@@ -28,13 +28,7 @@ const shuffleArray = (arr) => {
 
 const serializeGridData = gridData => gridData.flat().flat().flat().join('')
 
-const deserializeGridData = gridDataSerialized => {
-  const size = Math.sqrt(Math.sqrt(gridDataSerialized.length))
-
-  if (size % 1 !== 0) {
-    throw new Error('Grid must have a size that is a power of 4.')
-  }
-
+const generateGrid = (size, gridDataSerialized) => {
   const gridData = []
   let count = 0
 
@@ -48,7 +42,7 @@ const deserializeGridData = gridDataSerialized => {
         const subGridRow = []
 
         for (let subGridX = 0; subGridX < size; subGridX++) {
-          const value = gridDataSerialized[count]
+          const value = (gridDataSerialized) ? gridDataSerialized[count] : '0'
           subGridRow.push((value === '1') ? 1 : 0)
           count++
         }
@@ -65,48 +59,17 @@ const deserializeGridData = gridDataSerialized => {
   return gridData
 }
 
-let gridData
-
 class App extends React.Component {
   constructor () {
     super()
 
-    let size
     const filledColor = '#000000'
     const emptyColor = '#FFFFFF'
+    const solvedColor = 'green'
+    const unsolvedColor = 'grey'
+
     const searchParams = new URLSearchParams(window.location.search)
     const query = Object.fromEntries(searchParams.entries())
-    const gridDataSerialized = query.gridData
-
-    if (gridDataSerialized) {
-      gridData = deserializeGridData(gridDataSerialized)
-      size = Math.sqrt(Math.sqrt(gridDataSerialized.length))
-    } else {
-      gridData = []
-      size = 8
-
-      for (let gridY = 0; gridY < size; gridY++) {
-        const gridRow = []
-
-        for (let gridX = 0; gridX < size; gridX++) {
-          const subGridData = []
-
-          for (let subGridY = 0; subGridY < size; subGridY++) {
-            const subGridRow = []
-
-            for (let subGridX = 0; subGridX < size; subGridX++) {
-              subGridRow.push(0)
-            }
-
-            subGridData.push(subGridRow)
-          }
-
-          gridRow.push(subGridData)
-        }
-
-        gridData.push(gridRow)
-      }
-    }
 
     document.onselectstart = () => false
 
@@ -117,15 +80,49 @@ class App extends React.Component {
     }
 
     this.state = {
+      isAuthoring: (query.isAuthoring === 'true'),
       isUsingMouse: true,
       isFilling: false,
-      size,
+      size: this.initializeGrid(query.gridData),
       filledColor,
-      emptyColor
+      emptyColor,
+      solvedColor,
+      unsolvedColor
     }
 
+    this.initializeGrid = this.initializeGrid.bind(this)
     this.onCellEdit = this.onCellEdit.bind(this)
     this.onCellChanged = this.onCellChanged.bind(this)
+    this.changeMode = this.changeMode.bind(this)
+    this.clear = this.clear.bind(this)
+  }
+
+  initializeGrid (gridDataSerialized) {
+    let size = 8
+
+    if (gridDataSerialized) {
+      const deserializedSize = Math.sqrt(Math.sqrt(gridDataSerialized.length))
+
+      if (deserializedSize % 1 !== 0) {
+        // Convert to use Toast notification.
+        console.error('Grid must have a size that is a power of 4.')
+        this.gridData = generateGrid(size)
+      } else if (deserializedSize < 3) {
+        console.error('Sub-grids can be no smaller than 3x3.')
+        this.gridData = generateGrid(size)
+      } else if (deserializedSize > 11) {
+        // Convert to use Toast notification.
+        console.error('Sub-grids can be no larger than 11x11.')
+        this.gridData = generateGrid(size)
+      } else {
+        size = deserializedSize
+        this.gridData = generateGrid(size, gridDataSerialized)
+      }
+    } else {
+      this.gridData = generateGrid(size)
+    }
+
+    return size
   }
 
   onCellEdit (filled) {
@@ -135,34 +132,76 @@ class App extends React.Component {
   }
 
   onCellChanged (gridY, gridX, subGridY, subGridX, value) {
-    gridData[gridY][gridX][subGridY][subGridX] = (value) ? 1 : 0
+    this.gridData[gridY][gridX][subGridY][subGridX] = (value) ? 1 : 0
   }
 
-  play () {
+  changeMode () {
     if ('URLSearchParams' in window) {
+      const { isAuthoring } = this.state
       const searchParams = new URLSearchParams(window.location.search)
-      searchParams.set('gridData', serializeGridData(gridData))
+      searchParams.set('gridData', serializeGridData(this.gridData))
+      searchParams.set('isAuthoring', JSON.stringify(!isAuthoring))
+      window.location.search = searchParams.toString()
+    }
+  }
+
+  clear () {
+    // TODO: Popup confirmation.
+
+    if ('URLSearchParams' in window) {
+      const { isAuthoring } = this.state
+      const searchParams = new URLSearchParams(window.location.search)
+
+      if (isAuthoring) {
+        // Only clear data if authoring. Otherwise, refresh the page to reset progress.
+        searchParams.delete('gridData')
+      }
+
+      searchParams.set('isAuthoring', JSON.stringify(isAuthoring))
       window.location.search = searchParams.toString()
     }
   }
 
   render () {
-    const { isUsingMouse, isFilling, size, filledColor, emptyColor } = this.state
+    const {
+      isAuthoring, isUsingMouse, isFilling, size,
+      filledColor, emptyColor, solvedColor, unsolvedColor
+    } = this.state
 
     return (
       <div>
         <Grid
           onCellEdit={this.onCellEdit}
           onCellChanged={this.onCellChanged}
+          isAuthoring={isAuthoring}
           isUsingMouse={isUsingMouse}
           isFilling={isFilling}
           size={size}
           filledColor={filledColor}
           emptyColor={emptyColor}
-          gridData={gridData}
+          solvedColor={solvedColor}
+          unsolvedColor={unsolvedColor}
+          gridData={this.gridData}
         />
 
-        <Button onClick={this.play}>Play</Button>
+        {isAuthoring && (
+          <div>
+            <Button>Import (File upload)</Button>
+            <Button>Share (Provide shareable link using hostname and query params.)</Button>
+            <Button>Drop down to change size (Provide same warning as clearing)</Button>
+          </div>
+        )}
+
+        {!isAuthoring && (
+          <div>
+            <Button>Reveal Solution (Add popup to confirm)</Button>
+          </div>
+        )}
+
+        <Button onClick={this.clear}>Clear (Warn lost progress; interrupt refresh in the same way)</Button>
+
+        <Button onClick={this.changeMode}>{(isAuthoring) ? 'Play (Indicate lost progress)' : 'Edit (Warn losing progress and revealing puzzle)'}</Button>
+        <Button>Print (New window)</Button>
       </div>
     )
   }
