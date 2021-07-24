@@ -5,7 +5,7 @@ import Cell from './Cell'
 class SubGrid extends React.Component {
   constructor (props) {
     super()
-    const { isAuthoring, size } = props
+    const { isAuthoring, isCoordinate, size } = props
     const { initialSubGridData } = props
 
     const subGridData = []
@@ -21,7 +21,7 @@ class SubGrid extends React.Component {
 
           subGridDataRow.push(initialValue)
 
-          if (isAuthoring) {
+          if (isAuthoring || isCoordinate) {
             subGridFillingRow.push(initialValue)
           } else {
             subGridFillingRow.push(0)
@@ -46,16 +46,18 @@ class SubGrid extends React.Component {
   }
 
   onCellChanged (gridY, gridX, subGridY, subGridX, value) {
-    const { isAuthoring } = this.props
+    const { isAuthoring, isCoordinate } = this.props
     const { subGridData, subGridFilling } = this.state
 
-    if (isAuthoring) {
-      subGridData[subGridY][subGridX] = (value) ? 1 : 0
-      subGridFilling[subGridY][subGridX] = subGridData[subGridY][subGridX]
-      this.props.onCellChanged(gridY, gridX, subGridY, subGridX, value)
-    }
+    if (!isCoordinate) {
+      if (isAuthoring) {
+        subGridData[subGridY][subGridX] = (value) ? 1 : 0
+        subGridFilling[subGridY][subGridX] = subGridData[subGridY][subGridX]
+        this.props.onCellChanged(gridY, gridX, subGridY, subGridX, value)
+      }
 
-    subGridFilling[subGridY][subGridX] = (value) ? 1 : 0
+      subGridFilling[subGridY][subGridX] = (value) ? 1 : 0
+    }
 
     this.setState({
       subGridData,
@@ -64,12 +66,9 @@ class SubGrid extends React.Component {
   }
 
   isSolved () {
+    const { isAuthoring, isCoordinate } = this.props
     const { subGridData, subGridFilling } = this.state
-    console.log(JSON.stringify(subGridData))
-    console.log(JSON.stringify(subGridFilling))
-
-    console.log(JSON.stringify(subGridData) === JSON.stringify(subGridFilling))
-    return (JSON.stringify(subGridData) === JSON.stringify(subGridFilling))
+    return (!isAuthoring && !isCoordinate && JSON.stringify(subGridData) === JSON.stringify(subGridFilling))
   }
 
   render () {
@@ -78,7 +77,6 @@ class SubGrid extends React.Component {
       solvedColor, unsolvedColor, gridY, gridX
     } = this.props
 
-    console.log(solvedColor, unsolvedColor)
     const { subGridFilling } = this.state
 
     return (
@@ -118,9 +116,10 @@ class SubGrid extends React.Component {
 SubGrid.propTypes = {
   onCellEdit: PropTypes.func,
   onCellChanged: PropTypes.func,
-  isAuthoring: PropTypes.bool.isRequired,
-  isUsingMouse: PropTypes.bool.isRequired,
-  isFilling: PropTypes.bool.isRequired,
+  isAuthoring: PropTypes.bool,
+  isCoordinate: PropTypes.bool,
+  isUsingMouse: PropTypes.bool,
+  isFilling: PropTypes.bool,
   size: PropTypes.number.isRequired,
   filledColor: PropTypes.string.isRequired,
   emptyColor: PropTypes.string.isRequired,

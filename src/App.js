@@ -3,61 +3,8 @@ import Grid from './components/Grid'
 import { Button } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
-
-// https://stackoverflow.com/a/10142256/12055600
-/*
-const shuffleArray = (arr) => {
-  let i = arr.length
-  let j
-  let temp
-
-  if (i === 0) {
-    return arr
-  }
-
-  while (--i) {
-    j = Math.floor(Math.random() * (i + 1))
-    temp = arr[i]
-    arr[i] = arr[j]
-    arr[j] = temp
-  }
-
-  return arr
-}
-*/
-
-const serializeGridData = gridData => gridData.flat().flat().flat().join('')
-
-const generateGrid = (size, gridDataSerialized) => {
-  const gridData = []
-  let count = 0
-
-  for (let gridY = 0; gridY < size; gridY++) {
-    const gridRow = []
-
-    for (let gridX = 0; gridX < size; gridX++) {
-      const subGridData = []
-
-      for (let subGridY = 0; subGridY < size; subGridY++) {
-        const subGridRow = []
-
-        for (let subGridX = 0; subGridX < size; subGridX++) {
-          const value = (gridDataSerialized) ? gridDataSerialized[count] : '0'
-          subGridRow.push((value === '1') ? 1 : 0)
-          count++
-        }
-
-        subGridData.push(subGridRow)
-      }
-
-      gridRow.push(subGridData)
-    }
-
-    gridData.push(gridRow)
-  }
-
-  return gridData
-}
+import SubGrid from './components/SubGrid'
+import { generateGrid, generateCoordinatesOrder, serializeGridData, getCoordinateLabel } from './lib/util'
 
 class App extends React.Component {
   constructor () {
@@ -121,6 +68,8 @@ class App extends React.Component {
     } else {
       this.gridData = generateGrid(size)
     }
+
+    this.coordinatesOrder = generateCoordinatesOrder(size)
 
     return size
   }
@@ -194,6 +143,32 @@ class App extends React.Component {
 
         {!isAuthoring && (
           <div>
+            {this.coordinatesOrder.map((coordinates, index) => {
+              const { x, y } = coordinates
+
+              return (
+                <table key={index}>
+                  <tbody>
+                    <tr>
+                      <td>{getCoordinateLabel(x, y)}</td>
+                    </tr>
+                    <tr>
+                      <SubGrid
+                        isCoordinate={true}
+                        size={size}
+                        filledColor={filledColor}
+                        emptyColor={emptyColor}
+                        solvedColor={solvedColor}
+                        unsolvedColor={unsolvedColor}
+                        gridY={y}
+                        gridX={x}
+                        initialSubGridData={this.gridData[y][x]}
+                      />
+                    </tr>
+                  </tbody>
+                </table>
+              )
+            })}
             <Button>Reveal Solution (Add popup to confirm)</Button>
           </div>
         )}

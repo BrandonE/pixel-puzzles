@@ -1,0 +1,71 @@
+// https://stackoverflow.com/a/10142256/12055600
+export const shuffleArray = (arr) => {
+  let i = arr.length
+  let j
+  let temp
+
+  if (i === 0) {
+    return arr
+  }
+
+  while (--i) {
+    j = Math.floor(Math.random() * (i + 1))
+    temp = arr[i]
+    arr[i] = arr[j]
+    arr[j] = temp
+  }
+
+  return arr
+}
+
+export const serializeGridData = gridData => gridData.flat().flat().flat().join('')
+
+export const generateGrid = (size, gridDataSerialized) => {
+  const gridData = []
+  let count = 0
+
+  for (let gridY = 0; gridY < size; gridY++) {
+    const gridRow = []
+
+    for (let gridX = 0; gridX < size; gridX++) {
+      const subGridData = []
+
+      for (let subGridY = 0; subGridY < size; subGridY++) {
+        const subGridRow = []
+
+        for (let subGridX = 0; subGridX < size; subGridX++) {
+          const value = (gridDataSerialized) ? gridDataSerialized[count] : '0'
+          subGridRow.push((value === '1') ? 1 : 0)
+          count++
+        }
+
+        subGridData.push(subGridRow)
+      }
+
+      gridRow.push(subGridData)
+    }
+
+    gridData.push(gridRow)
+  }
+
+  return gridData
+}
+
+export const generateCoordinatesOrder = size => {
+  const coordinatesOrder = []
+
+  for (let gridY = 0; gridY < size; gridY++) {
+    for (let gridX = 0; gridX < size; gridX++) {
+      coordinatesOrder.push({
+        x: gridX,
+        y: gridY
+      })
+    }
+  }
+
+  return shuffleArray(coordinatesOrder)
+}
+
+export const getXLabel = x => 'ABCDEFGHIJK'[x]
+export const getYLabel = y => y + 1
+export const getCoordinateLabel = (x, y) => getXLabel(x) + getYLabel(y)

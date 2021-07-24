@@ -41,8 +41,8 @@ const Cell = props => {
 Cell.propTypes = {
   onCellEdit: PropTypes.func,
   onCellChanged: PropTypes.func,
-  isUsingMouse: PropTypes.bool.isRequired,
-  isFilling: PropTypes.bool.isRequired,
+  isUsingMouse: PropTypes.bool,
+  isFilling: PropTypes.bool,
   filledColor: PropTypes.string.isRequired,
   emptyColor: PropTypes.string.isRequired,
   gridY: PropTypes.number.isRequired,

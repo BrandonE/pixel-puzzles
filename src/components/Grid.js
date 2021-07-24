@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import SubGrid from './SubGrid'
+import { getXLabel, getYLabel } from '../lib/util'
 
 const Grid = props => {
   const {
@@ -11,8 +12,16 @@ const Grid = props => {
   return (
     <table>
       <tbody>
+        <tr>
+          <td></td>
+          {Array(size).fill().map((_, colIndex) => (
+            <td key={colIndex}>{getXLabel(colIndex)}</td>
+          ))}
+        </tr>
+
         {Array(size).fill().map((_, rowIndex) => (
           <tr key={rowIndex}>
+            <td>{getYLabel(rowIndex)}</td>
             {Array(size).fill().map((_, colIndex) => (
               <SubGrid
                 key={colIndex}
