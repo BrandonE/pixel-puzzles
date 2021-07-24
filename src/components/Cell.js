@@ -3,44 +3,53 @@ import PropTypes from 'prop-types'
 
 const Cell = props => {
   const {
-    onCellEdit, onCellChanged, isUsingMouse, isFilling, filledColor, emptyColor, subGridY, subGridX, isFilled
+    onCellEdit, onCellChanged, isUsingMouse, isFilling, filledColor, emptyColor,
+    gridY, gridX, subGridY, subGridX, isFilled
   } = props
-
   return (
-    <div
+    <td
+      className="cell"
+
       style={{
-        background: (isFilled) ? filledColor : emptyColor
+        backgroundColor: (isFilled) ? filledColor : emptyColor
       }}
 
       onPointerDown={() => {
-        onCellEdit(isFilled)
-        onCellChanged(subGridY, subGridX, !isFilled)
+        if (onCellEdit) {
+          onCellEdit(isFilled)
+        }
+
+        if (onCellChanged) {
+          onCellChanged(gridY, gridX, subGridY, subGridX, !isFilled)
+        }
       }}
 
       onPointerEnter={(e) => {
-        if (!isUsingMouse || (e.buttons === undefined ? e.which === 1 : e.buttons === 1)) {
-          onCellChanged(subGridY, subGridX, isFilling)
+        if (
+          onCellChanged && (
+            !isUsingMouse || (e.buttons === undefined ? e.which === 1 : e.buttons === 1)
+          )
+        ) {
+          onCellChanged(gridY, gridX, subGridY, subGridX, isFilling)
         }
       }}
     >
-      x
-    </div>
+    </td>
   )
 }
 
 Cell.propTypes = {
   onCellEdit: PropTypes.func,
   onCellChanged: PropTypes.func,
-  isUsingMouse: PropTypes.bool,
-  isFilling: PropTypes.bool,
-  filledColor: PropTypes.string,
-  emptyColor: PropTypes.string,
-  subGridData: PropTypes.array,
-  gridY: PropTypes.number,
-  gridX: PropTypes.number,
-  subGridY: PropTypes.number,
-  subGridX: PropTypes.number,
-  isFilled: PropTypes.bool
+  isUsingMouse: PropTypes.bool.isRequired,
+  isFilling: PropTypes.bool.isRequired,
+  filledColor: PropTypes.string.isRequired,
+  emptyColor: PropTypes.string.isRequired,
+  gridY: PropTypes.number.isRequired,
+  gridX: PropTypes.number.isRequired,
+  subGridY: PropTypes.number.isRequired,
+  subGridX: PropTypes.number.isRequired,
+  isFilled: PropTypes.number.isRequired
 }
 
 export default Cell
