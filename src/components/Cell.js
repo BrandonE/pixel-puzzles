@@ -3,18 +3,24 @@ import PropTypes from 'prop-types'
 
 const Cell = props => {
   const {
-    onCellChanged, filledColor, emptyColor,
-    gridY, gridX, subGridY, subGridX, filled
+    onCellEdit, onCellChanged, isUsingMouse, isFilling, filledColor, emptyColor, subGridY, subGridX, isFilled
   } = props
 
   return (
     <div
       style={{
-        background: (filled) ? filledColor : emptyColor
+        background: (isFilled) ? filledColor : emptyColor
       }}
-      onMouseEnter={() => {
-        console.log(gridY, gridX, subGridY, subGridX, !filled)
-        onCellChanged(gridY, gridX, subGridY, subGridX, !filled)
+
+      onPointerDown={() => {
+        onCellEdit(isFilled)
+        onCellChanged(subGridY, subGridX, !isFilled)
+      }}
+
+      onPointerEnter={(e) => {
+        if (!isUsingMouse || (e.buttons === undefined ? e.which === 1 : e.buttons === 1)) {
+          onCellChanged(subGridY, subGridX, isFilling)
+        }
       }}
     >
       x
@@ -23,7 +29,10 @@ const Cell = props => {
 }
 
 Cell.propTypes = {
+  onCellEdit: PropTypes.func,
   onCellChanged: PropTypes.func,
+  isUsingMouse: PropTypes.bool,
+  isFilling: PropTypes.bool,
   filledColor: PropTypes.string,
   emptyColor: PropTypes.string,
   subGridData: PropTypes.array,
@@ -31,7 +40,7 @@ Cell.propTypes = {
   gridX: PropTypes.number,
   subGridY: PropTypes.number,
   subGridX: PropTypes.number,
-  filled: PropTypes.bool
+  isFilled: PropTypes.bool
 }
 
 export default Cell

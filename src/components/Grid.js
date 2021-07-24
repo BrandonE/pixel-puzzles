@@ -3,20 +3,22 @@ import PropTypes from 'prop-types'
 import SubGrid from './SubGrid'
 
 const Grid = props => {
-  const { onCellChanged, filledColor, emptyColor, gridData } = props
+  const { onCellEdit, isUsingMouse, isFilling, size, filledColor, emptyColor } = props
 
   return (
     <table>
       <tbody>
-        {gridData.map((gridRow, rowIndex) => (
+        {Array(size).fill().map((_, rowIndex) => (
           <tr key={rowIndex}>
-            {gridRow.map((subGridData, colIndex) => (
+            {Array(size).fill().map((_, colIndex) => (
               <td key={colIndex}>
                 <SubGrid
-                  onCellChanged={onCellChanged}
+                  onCellEdit={onCellEdit}
+                  isUsingMouse={isUsingMouse}
+                  isFilling={isFilling}
+                  size={size}
                   filledColor={filledColor}
                   emptyColor={emptyColor}
-                  subGridData={subGridData}
                   gridY={rowIndex}
                   gridX={colIndex}
                 />
@@ -30,10 +32,12 @@ const Grid = props => {
 }
 
 Grid.propTypes = {
-  onCellChanged: PropTypes.func,
+  onCellEdit: PropTypes.func,
+  isUsingMouse: PropTypes.bool,
+  isFilling: PropTypes.bool,
+  size: PropTypes.number,
   filledColor: PropTypes.string,
-  emptyColor: PropTypes.string,
-  gridData: PropTypes.array
+  emptyColor: PropTypes.string
 }
 
 export default Grid
