@@ -96,10 +96,38 @@ export const jimpToSerializedGridData = jimpFile => {
   return serializedGridData
 }
 
-export const serializedGridDataToJimp = serializeGridData => {
+export const serializedGridDataToJimp = (serializedGridData, filledColor, emptyColor) => {
+  const widthAndHeight = Math.sqrt(serializedGridData.length)
+  const size = Math.sqrt(widthAndHeight)
 
+  if (size % 1 !== 0) {
+    // This should never be thrown.
+    throw new Error('Invalid image size.')
+  }
+
+  const jimpFile = new Jimp(widthAndHeight, widthAndHeight)
+  let count = 0
+
+  for (let gridY = 0; gridY < size; gridY++) {
+    for (let gridX = 0; gridX < size; gridX++) {
+      for (let subGridY = 0; subGridY < size; subGridY++) {
+        for (let subGridX = 0; subGridX < size; subGridX++) {
+          const x = gridX * size + subGridX
+          const y = gridY * size + subGridY
+          const { r, g, b } = Jimp.intToRGBA((serializedGridData[count] === '1') ? filledColor : emptyColor)
+
+          jimpFile.setPixelColor(Jimp.rgbaToInt(r, g, b, 255), x, y)
+
+          count++
+        }
+      }
+    }
+  }
+
+  return jimpFile
 }
 
+export const decimalToHex = dec => `#${dec.toString(16).toUpperCase().padStart(6, '0')}`
 export const getXLabel = x => 'ABCDEFGHIJK'[x]
 export const getYLabel = y => y + 1
 export const getCoordinateLabel = (x, y) => getXLabel(x) + getYLabel(y)

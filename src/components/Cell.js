@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { decimalToHex } from '../lib/util'
 
 const Cell = props => {
   const {
@@ -11,7 +12,7 @@ const Cell = props => {
       className="cell"
 
       style={{
-        backgroundColor: (isFilled) ? filledColor : emptyColor
+        backgroundColor: decimalToHex((isFilled) ? filledColor : emptyColor)
       }}
 
       onPointerDown={() => {
@@ -43,8 +44,8 @@ Cell.propTypes = {
   onCellChanged: PropTypes.func,
   isUsingMouse: PropTypes.bool,
   isFilling: PropTypes.bool,
-  filledColor: PropTypes.string.isRequired,
-  emptyColor: PropTypes.string.isRequired,
+  filledColor: PropTypes.number.isRequired,
+  emptyColor: PropTypes.number.isRequired,
   gridY: PropTypes.number.isRequired,
   gridX: PropTypes.number.isRequired,
   subGridY: PropTypes.number.isRequired,

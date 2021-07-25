@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Cell from './Cell'
+import { decimalToHex } from '../lib/util'
 
 class SubGrid extends React.Component {
   constructor (props) {
@@ -81,7 +82,7 @@ class SubGrid extends React.Component {
     return (
       <td
         className="subGrid"
-        style={{ border: `1px solid ${this.isSolved() ? solvedColor : unsolvedColor}` }}
+        style={{ border: `1px solid ${decimalToHex(this.isSolved() ? solvedColor : unsolvedColor)}` }}
       >
         <table>
           <tbody>
@@ -120,10 +121,10 @@ SubGrid.propTypes = {
   isUsingMouse: PropTypes.bool,
   isFilling: PropTypes.bool,
   size: PropTypes.number.isRequired,
-  filledColor: PropTypes.string.isRequired,
-  emptyColor: PropTypes.string.isRequired,
-  solvedColor: PropTypes.string.isRequired,
-  unsolvedColor: PropTypes.string.isRequired,
+  filledColor: PropTypes.number.isRequired,
+  emptyColor: PropTypes.number.isRequired,
+  solvedColor: PropTypes.number.isRequired,
+  unsolvedColor: PropTypes.number.isRequired,
   gridY: PropTypes.number.isRequired,
   gridX: PropTypes.number.isRequired,
   initialSubGridData: PropTypes.array

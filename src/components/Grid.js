@@ -54,10 +54,10 @@ Grid.propTypes = {
   isUsingMouse: PropTypes.bool.isRequired,
   isFilling: PropTypes.bool.isRequired,
   size: PropTypes.number.isRequired,
-  filledColor: PropTypes.string.isRequired,
-  emptyColor: PropTypes.string.isRequired,
-  solvedColor: PropTypes.string.isRequired,
-  unsolvedColor: PropTypes.string.isRequired,
+  filledColor: PropTypes.number.isRequired,
+  emptyColor: PropTypes.number.isRequired,
+  solvedColor: PropTypes.number.isRequired,
+  unsolvedColor: PropTypes.number.isRequired,
   gridData: PropTypes.array.isRequired
 }
 
