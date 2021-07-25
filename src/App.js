@@ -1,15 +1,20 @@
 import React from 'react'
 import Grid from './components/Grid'
-import { Container, Button, Form, Dropdown, DropdownButton } from 'react-bootstrap'
+import { Container, Row, Col, Button, Form, Dropdown, DropdownButton } from 'react-bootstrap'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast, ToastContainer } from 'react-toastify'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import Jimp from 'jimp/es'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import 'react-toastify/dist/ReactToastify.css'
 import './App.css'
 import SubGrid from './components/SubGrid'
-import { generateGrid, generateCoordinatesOrder, serializeGridData, getCoordinateLabel, jimpToSerializedGridData, serializedGridDataToJimp } from './lib/util'
+import {
+  generateGrid, generateCoordinatesOrder, serializeGridData, getCoordinateLabel,
+  jimpToSerializedGridData, serializedGridDataToJimp
+} from './lib/util'
 
 const serializedGridDataGitHub = '0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000011000011110001111100000000000000110001111101111111111111111111111111111111111111110111111111111111111111111111111111111111111111111111111111111111111111101111111111111111111111111111111111111111111111111111111100000000110000001111100011111110111111111111111111111111111111110000000000000000000000000000000010000000110000001111000011111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000010000001100000111000011110011111101111111111111111111111111111111111111111111111011111110111111111111111111111111111111111111111111111111000111110000011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110001110000011111100111111101111111111111111111111111111111101111111011111110000000000000000000000001000000010000000110000001110000011110000000011110001111100011111001111110011111100111111011111110111111111111110111111101111111011111110111111101111111011111110111111000000000100000000000000000000000000000000000000000000000000000000111100000000000000000000000000000000000000000000000000000000000000001111000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000011111110111111101111111011111110111111101111111011111110011111111110000111110001111100011111100111111001111110011111110111111100111111101111111111111111111111111111111111111111111111111111111111111001111100011111000111100001111000011110000111100001111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011111100011111000111110000111100001111000011110000111100001111111111101111111011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111000011110000111100001111000011110000111110001111100011111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001111000011110000111100001111000011110001111100011111000111111111111111111111111111111111111111111111111111111111111111111111011111110111111101111111011111110011111100111111000111110001111111111100111111101111111011111111111111111111111110011111110001110000000000000000000000000000000011000000111100001111111011111111000000000000000000000000000000000000000000000000000000001100000000000000000000000000000000000000000000000000000000000000000000110000000000000000000000000000000000000011000011110111111111111111001111110111111101111111111111111111111111111111111111111111111111111110111111101111111011111110111111001111110011111000111110000000111100001111000001110000011100000011000000010000000000000000111001111111001111111010111110011111110011111100111111100111111111111111111111111111111111111111001111100110111100000000100000001100000010000000100000000000000000000000000000000000000000000000000000110000000100000001000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110111100001111000011100000111000001100000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111111100011111000011110000011100000011000000000000000000000000111111111111111111111111111111111111111111111111001111110000111100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111001111000011111110111110001111000011100000110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
 
@@ -19,7 +24,6 @@ class App extends React.Component {
 
     this.state = {
       isAuthoring: false,
-      isUsingMouse: true,
       isFilling: false,
       filledColor: 0x00000000,
       emptyColor: 0xFFFFFFFF,
@@ -46,12 +50,6 @@ class App extends React.Component {
     const query = Object.fromEntries(searchParams.entries())
 
     document.onselectstart = () => false
-
-    document.ontouchstart = () => {
-      this.setState({
-        isUsingMouse: false
-      })
-    }
 
     this.setState({
       isAuthoring: (query.isAuthoring === 'true'),
@@ -181,7 +179,6 @@ class App extends React.Component {
                   return (
                     <Grid
                       isAuthoring={true}
-                      isUsingMouse={false}
                       isFilling={false}
                       size={size}
                       filledColor={filledColor}
@@ -321,7 +318,7 @@ class App extends React.Component {
 
   render () {
     const {
-      isAuthoring, isUsingMouse, isFilling, size,
+      isAuthoring, isFilling, size,
       filledColor, emptyColor, solvedColor, unsolvedColor
     } = this.state
 
@@ -333,6 +330,8 @@ class App extends React.Component {
       <Container>
         <ToastContainer />
         <h1>Pixel Puzzles</h1>
+        <h4>Copy each square&apos;s pattern to the associated coordinates to reveal a secret image!</h4>
+        <h6>Fill the grid in your browser or print the puzzle to complete by hand. Edit the puzzle or generate your own using any image. Share puzzles with your friends and family!</h6>
 
         <div>
           <div className="grid">
@@ -340,7 +339,6 @@ class App extends React.Component {
               onCellEdit={this.onCellEdit}
               onCellChanged={this.onCellChanged}
               isAuthoring={isAuthoring}
-              isUsingMouse={isUsingMouse}
               isFilling={isFilling}
               size={size}
               filledColor={filledColor}
@@ -383,57 +381,71 @@ class App extends React.Component {
 
         <Form>
           {isAuthoring && (
-            <div>
-              <Form.Group className="mb-3">
-                <Button onClick={this.invert}>Invert</Button>
-                <DropdownButton title="Resize Canvas">
-                  { /* Sizes allowed are 3-11 */ }
-                  {Array(11).fill(0).map((_, i) => i + 1).filter(
-                    size => size >= 3 && size !== this.gridData.length
-                  ).map(size => (
-                    <Dropdown.Item
-                      key={size}
-                      onSelect={() => this.resizeCanvas(size)}
-                    >
-                      {size}<sup>4</sup>
-                    </Dropdown.Item>
-                  ))}
-                </DropdownButton>
-              </Form.Group>
+            <>
+              <Row>
+                <Col>
+                  <DropdownButton title="Resize Canvas">
+                    { /* Sizes allowed are 3-11 */ }
+                    {Array(11).fill(0).map((_, i) => i + 1).filter(
+                      size => size >= 3 && size !== this.gridData.length
+                    ).map(size => (
+                      <Dropdown.Item
+                        key={size}
+                        onSelect={() => this.resizeCanvas(size)}
+                      >
+                        {size}<sup>4</sup>
+                      </Dropdown.Item>
+                    ))}
+                  </DropdownButton>
+                  <Button onClick={this.invert}>Invert</Button>
+                </Col>
+              </Row>
 
-              <Form.Group className="mb-3">
+              <Row>
                 <Form.Label>Import from Image</Form.Label>
                 <Form.Control
                   type="file" name="files"
                   accept=".jpg, .jpeg, .png, .gif"
                   onChange={this.import}
                 />
-              </Form.Group>
+              </Row>
 
-              <Form.Group className="mb-3">
-                <Button onClick={this.export}>Export as Image</Button>
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Button onClick={this.share}>Share</Button>
-              </Form.Group>
-
-            </div>
+              <Row>
+                <Col>
+                  <Button onClick={this.export}>Export as Image</Button>
+                  <Button onClick={this.share}>Share</Button>
+                </Col>
+              </Row>
+            </>
           )}
 
           {!isAuthoring && (
             <div>
-              <Form.Group className="mb-3">
-                <Button onClick={this.revealSolution}>Reveal Solution</Button>
-              </Form.Group>
+              <Row>
+                <Col>
+                  <Form.Group className="mb-3">
+                    <Button onClick={this.revealSolution}>Reveal Solution</Button>
+                  </Form.Group>
+                </Col>
+              </Row>
             </div>
           )}
 
-          <Form.Group className="mb-3">
-            <Button variant="danger" onClick={this.clear}>Clear</Button>
-            <Button onClick={this.changeMode}>{(isAuthoring) ? 'Play' : 'Edit'}</Button>
-            <Button>Print as PDF</Button>
-          </Form.Group>
+          <Row>
+            <Col>
+              <Button variant="danger" onClick={this.clear}>Clear</Button>
+              <Button onClick={this.changeMode}>{(isAuthoring) ? 'Play' : 'Edit'}</Button>
+              <Button>Print as PDF</Button>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col>
+              Created by <a href="https://github.com/BrandonE" target="_blank" rel="noreferrer">Brandon Evans</a>.
+              Inspired by <a href="https://web.archive.org/web/20111027002447/http://www.tipstricks.com/puzzles.html" target="_blank" rel="noreferrer">Pencil Puzzles</a> from <a href="https://en.wikipedia.org/wiki/Tips_%26_Tricks_(magazine)">Tips &amp; Tricks Magazine</a>
+              &nbsp; <a href="https://github.com/BrandonE/pixel-puzzles" target="_blank" rel="noreferrer"><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon></a>
+            </Col>
+          </Row>
         </Form>
       </Container>
     )

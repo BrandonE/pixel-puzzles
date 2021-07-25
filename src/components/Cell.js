@@ -4,7 +4,7 @@ import { decimalToHex } from '../lib/util'
 
 const Cell = props => {
   const {
-    onCellEdit, onCellChanged, isUsingMouse, isFilling, filledColor, emptyColor,
+    onCellEdit, onCellChanged, filledColor, emptyColor,
     gridY, gridX, subGridY, subGridX, isFilled
   } = props
   return (
@@ -16,6 +16,9 @@ const Cell = props => {
       }}
 
       onPointerDown={() => {
+        const { isFilled } = props
+        console.log(isFilled)
+
         if (onCellEdit) {
           onCellEdit(isFilled)
         }
@@ -25,12 +28,11 @@ const Cell = props => {
         }
       }}
 
-      onPointerEnter={(e) => {
-        if (
-          onCellChanged && (
-            !isUsingMouse || (e.buttons === undefined ? e.which === 1 : e.buttons === 1)
-          )
-        ) {
+      onMouseEnter={e => {
+        const { isFilling } = props
+        console.log('POINTER ENTER')
+
+        if (onCellChanged && e.buttons === undefined ? e.which === 1 : e.buttons === 1) {
           onCellChanged(gridY, gridX, subGridY, subGridX, isFilling)
         }
       }}
@@ -42,7 +44,6 @@ const Cell = props => {
 Cell.propTypes = {
   onCellEdit: PropTypes.func,
   onCellChanged: PropTypes.func,
-  isUsingMouse: PropTypes.bool,
   isFilling: PropTypes.bool,
   filledColor: PropTypes.number.isRequired,
   emptyColor: PropTypes.number.isRequired,

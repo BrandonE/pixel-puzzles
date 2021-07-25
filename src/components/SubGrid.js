@@ -49,6 +49,7 @@ class SubGrid extends React.Component {
   onCellChanged (gridY, gridX, subGridY, subGridX, value) {
     const { onCellChanged, isAuthoring, isCoordinate } = this.props
     const { subGridData, subGridFilling } = this.state
+    console.log('CHANGE TO', value)
 
     if (!isCoordinate && onCellChanged) {
       if (isAuthoring) {
@@ -74,7 +75,7 @@ class SubGrid extends React.Component {
 
   render () {
     const {
-      onCellEdit, isUsingMouse, isFilling, filledColor, emptyColor,
+      onCellEdit, isFilling, filledColor, emptyColor,
       solvedColor, unsolvedColor, gridY, gridX
     } = this.props
     const { subGridFilling } = this.state
@@ -93,7 +94,6 @@ class SubGrid extends React.Component {
                     key={colIndex}
                     onCellEdit={onCellEdit}
                     onCellChanged={this.onCellChanged}
-                    isUsingMouse={isUsingMouse}
                     isFilling={isFilling}
                     filledColor={filledColor}
                     emptyColor={emptyColor}
@@ -118,7 +118,6 @@ SubGrid.propTypes = {
   onCellChanged: PropTypes.func,
   isAuthoring: PropTypes.bool,
   isCoordinate: PropTypes.bool,
-  isUsingMouse: PropTypes.bool,
   isFilling: PropTypes.bool,
   size: PropTypes.number.isRequired,
   filledColor: PropTypes.number.isRequired,

@@ -1,6 +1,7 @@
 table tbody tr td {
   border: 0px;
   text-align: center;
+  touch-action: none;
 }
 
 form {
@@ -25,7 +26,20 @@ form {
 
 .cell {
   border: 1px solid black;
-  padding: 5px;
+  width: 0.5vw;
+  height: 0.5vw;
+}
+
+.row {
+  margin-bottom: 20px;
+}
+
+.btn {
+  margin-right: 40px;
+}
+
+.dropdown-toggle {
+  float: left;
 }
 
 .react-confirm-alert {
@@ -34,4 +48,8 @@ form {
 
 .react-confirm-alert-body {
   width: auto;
+}
+
+.fa-github {
+  font-size: 30px;
 }
