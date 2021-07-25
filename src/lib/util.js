@@ -1,3 +1,5 @@
+import Jimp from 'jimp/es'
+
 // https://stackoverflow.com/a/10142256/12055600
 export const shuffleArray = (arr) => {
   let i = arr.length
@@ -20,7 +22,7 @@ export const shuffleArray = (arr) => {
 
 export const serializeGridData = gridData => gridData.flat().flat().flat().join('')
 
-export const generateGrid = (size, gridDataSerialized) => {
+export const generateGrid = (size, serializedGridData) => {
   const gridData = []
   let count = 0
 
@@ -34,7 +36,7 @@ export const generateGrid = (size, gridDataSerialized) => {
         const subGridRow = []
 
         for (let subGridX = 0; subGridX < size; subGridX++) {
-          const value = (gridDataSerialized) ? gridDataSerialized[count] : '0'
+          const value = (serializedGridData) ? serializedGridData[count] : '0'
           subGridRow.push((value === '1') ? 1 : 0)
           count++
         }
@@ -64,6 +66,38 @@ export const generateCoordinatesOrder = size => {
   }
 
   return shuffleArray(coordinatesOrder)
+}
+
+export const jimpToSerializedGridData = jimpFile => {
+  let serializedGridData = ''
+  const { width, height } = jimpFile.bitmap
+  const size = Math.sqrt(Math.sqrt(width * height))
+
+  if (size % 1 !== 0) {
+    // This should never be thrown.
+    throw new Error('Invalid image size.')
+  }
+
+  for (let gridY = 0; gridY < size; gridY++) {
+    for (let gridX = 0; gridX < size; gridX++) {
+      for (let subGridY = 0; subGridY < size; subGridY++) {
+        for (let subGridX = 0; subGridX < size; subGridX++) {
+          const x = gridX * size + subGridX
+          const y = gridY * size + subGridY
+          const { r, g, b, a } = Jimp.intToRGBA(jimpFile.getPixelColor(x, y))
+          const rgb = r * g * b
+          const value = (rgb >= ((255 * 255 * 255) / 2) || a === 0) ? '0' : '1'
+          serializedGridData += value
+        }
+      }
+    }
+  }
+
+  return serializedGridData
+}
+
+export const serializedGridDataToJimp = serializeGridData => {
+
 }
 
 export const getXLabel = x => 'ABCDEFGHIJK'[x]

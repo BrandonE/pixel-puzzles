@@ -9,7 +9,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css'
 import 'react-toastify/dist/ReactToastify.css'
 import './App.css'
 import SubGrid from './components/SubGrid'
-import { generateGrid, generateCoordinatesOrder, serializeGridData, getCoordinateLabel } from './lib/util'
+import { generateGrid, generateCoordinatesOrder, serializeGridData, getCoordinateLabel, jimpToSerializedGridData } from './lib/util'
 
 class App extends React.Component {
   constructor () {
@@ -54,11 +54,11 @@ class App extends React.Component {
     })
   }
 
-  initializeGrid (gridDataSerialized) {
+  initializeGrid (serializedGridData) {
     let size = 8
 
-    if (gridDataSerialized) {
-      const deserializedSize = Math.sqrt(Math.sqrt(gridDataSerialized.length))
+    if (serializedGridData) {
+      const deserializedSize = Math.sqrt(Math.sqrt(serializedGridData.length))
 
       if (deserializedSize % 1 !== 0) {
         toast.error('Grid must have a size that is a power of 4.')
@@ -71,7 +71,7 @@ class App extends React.Component {
         this.gridData = generateGrid(size)
       } else {
         size = deserializedSize
-        this.gridData = generateGrid(size, gridDataSerialized)
+        this.gridData = generateGrid(size, serializedGridData)
       }
     } else {
       this.gridData = generateGrid(size)
@@ -230,25 +230,15 @@ class App extends React.Component {
             // Closure to capture the file information.
             reader.onload = ((_) => {
               return async (e) => {
-                let jimpFile = await Jimp.read(Buffer.from(e.target.result))
+                const jimpFile = await Jimp.read(Buffer.from(e.target.result))
 
-                jimpFile = jimpFile
-                  .greyscale()
+                jimpFile
                   .contrast(1)
+                  .resize(64, 64) // TODO: Allow resizing to any number between 3^4 and 11^4. Allow cropping to square.
 
-                console.log(jimpFile)
-
-                // https://stackoverflow.com/a/58787093/12055600
-                const { width, height } = jimpFile.bitmap
-                // const pixels = []
-
-                for (let y = 0; y < height; y++) {
-                  for (let x = 0; x < width; x++) {
-                    // const pixel = Jimp.intToRGBA(jimpFile.getPixelColor(x, y))
-
-                    console.log(Jimp.intToRGBA(jimpFile.getPixelColor(x, y)))
-                  }
-                }
+                const searchParams = new URLSearchParams(window.location.search)
+                searchParams.set('gridData', jimpToSerializedGridData(jimpFile))
+                window.location.search = searchParams.toString()
               }
             })(file)
 
@@ -338,6 +328,10 @@ class App extends React.Component {
               </Form.Group>
 
               <Form.Group className="mb-3">
+                <Button>Export as Image</Button>
+              </Form.Group>
+
+              <Form.Group className="mb-3">
                 <Button>Share (Provide shareable link using hostname and query params.)</Button>
               </Form.Group>
 
@@ -355,7 +349,7 @@ class App extends React.Component {
           <Form.Group className="mb-3">
             <Button variant="danger" onClick={this.clear}>Clear</Button>
             <Button onClick={this.changeMode}>{(isAuthoring) ? 'Play' : 'Edit'}</Button>
-            <Button>Print (New window)</Button>
+            <Button>Print as PDF</Button>
           </Form.Group>
         </Form>
       </Container>

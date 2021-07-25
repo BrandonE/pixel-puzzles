@@ -48,8 +48,8 @@ const Grid = props => {
 }
 
 Grid.propTypes = {
-  onCellEdit: PropTypes.func.isRequired,
-  onCellChanged: PropTypes.func.isRequired,
+  onCellEdit: PropTypes.func,
+  onCellChanged: PropTypes.func,
   isAuthoring: PropTypes.bool.isRequired,
   isUsingMouse: PropTypes.bool.isRequired,
   isFilling: PropTypes.bool.isRequired,
