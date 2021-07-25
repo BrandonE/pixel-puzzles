@@ -3,10 +3,29 @@ table tbody tr td {
   text-align: center;
 }
 
+.grid {
+  float: left;
+  padding-right: 20px;
+}
+
+.coordinates {
+  display: inline;
+  margin-right: 20px;
+}
+
 .subGrid {
   padding: 0;
 }
 
 .cell {
   border: 1px solid black;
+  padding: 5px;
+}
+
+.react-confirm-alert {
+  width: 90%;
+}
+
+.react-confirm-alert-body {
+  width: auto;
 }

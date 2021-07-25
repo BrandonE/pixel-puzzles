@@ -46,14 +46,14 @@ class SubGrid extends React.Component {
   }
 
   onCellChanged (gridY, gridX, subGridY, subGridX, value) {
-    const { isAuthoring, isCoordinate } = this.props
+    const { onCellChanged, isAuthoring, isCoordinate } = this.props
     const { subGridData, subGridFilling } = this.state
 
-    if (!isCoordinate) {
+    if (!isCoordinate && onCellChanged) {
       if (isAuthoring) {
         subGridData[subGridY][subGridX] = (value) ? 1 : 0
         subGridFilling[subGridY][subGridX] = subGridData[subGridY][subGridX]
-        this.props.onCellChanged(gridY, gridX, subGridY, subGridX, value)
+        onCellChanged(gridY, gridX, subGridY, subGridX, value)
       }
 
       subGridFilling[subGridY][subGridX] = (value) ? 1 : 0
@@ -76,7 +76,6 @@ class SubGrid extends React.Component {
       onCellEdit, isUsingMouse, isFilling, filledColor, emptyColor,
       solvedColor, unsolvedColor, gridY, gridX
     } = this.props
-
     const { subGridFilling } = this.state
 
     return (
