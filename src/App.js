@@ -1,8 +1,9 @@
 import React from 'react'
 import Grid from './components/Grid'
-import { Container, ButtonToolbar, ButtonGroup, Button } from 'react-bootstrap'
+import { Container, Button, Form } from 'react-bootstrap'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast, ToastContainer } from 'react-toastify'
+import Jimp from 'jimp/es'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import 'react-toastify/dist/ReactToastify.css'
@@ -32,6 +33,7 @@ class App extends React.Component {
     this.clear = this.clear.bind(this)
     this.revealSolution = this.revealSolution.bind(this)
     this.invert = this.invert.bind(this)
+    this.import = this.import.bind(this)
   }
 
   componentDidMount () {
@@ -213,6 +215,53 @@ class App extends React.Component {
     window.location.search = searchParams.toString()
   }
 
+  import (e) {
+    const file = e.target.files[0]
+
+    confirmAlert({
+      title: 'Confirmation',
+      message: 'Are you sure you want to import this image? Your current canvas will be overwritten.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {
+            const reader = new FileReader()
+
+            // Closure to capture the file information.
+            reader.onload = ((_) => {
+              return async (e) => {
+                let jimpFile = await Jimp.read(Buffer.from(e.target.result))
+
+                jimpFile = jimpFile
+                  .greyscale()
+                  .contrast(1)
+
+                console.log(jimpFile)
+
+                // https://stackoverflow.com/a/58787093/12055600
+                const { width, height } = jimpFile.bitmap
+                // const pixels = []
+
+                for (let y = 0; y < height; y++) {
+                  for (let x = 0; x < width; x++) {
+                    // const pixel = Jimp.intToRGBA(jimpFile.getPixelColor(x, y))
+
+                    console.log(Jimp.intToRGBA(jimpFile.getPixelColor(x, y)))
+                  }
+                }
+              }
+            })(file)
+
+            reader.readAsArrayBuffer(file)
+          }
+        },
+        {
+          label: 'No'
+        }
+      ]
+    })
+  }
+
   render () {
     const {
       isAuthoring, isUsingMouse, isFilling, size,
@@ -275,29 +324,40 @@ class App extends React.Component {
           )}
         </div>
 
-        <ButtonToolbar>
-          <ButtonGroup>
-            {isAuthoring && (
-              <div>
+        <Form>
+          {isAuthoring && (
+            <div>
+              <Form.Group className="mb-3">
                 <Button onClick={this.invert}>Invert</Button>
-                <Button>Import (File upload)</Button>
-                <Button>Share (Provide shareable link using hostname and query params.)</Button>
                 <Button>Drop down to change size (Provide same warning as clearing)</Button>
-              </div>
-            )}
+              </Form.Group>
 
-            {!isAuthoring && (
-              <div>
+              <Form.Group className="mb-3">
+                <Form.Label>Import from file</Form.Label>
+                <Form.Control type="file" name="files" accept=".jpg, .jpeg, .png, .gif" onChange={this.import} />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Button>Share (Provide shareable link using hostname and query params.)</Button>
+              </Form.Group>
+
+            </div>
+          )}
+
+          {!isAuthoring && (
+            <div>
+              <Form.Group className="mb-3">
                 <Button onClick={this.revealSolution}>Reveal Solution</Button>
-              </div>
-            )}
+              </Form.Group>
+            </div>
+          )}
 
+          <Form.Group className="mb-3">
             <Button variant="danger" onClick={this.clear}>Clear</Button>
-
             <Button onClick={this.changeMode}>{(isAuthoring) ? 'Play' : 'Edit'}</Button>
             <Button>Print (New window)</Button>
-          </ButtonGroup>
-        </ButtonToolbar>
+          </Form.Group>
+        </Form>
       </Container>
     )
   }
