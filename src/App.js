@@ -37,6 +37,7 @@ class App extends React.Component {
     this.invert = this.invert.bind(this)
     this.import = this.import.bind(this)
     this.export = this.export.bind(this)
+    this.share = this.share.bind(this)
   }
 
   componentDidMount () {
@@ -286,6 +287,15 @@ class App extends React.Component {
     })
   }
 
+  share () {
+    const { protocol, host } = window.location
+    const searchParams = new URLSearchParams(window.location.search)
+    searchParams.set('isAuthoring', 'false')
+    searchParams.set('gridData', serializeGridData(this.gridData))
+    navigator.clipboard.writeText(`${protocol}//${host}/?${searchParams.toString()}`)
+    toast.success('URL copied to your clipboard!')
+  }
+
   render () {
     const {
       isAuthoring, isUsingMouse, isFilling, size,
@@ -366,7 +376,7 @@ class App extends React.Component {
               </Form.Group>
 
               <Form.Group className="mb-3">
-                <Button>Share (Copy link to clipboard and show Toast notification)</Button>
+                <Button onClick={this.share}>Share</Button>
               </Form.Group>
 
             </div>
