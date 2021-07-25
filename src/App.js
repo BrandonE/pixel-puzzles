@@ -1,6 +1,6 @@
 import React from 'react'
 import Grid from './components/Grid'
-import { Container, Button, Form } from 'react-bootstrap'
+import { Container, Button, Form, Dropdown, DropdownButton } from 'react-bootstrap'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast, ToastContainer } from 'react-toastify'
 import Jimp from 'jimp/es'
@@ -38,6 +38,7 @@ class App extends React.Component {
     this.import = this.import.bind(this)
     this.export = this.export.bind(this)
     this.share = this.share.bind(this)
+    this.resizeCanvas = this.resizeCanvas.bind(this)
   }
 
   componentDidMount () {
@@ -65,13 +66,13 @@ class App extends React.Component {
       const deserializedSize = Math.sqrt(Math.sqrt(serializedGridData.length))
 
       if (deserializedSize % 1 !== 0) {
-        toast.error('Grid must have a size that is a power of 4.')
+        toast.error('Grid must have a size of x^4.')
         this.gridData = generateGrid(size, serializedGridDataGitHub)
       } else if (deserializedSize < 3) {
-        toast.error('Sub-grids can be no smaller than 3x3.')
+        toast.error('Grid can be no smaller than 3^4.')
         this.gridData = generateGrid(size, serializedGridDataGitHub)
       } else if (deserializedSize > 11) {
-        toast.error('Sub-grids can be no larger than 11x11.')
+        toast.error('Grid can be no larger than 11^4.')
         this.gridData = generateGrid(size, serializedGridDataGitHub)
       } else {
         size = deserializedSize
@@ -131,7 +132,7 @@ class App extends React.Component {
 
     confirmAlert({
       title: 'Confirmation',
-      message: `Are you sure you want to clear ${isAuthoring ? 'the canvas' : 'your progress'}? This cannot be undone`,
+      message: `Are you sure you want to clear ${isAuthoring ? 'the canvas' : 'your progress'}? This cannot be undone.`,
       buttons: [
         {
           label: 'Yes',
@@ -140,8 +141,8 @@ class App extends React.Component {
 
             if (isAuthoring) {
               // Clear the canvas.
-              const gridData = serializeGridData(this.gridData)
-              searchParams.set('gridData', '0'.repeat(gridData.length))
+              const serializedGridData = serializeGridData(this.gridData)
+              searchParams.set('gridData', '0'.repeat(serializedGridData.length))
             } else {
               // Clear your progress, not the grid data (actual puzzle contents).
               searchParams.set('gridData', serializeGridData(this.gridData))
@@ -222,6 +223,7 @@ class App extends React.Component {
 
   import (e) {
     const file = e.target.files[0]
+    e.target.value = ''
 
     confirmAlert({
       title: 'Confirmation',
@@ -236,10 +238,11 @@ class App extends React.Component {
             reader.onload = ((_) => {
               return async (e) => {
                 const jimpFile = await Jimp.read(Buffer.from(e.target.result))
+                const size = Math.pow(this.gridData.length, 2)
 
                 jimpFile
                   .contrast(1)
-                  .resize(64, 64) // TODO: Allow resizing to any number between 3^4 and 11^4. Allow cropping to square.
+                  .resize(size, size)
 
                 const searchParams = new URLSearchParams(window.location.search)
                 searchParams.set('gridData', jimpToSerializedGridData(jimpFile))
@@ -294,6 +297,26 @@ class App extends React.Component {
     searchParams.set('gridData', serializeGridData(this.gridData))
     navigator.clipboard.writeText(`${protocol}//${host}/?${searchParams.toString()}`)
     toast.success('URL copied to your clipboard!')
+  }
+
+  resizeCanvas (size) {
+    confirmAlert({
+      title: 'Confirmation',
+      message: 'Are you sure you want to resize? This will clear the canvas.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {
+            const searchParams = new URLSearchParams(window.location.search)
+            searchParams.set('gridData', '0'.repeat(Math.pow(size, 4)))
+            window.location.search = searchParams.toString()
+          }
+        },
+        {
+          label: 'No'
+        }
+      ]
+    })
   }
 
   render () {
@@ -363,12 +386,28 @@ class App extends React.Component {
             <div>
               <Form.Group className="mb-3">
                 <Button onClick={this.invert}>Invert</Button>
-                <Button>Drop down to change size (Provide same warning as clearing)</Button>
+                <DropdownButton title="Resize Canvas">
+                  { /* Sizes allowed are 3-11 */ }
+                  {Array(11).fill(0).map((_, i) => i + 1).filter(
+                    size => size >= 3 && size !== this.gridData.length
+                  ).map(size => (
+                    <Dropdown.Item
+                      key={size}
+                      onSelect={() => this.resizeCanvas(size)}
+                    >
+                      {size}<sup>4</sup>
+                    </Dropdown.Item>
+                  ))}
+                </DropdownButton>
               </Form.Group>
 
               <Form.Group className="mb-3">
-                <Form.Label>Import from file</Form.Label>
-                <Form.Control type="file" name="files" accept=".jpg, .jpeg, .png, .gif" onChange={this.import} />
+                <Form.Label>Import from Image</Form.Label>
+                <Form.Control
+                  type="file" name="files"
+                  accept=".jpg, .jpeg, .png, .gif"
+                  onChange={this.import}
+                />
               </Form.Group>
 
               <Form.Group className="mb-3">
