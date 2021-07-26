@@ -53,3 +53,33 @@ form {
 .fa-github {
   font-size: 30px;
 }
+
+.print {
+  margin: 20px;
+}
+
+.print a {
+  text-decoration: none;
+  color: black;
+}
+
+.print .cell {
+  border: 1px solid black;
+  width: 0.4vw;
+  height: 0.4vw;
+}
+
+.print .footer {
+  position: fixed;
+  bottom: 0px;
+}
+
+.print .fa-github {
+  display: none;
+}
+
+@media not print {
+  .print {
+    display: none;
+  }
+}

@@ -49,8 +49,8 @@ const Grid = props => {
 Grid.propTypes = {
   onCellEdit: PropTypes.func,
   onCellChanged: PropTypes.func,
-  isAuthoring: PropTypes.bool.isRequired,
-  isFilling: PropTypes.bool.isRequired,
+  isAuthoring: PropTypes.bool,
+  isFilling: PropTypes.bool,
   size: PropTypes.number.isRequired,
   filledColor: PropTypes.number.isRequired,
   emptyColor: PropTypes.number.isRequired,

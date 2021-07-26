@@ -49,7 +49,6 @@ class SubGrid extends React.Component {
   onCellChanged (gridY, gridX, subGridY, subGridX, value) {
     const { onCellChanged, isAuthoring, isCoordinate } = this.props
     const { subGridData, subGridFilling } = this.state
-    console.log('CHANGE TO', value)
 
     if (!isCoordinate && onCellChanged) {
       if (isAuthoring) {

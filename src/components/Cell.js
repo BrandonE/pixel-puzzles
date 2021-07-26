@@ -7,6 +7,7 @@ const Cell = props => {
     onCellEdit, onCellChanged, filledColor, emptyColor,
     gridY, gridX, subGridY, subGridX, isFilled
   } = props
+
   return (
     <td
       className="cell"
@@ -17,7 +18,6 @@ const Cell = props => {
 
       onPointerDown={() => {
         const { isFilled } = props
-        console.log(isFilled)
 
         if (onCellEdit) {
           onCellEdit(isFilled)
@@ -30,7 +30,6 @@ const Cell = props => {
 
       onMouseEnter={e => {
         const { isFilling } = props
-        console.log('POINTER ENTER')
 
         if (onCellChanged && e.buttons === undefined ? e.which === 1 : e.buttons === 1) {
           onCellChanged(gridY, gridX, subGridY, subGridX, isFilling)
