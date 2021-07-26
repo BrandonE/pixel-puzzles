@@ -13,30 +13,38 @@ class Print extends React.Component {
       unsolvedColor, gridData, coordinatesOrder
     } = this.props
 
+    if (!gridData) {
+      return <></>
+    }
+
     return (
       <div className="print">
         <Header />
 
-        <div className="grid">
-          <Grid
-            size={size}
-            filledColor={filledColor}
-            emptyColor={emptyColor}
-            solvedColor={unsolvedColor}
-            unsolvedColor={unsolvedColor}
-            gridData={gridData}
-          />
-        </div>
+        {gridData && (
+          <>
+            <div className="grid">
+              <Grid
+                size={size}
+                filledColor={filledColor}
+                emptyColor={emptyColor}
+                solvedColor={unsolvedColor}
+                unsolvedColor={unsolvedColor}
+                gridData={gridData}
+              />
+            </div>
 
-        <Coordinates
-          size={size}
-          filledColor={filledColor}
-          emptyColor={emptyColor}
-          solvedColor={unsolvedColor}
-          unsolvedColor={unsolvedColor}
-          gridData={gridData}
-          coordinatesOrder={coordinatesOrder}
-        />
+            <Coordinates
+              size={size}
+              filledColor={filledColor}
+              emptyColor={emptyColor}
+              solvedColor={unsolvedColor}
+              unsolvedColor={unsolvedColor}
+              gridData={gridData}
+              coordinatesOrder={coordinatesOrder}
+            />
+          </>
+        )}
 
         <Footer />
       </div>
@@ -49,7 +57,7 @@ Print.propTypes = {
   filledColor: PropTypes.number.isRequired,
   emptyColor: PropTypes.number.isRequired,
   unsolvedColor: PropTypes.number.isRequired,
-  gridData: PropTypes.array.isRequired,
+  gridData: PropTypes.array,
   coordinatesOrder: PropTypes.array.isRequired
 }
 

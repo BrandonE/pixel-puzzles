@@ -1,6 +1,34 @@
 # Pixel Puzzles
 
-Fill out sections of a grid to reveal pixel art. Inspired by [Pencil Puzzles](https://web.archive.org/web/20111027002447/http://www.tipstricks.com/puzzles.html) from [Tips & Tricks Magazine](https://en.wikipedia.org/wiki/Tips_%26_Tricks_(magazine)).
+Copy each square's pattern to the associated coordinates to reveal a secret image! Fill the grid in your browser or print the puzzle to complete by hand. Edit the puzzle or generate your own using any image. Share puzzles with your friends and family!
+
+![Example puzzle with the GitHub Octocat](http://url/to/img.png)
+
+Inspired by [Pencil Puzzles](https://web.archive.org/web/20111027002447/http://www.tipstricks.com/puzzles.html) from [Tips & Tricks Magazine](https://en.wikipedia.org/wiki/Tips_%26_Tricks_(magazine)).
+
+## Functionality
+
+### Playing
+
+When you first load the application, you will be presented with the sample puzzle shown above. You can toggle pixels on and off using your mouse. When a square has all of its pixels filled out properly, the square's border will light up. You can erase your progress and start over by refreshing the page or selecting *Clear*. You can also *Reveal* the solution.
+
+### Editing
+
+Selecting *Edit* will **reveal the solution to the puzzle you are currently solving**. Afterwards, you can modify the puzzle by toggling pixels using your mouse just as you would when playing. Selecting *Clear* will empty the canvas, allowing you to create a puzzle from scratch.
+
+By default, the canvas is made up of 8<sup>4</sup> pixels. You can resize the canvas from anywhere between 3<sup>4</sup> and 11<sup>4</sup> pixels. Resizing the canvas will also empty it.
+
+You can also *Import* a puzzle from an image. Select an image from your machine to generate the puzzle. Images will be recolored and scaled to the current size of the canvas. Square images with high contrast will work best.
+
+If you would like, you can *Export* the current canvas as an image. Importing the image will result in the canvas being restored.
+
+Clicking *Invert* will replace all filled pixels with empty pixels and vice-versa. This can be useful if an imported image was not colored as expected.
+
+Whenever you are done editing your puzzle, you can click *Play* to solve it.
+
+### Printing and Sharing
+
+While playing or editing a puzzle, you can click *Print* to generate a printable version of the puzzle (Landscape mode recommended) or *Share* to copy a link for the puzzle to your clipboard.
 
 ## Available Scripts
 

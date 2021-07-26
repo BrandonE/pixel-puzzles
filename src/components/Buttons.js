@@ -1,12 +1,11 @@
 import React from 'react'
-import ReactToPrint from 'react-to-print'
 import PropTypes from 'prop-types'
 import { Row, Col, Button, Form, Dropdown, DropdownButton } from 'react-bootstrap'
 
 const Buttons = props => {
   const {
     changeMode, clear, revealSolution, invert, importImage, exportImage,
-    share, resizeCanvas, isAuthoring, gridData, printableRef
+    share, resizeCanvas, print, isAuthoring, gridData
   } = props
 
   return (
@@ -36,7 +35,7 @@ const Buttons = props => {
             <Form.Label>Import from Image</Form.Label>
             <Form.Control
               type="file" name="files"
-              accept=".jpg, .jpeg, .png, .gif"
+              accept=".bmp, .gif, .jpg, .jpeg, .png, .tiff"
               onChange={importImage}
             />
           </Row>
@@ -44,7 +43,6 @@ const Buttons = props => {
           <Row>
             <Col>
               <Button onClick={exportImage}>Export as Image</Button>
-              <Button onClick={share}>Share</Button>
             </Col>
           </Row>
         </>
@@ -55,7 +53,7 @@ const Buttons = props => {
           <Row>
             <Col>
               <Form.Group className="mb-3">
-                <Button onClick={revealSolution}>Reveal Solution</Button>
+                <Button variant="warning" onClick={revealSolution}>Reveal Solution</Button>
               </Form.Group>
             </Col>
           </Row>
@@ -65,13 +63,14 @@ const Buttons = props => {
       <Row>
         <Col>
           <Button variant="danger" onClick={clear}>Clear</Button>
-          <Button onClick={changeMode}>{(isAuthoring) ? 'Play' : 'Edit'}</Button>
-          <ReactToPrint
-            trigger={() => (
-              <Button>Print (Landscape Recommended)</Button>
-            )}
-            content={() => printableRef.current}
-          />
+          <Button variant="danger" onClick={changeMode}>{(isAuthoring) ? 'Play' : 'Edit'}</Button>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col>
+          <Button onClick={print}>Print</Button>
+          <Button onClick={share}>Share</Button>
         </Col>
       </Row>
     </>
@@ -87,9 +86,9 @@ Buttons.propTypes = {
   exportImage: PropTypes.func.isRequired,
   share: PropTypes.func.isRequired,
   resizeCanvas: PropTypes.func.isRequired,
+  print: PropTypes.func.isRequired,
   isAuthoring: PropTypes.bool,
-  gridData: PropTypes.array.isRequired,
-  printableRef: PropTypes.object.isRequired
+  gridData: PropTypes.array.isRequired
 }
 
 export default Buttons

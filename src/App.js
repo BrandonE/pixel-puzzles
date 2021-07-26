@@ -1,8 +1,9 @@
 import React from 'react'
 import Grid from './components/Grid'
-import { Container, Form } from 'react-bootstrap'
+import { Container, Form, Button } from 'react-bootstrap'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast, ToastContainer } from 'react-toastify'
+import ReactToPrint from 'react-to-print'
 import Jimp from 'jimp/es'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'react-confirm-alert/src/react-confirm-alert.css'
@@ -47,6 +48,7 @@ class App extends React.Component {
     this.exportImage = this.exportImage.bind(this)
     this.share = this.share.bind(this)
     this.resizeCanvas = this.resizeCanvas.bind(this)
+    this.print = this.print.bind(this)
   }
 
   componentDidMount () {
@@ -320,10 +322,34 @@ class App extends React.Component {
     })
   }
 
+  print () {
+    this.setState({
+      gridDataToPrint: this.gridData
+    })
+
+    confirmAlert({
+      title: 'Print',
+      message: 'Click this button to print the puzzle. We recommend printing in Landscape mode. ',
+      childrenElement: () => (
+        <ReactToPrint
+          trigger={() => (
+            <Button>Print</Button>
+          )}
+          content={() => this.printableRef.current}
+        />
+      ),
+      buttons: [
+        {
+          label: 'Cancel'
+        }
+      ]
+    })
+  }
+
   render () {
     const {
-      isAuthoring, isFilling, size,
-      filledColor, emptyColor, solvedColor, unsolvedColor
+      isAuthoring, isFilling, size, filledColor,
+      emptyColor, solvedColor, unsolvedColor, gridDataToPrint
     } = this.state
 
     if (!size) {
@@ -359,9 +385,9 @@ class App extends React.Component {
             exportImage={this.exportImage}
             share={this.share}
             resizeCanvas={this.resizeCanvas}
+            print={this.print}
             isAuthoring={isAuthoring}
             gridData={this.gridData}
-            printableRef={this.printableRef}
           />
 
           <Footer />
@@ -371,7 +397,7 @@ class App extends React.Component {
             filledColor={filledColor}
             emptyColor={emptyColor}
             unsolvedColor={unsolvedColor}
-            gridData={this.gridData}
+            gridData={gridDataToPrint}
             coordinatesOrder={this.coordinatesOrder}
             ref={this.printableRef}
           />
