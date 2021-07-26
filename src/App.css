@@ -30,6 +30,13 @@ form {
   height: 0.5vw;
 }
 
+@media only screen and (min-width: 1200px) {
+  .cell {
+    width: 6px;
+    height: 6px;
+  }
+}
+
 .row {
   margin-bottom: 20px;
 }

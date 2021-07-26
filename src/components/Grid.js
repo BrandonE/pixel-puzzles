@@ -5,8 +5,8 @@ import { getXLabel, getYLabel } from '../lib/util'
 
 const Grid = props => {
   const {
-    onCellEdit, onCellChanged, isAuthoring, isFilling, size,
-    filledColor, emptyColor, solvedColor, unsolvedColor, gridData
+    onCellEdit, onCellChanged, isAuthoring, isFilling, isRevealing,
+    size, filledColor, emptyColor, solvedColor, unsolvedColor, gridData
   } = props
 
   return (
@@ -29,6 +29,7 @@ const Grid = props => {
                 onCellChanged={onCellChanged}
                 isAuthoring={isAuthoring}
                 isFilling={isFilling}
+                isRevealing={isRevealing}
                 size={size}
                 filledColor={filledColor}
                 emptyColor={emptyColor}
@@ -51,6 +52,7 @@ Grid.propTypes = {
   onCellChanged: PropTypes.func,
   isAuthoring: PropTypes.bool,
   isFilling: PropTypes.bool,
+  isRevealing: PropTypes.bool,
   size: PropTypes.number.isRequired,
   filledColor: PropTypes.number.isRequired,
   emptyColor: PropTypes.number.isRequired,

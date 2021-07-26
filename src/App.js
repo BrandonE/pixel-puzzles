@@ -182,7 +182,7 @@ class App extends React.Component {
                   // TODO: Create an animation of filling the grid.
                   return (
                     <Grid
-                      isAuthoring={true}
+                      isRevealing={true}
                       isFilling={false}
                       size={size}
                       filledColor={filledColor}

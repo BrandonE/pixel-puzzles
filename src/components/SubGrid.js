@@ -6,7 +6,7 @@ import { decimalToHex } from '../lib/util'
 class SubGrid extends React.Component {
   constructor (props) {
     super()
-    const { isAuthoring, isCoordinate, size } = props
+    const { isAuthoring, isCoordinate, isRevealing, size } = props
     const { initialSubGridData } = props
 
     const subGridData = []
@@ -40,6 +40,14 @@ class SubGrid extends React.Component {
     this.state = {
       subGridData,
       subGridFilling
+    }
+
+    if (isRevealing) {
+      setTimeout(() => {
+        this.setState({
+          subGridFilling: subGridData
+        })
+      }, Math.random() * 1000)
     }
 
     this.onCellChanged = this.onCellChanged.bind(this)
@@ -118,6 +126,7 @@ SubGrid.propTypes = {
   isAuthoring: PropTypes.bool,
   isCoordinate: PropTypes.bool,
   isFilling: PropTypes.bool,
+  isRevealing: PropTypes.bool,
   size: PropTypes.number.isRequired,
   filledColor: PropTypes.number.isRequired,
   emptyColor: PropTypes.number.isRequired,
