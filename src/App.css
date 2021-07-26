@@ -26,15 +26,10 @@ form {
 
 .cell {
   border: 1px solid black;
-  width: 0.5vw;
-  height: 0.5vw;
-}
-
-@media only screen and (min-width: 1200px) {
-  .cell {
-    width: 6px;
-    height: 6px;
-  }
+  width: 0.6vw;
+  height: 0.6vw;
+  max-width: 20px;
+  max-height: 20px;
 }
 
 .row {
