@@ -2,7 +2,7 @@
 
 Copy each square's pattern to the associated coordinates to reveal a secret image! Fill the grid in your browser or print the puzzle to complete by hand. Edit the puzzle or generate your own using any image. Share puzzles with your friends and family!
 
-![Example puzzle with the GitHub Octocat](http://url/to/img.png)
+![Example puzzle with the GitHub Octocat](./example.png)
 
 Inspired by [Pencil Puzzles](https://web.archive.org/web/20111027002447/http://www.tipstricks.com/puzzles.html) from [Tips & Tricks Magazine](https://en.wikipedia.org/wiki/Tips_%26_Tricks_(magazine)).
 
