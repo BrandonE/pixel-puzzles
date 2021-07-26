@@ -75,8 +75,8 @@ class App extends React.Component {
       } else if (deserializedSize < 3) {
         toast.error('Grid can be no smaller than 3^4.')
         this.gridData = generateGrid(size, serializedGridDataGitHub)
-      } else if (deserializedSize > 11) {
-        toast.error('Grid can be no larger than 11^4.')
+      } else if (deserializedSize > 9) {
+        toast.error('Grid can be no larger than 9^4.')
         this.gridData = generateGrid(size, serializedGridDataGitHub)
       } else {
         size = deserializedSize

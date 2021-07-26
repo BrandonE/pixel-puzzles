@@ -15,8 +15,8 @@ const Buttons = props => {
           <Row>
             <Col>
               <DropdownButton title="Resize Canvas">
-                { /* Sizes allowed are 3-11 */ }
-                {Array(11).fill(0).map((_, i) => i + 1).filter(
+                { /* Sizes allowed are 3-9 */ }
+                {Array(9).fill(0).map((_, i) => i + 1).filter(
                   size => size >= 3 && size !== gridData.length
                 ).map(size => (
                   <Dropdown.Item

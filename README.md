@@ -16,7 +16,7 @@ When you first load the application, you will be presented with the sample puzzl
 
 Selecting *Edit* will **reveal the solution to the puzzle you are currently solving**. Afterwards, you can modify the puzzle by toggling pixels using your mouse just as you would when playing. Selecting *Clear* will empty the canvas, allowing you to create a puzzle from scratch.
 
-By default, the canvas is made up of 8<sup>4</sup> pixels. You can resize the canvas from anywhere between 3<sup>4</sup> and 11<sup>4</sup> pixels. Resizing the canvas will also empty it.
+By default, the canvas is made up of 8<sup>4</sup> pixels. You can resize the canvas from anywhere between 3<sup>4</sup> and 9<sup>4</sup> pixels. Resizing the canvas will also empty it.
 
 You can also *Import* a puzzle from an image. Select an image from your machine to generate the puzzle. Images will be recolored and scaled to the current size of the canvas. Square images with high contrast will work best.
 
