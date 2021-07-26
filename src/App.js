@@ -294,11 +294,11 @@ class App extends React.Component {
   }
 
   share () {
-    const { protocol, host } = window.location
+    const { protocol, host, pathname } = window.location
     const searchParams = new URLSearchParams(window.location.search)
     searchParams.set('isAuthoring', 'false')
     searchParams.set('gridData', serializeGridData(this.gridData))
-    navigator.clipboard.writeText(`${protocol}//${host}/?${searchParams.toString()}`)
+    navigator.clipboard.writeText(`${protocol}//${host}${pathname}?${searchParams.toString()}`)
     toast.success('URL copied to your clipboard!')
   }
 
