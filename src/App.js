@@ -27,6 +27,7 @@ class App extends React.Component {
 
     this.state = {
       isAuthoring: false,
+      // TODO: Move this down to Grid to avoid re-rendering coordinates and make things faster.
       isFilling: false,
       filledColor: 0x00000000,
       emptyColor: 0xFFFFFFFF,
@@ -232,34 +233,49 @@ class App extends React.Component {
       message: 'Are you sure you want to import this image? Your current canvas will be overwritten.',
       buttons: [
         {
-          label: 'Yes',
-          onClick: () => {
-            const reader = new FileReader()
-
-            // Closure to capture the file information.
-            reader.onload = ((_) => {
-              return async (e) => {
-                const jimpFile = await Jimp.read(Buffer.from(e.target.result))
-                const size = Math.pow(this.gridData.length, 2)
-
-                jimpFile
-                  .contrast(1)
-                  .resize(size, size)
-
-                const searchParams = new URLSearchParams(window.location.search)
-                searchParams.set('gridData', jimpToSerializedGridData(jimpFile))
-                window.location.search = searchParams.toString()
-              }
-            })(file)
-
-            reader.readAsArrayBuffer(file)
-          }
+          label: 'Stretch to Fit',
+          onClick: () => this.confirmImportImage(file, true)
         },
         {
-          label: 'No'
+          label: 'Resize Canvas',
+          onClick: () => this.confirmImportImage(file, false, false)
+        },
+        {
+          label: 'Cancel'
         }
       ]
     })
+  }
+
+  confirmImportImage (file, stretch, backgroundFilled) {
+    const reader = new FileReader()
+
+    // Closure to capture the file information.
+    reader.onload = ((_) => {
+      return async (e) => {
+        const jimpFile = await Jimp.read(Buffer.from(e.target.result))
+        const size = Math.pow(this.gridData.length, 2)
+
+        if (!stretch) {
+          const { width, height } = jimpFile.bitmap
+          const largerDimension = (width > height) ? width : height
+
+          jimpFile
+            .background((backgroundFilled) ? 0x00000000 : 0xFFFFFFFF)
+            .contain(largerDimension, largerDimension)
+        }
+
+        jimpFile
+          .contrast(1)
+          .resize(size, size)
+
+        const searchParams = new URLSearchParams(window.location.search)
+        searchParams.set('gridData', jimpToSerializedGridData(jimpFile))
+        window.location.search = searchParams.toString()
+      }
+    })(file)
+
+    reader.readAsArrayBuffer(file)
   }
 
   async exportImage () {
