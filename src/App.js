@@ -181,7 +181,6 @@ class App extends React.Component {
                     return <></>
                   }
 
-                  // TODO: Create an animation of filling the grid.
                   return (
                     <Grid
                       isRevealing={true}

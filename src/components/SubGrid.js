@@ -82,15 +82,18 @@ class SubGrid extends React.Component {
 
   render () {
     const {
-      onCellEdit, isFilling, filledColor, emptyColor,
-      solvedColor, unsolvedColor, gridY, gridX
+      onCellEdit, isCoordinate, isFilling, filledColor,
+      emptyColor, solvedColor, unsolvedColor, gridY, gridX
     } = this.props
     const { subGridFilling } = this.state
 
     return (
       <td
         className="subGrid"
-        style={{ border: `1px solid ${decimalToHex(this.isSolved() ? solvedColor : unsolvedColor)}` }}
+        style={{
+          border: `1px solid ${decimalToHex(this.isSolved() ? solvedColor : unsolvedColor)}`,
+          touchAction: (isCoordinate) ? 'auto' : 'none'
+        }}
       >
         <table>
           <tbody>

@@ -1,7 +1,6 @@
 table tbody tr td {
   border: 0px;
   text-align: center;
-  touch-action: none;
 }
 
 form {
@@ -65,15 +64,10 @@ form {
   color: black;
 }
 
-.print .cell {
-  border: 1px solid black;
-  width: 0.4vw;
-  height: 0.4vw;
-}
-
 .print .footer {
   position: fixed;
   bottom: 0px;
+  right: 20px;
 }
 
 .print .fa-github {
