@@ -8,7 +8,7 @@ import Footer from './Footer'
 class Print extends React.Component {
   render () {
     const {
-      size, filledColor, emptyColor,
+      gridSize, subGridSize, filledColor, emptyColor,
       // Don't indicate which boxes are empty to begin with; always use unsolved color.
       unsolvedColor, gridData, coordinatesOrder
     } = this.props
@@ -19,13 +19,14 @@ class Print extends React.Component {
 
     return (
       <div className="print">
-        <Header />
+        <Header showUrl={true} />
 
         {gridData && (
           <>
             <div className="grid">
               <Grid
-                size={size}
+                gridSize={gridSize}
+                subGridSize={subGridSize}
                 filledColor={filledColor}
                 emptyColor={emptyColor}
                 solvedColor={unsolvedColor}
@@ -35,7 +36,7 @@ class Print extends React.Component {
             </div>
 
             <Coordinates
-              size={size}
+              subGridSize={subGridSize}
               filledColor={filledColor}
               emptyColor={emptyColor}
               solvedColor={unsolvedColor}
@@ -53,7 +54,8 @@ class Print extends React.Component {
 }
 
 Print.propTypes = {
-  size: PropTypes.number.isRequired,
+  gridSize: PropTypes.number.isRequired,
+  subGridSize: PropTypes.number.isRequired,
   filledColor: PropTypes.number.isRequired,
   emptyColor: PropTypes.number.isRequired,
   unsolvedColor: PropTypes.number.isRequired,

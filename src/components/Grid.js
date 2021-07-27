@@ -6,7 +6,7 @@ import { getXLabel, getYLabel } from '../lib/util'
 const Grid = props => {
   const {
     onCellEdit, onCellChanged, isAuthoring, isFilling, isRevealing,
-    size, filledColor, emptyColor, solvedColor, unsolvedColor, gridData
+    gridSize, subGridSize, filledColor, emptyColor, solvedColor, unsolvedColor, gridData
   } = props
 
   return (
@@ -14,15 +14,15 @@ const Grid = props => {
       <tbody>
         <tr>
           <td></td>
-          {Array(size).fill().map((_, colIndex) => (
+          {Array(gridSize).fill().map((_, colIndex) => (
             <td key={colIndex}>{getXLabel(colIndex)}</td>
           ))}
         </tr>
 
-        {Array(size).fill().map((_, rowIndex) => (
+        {Array(gridSize).fill().map((_, rowIndex) => (
           <tr key={rowIndex}>
             <td>{getYLabel(rowIndex)}</td>
-            {Array(size).fill().map((_, colIndex) => (
+            {Array(gridSize).fill().map((_, colIndex) => (
               <SubGrid
                 key={colIndex}
                 onCellEdit={onCellEdit}
@@ -30,7 +30,7 @@ const Grid = props => {
                 isAuthoring={isAuthoring}
                 isFilling={isFilling}
                 isRevealing={isRevealing}
-                size={size}
+                subGridSize={subGridSize}
                 filledColor={filledColor}
                 emptyColor={emptyColor}
                 solvedColor={solvedColor}
@@ -53,7 +53,8 @@ Grid.propTypes = {
   isAuthoring: PropTypes.bool,
   isFilling: PropTypes.bool,
   isRevealing: PropTypes.bool,
-  size: PropTypes.number.isRequired,
+  gridSize: PropTypes.number.isRequired,
+  subGridSize: PropTypes.number.isRequired,
   filledColor: PropTypes.number.isRequired,
   emptyColor: PropTypes.number.isRequired,
   solvedColor: PropTypes.number.isRequired,

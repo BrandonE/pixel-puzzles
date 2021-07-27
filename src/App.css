@@ -1,3 +1,10 @@
+body {
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
 table tbody tr td {
   border: 0px;
   text-align: center;
@@ -25,10 +32,8 @@ form {
 
 .cell {
   border: 1px solid black;
-  width: 0.6vw;
-  height: 0.6vw;
-  max-width: 20px;
-  max-height: 20px;
+  width: 1vw;
+  height: 1vw;
 }
 
 .row {
@@ -65,13 +70,18 @@ form {
 }
 
 .print .footer {
-  position: fixed;
-  bottom: 0px;
-  right: 20px;
+ display: none
 }
 
 .print .fa-github {
   display: none;
+}
+
+@media print {
+  body {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
 }
 
 @media not print {

@@ -22,20 +22,20 @@ export const shuffleArray = (arr) => {
 
 export const serializeGridData = gridData => gridData.flat().flat().flat().join('')
 
-export const generateGrid = (size, serializedGridData) => {
+export const generateGrid = (gridSize, subGridSize, serializedGridData) => {
   const gridData = []
   let count = 0
 
-  for (let gridY = 0; gridY < size; gridY++) {
+  for (let gridY = 0; gridY < gridSize; gridY++) {
     const gridRow = []
 
-    for (let gridX = 0; gridX < size; gridX++) {
+    for (let gridX = 0; gridX < gridSize; gridX++) {
       const subGridData = []
 
-      for (let subGridY = 0; subGridY < size; subGridY++) {
+      for (let subGridY = 0; subGridY < subGridSize; subGridY++) {
         const subGridRow = []
 
-        for (let subGridX = 0; subGridX < size; subGridX++) {
+        for (let subGridX = 0; subGridX < subGridSize; subGridX++) {
           const value = (serializedGridData) ? serializedGridData[count] : '0'
           subGridRow.push((value === '1') ? 1 : 0)
           count++
@@ -53,11 +53,11 @@ export const generateGrid = (size, serializedGridData) => {
   return gridData
 }
 
-export const generateCoordinatesOrder = size => {
+export const generateCoordinatesOrder = gridSize => {
   const coordinatesOrder = []
 
-  for (let gridY = 0; gridY < size; gridY++) {
-    for (let gridX = 0; gridX < size; gridX++) {
+  for (let gridY = 0; gridY < gridSize; gridY++) {
+    for (let gridX = 0; gridX < gridSize; gridX++) {
       coordinatesOrder.push({
         x: gridX,
         y: gridY
@@ -68,22 +68,22 @@ export const generateCoordinatesOrder = size => {
   return shuffleArray(coordinatesOrder)
 }
 
-export const jimpToSerializedGridData = jimpFile => {
+export const jimpToSerializedGridData = (jimpFile, gridSize, subGridSize) => {
   let serializedGridData = ''
   const { width, height } = jimpFile.bitmap
-  const size = Math.sqrt(Math.sqrt(width * height))
+  const gridWidthAndHeight = gridSize * subGridSize
 
-  if (size % 1 !== 0) {
+  if (gridWidthAndHeight !== width || gridWidthAndHeight !== height) {
     // This should never be thrown.
     throw new Error('Invalid image size.')
   }
 
-  for (let gridY = 0; gridY < size; gridY++) {
-    for (let gridX = 0; gridX < size; gridX++) {
-      for (let subGridY = 0; subGridY < size; subGridY++) {
-        for (let subGridX = 0; subGridX < size; subGridX++) {
-          const x = gridX * size + subGridX
-          const y = gridY * size + subGridY
+  for (let gridY = 0; gridY < gridSize; gridY++) {
+    for (let gridX = 0; gridX < gridSize; gridX++) {
+      for (let subGridY = 0; subGridY < subGridSize; subGridY++) {
+        for (let subGridX = 0; subGridX < subGridSize; subGridX++) {
+          const x = gridX * subGridSize + subGridX
+          const y = gridY * subGridSize + subGridY
           const { r, g, b, a } = Jimp.intToRGBA(jimpFile.getPixelColor(x, y))
           const rgb = r * g * b
           const value = (rgb >= ((255 * 255 * 255) / 2) || a === 0) ? '0' : '1'
@@ -96,24 +96,21 @@ export const jimpToSerializedGridData = jimpFile => {
   return serializedGridData
 }
 
-export const serializedGridDataToJimp = (serializedGridData, filledColor, emptyColor) => {
-  const widthAndHeight = Math.sqrt(serializedGridData.length)
-  const size = Math.sqrt(widthAndHeight)
+export const gridDataToJimp = (gridData, filledColor, emptyColor) => {
+  const serializedGridData = serializeGridData(gridData)
+  const gridSize = gridData.length
+  const subGridSize = gridData[0][0].length
+  const gridWidthAndHeight = gridSize * subGridSize
 
-  if (size % 1 !== 0) {
-    // This should never be thrown.
-    throw new Error('Invalid image size.')
-  }
-
-  const jimpFile = new Jimp(widthAndHeight, widthAndHeight)
+  const jimpFile = new Jimp(gridWidthAndHeight, gridWidthAndHeight)
   let count = 0
 
-  for (let gridY = 0; gridY < size; gridY++) {
-    for (let gridX = 0; gridX < size; gridX++) {
-      for (let subGridY = 0; subGridY < size; subGridY++) {
-        for (let subGridX = 0; subGridX < size; subGridX++) {
-          const x = gridX * size + subGridX
-          const y = gridY * size + subGridY
+  for (let gridY = 0; gridY < gridSize; gridY++) {
+    for (let gridX = 0; gridX < gridSize; gridX++) {
+      for (let subGridY = 0; subGridY < subGridSize; subGridY++) {
+        for (let subGridX = 0; subGridX < subGridSize; subGridX++) {
+          const x = gridX * subGridSize + subGridX
+          const y = gridY * subGridSize + subGridY
           const { r, g, b } = Jimp.intToRGBA((serializedGridData[count] === '1') ? filledColor : emptyColor)
 
           jimpFile.setPixelColor(Jimp.rgbaToInt(r, g, b, 255), x, y)

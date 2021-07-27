@@ -6,7 +6,7 @@ import Coordinates from './Coordinates'
 class Main extends React.Component {
   render () {
     const {
-      onCellEdit, onCellChanged, isAuthoring, isFilling, size,
+      onCellEdit, onCellChanged, isAuthoring, isFilling, gridSize, subGridSize,
       filledColor, emptyColor, solvedColor, unsolvedColor, gridData,
       coordinatesOrder
     } = this.props
@@ -20,7 +20,8 @@ class Main extends React.Component {
               onCellChanged={onCellChanged}
               isAuthoring={isAuthoring}
               isFilling={isFilling}
-              size={size}
+              gridSize={gridSize}
+              subGridSize={subGridSize}
               filledColor={filledColor}
               emptyColor={emptyColor}
               solvedColor={solvedColor}
@@ -31,7 +32,7 @@ class Main extends React.Component {
 
           {!isAuthoring && (
             <Coordinates
-              size={size}
+              subGridSize={subGridSize}
               filledColor={filledColor}
               emptyColor={emptyColor}
               solvedColor={solvedColor}
@@ -51,7 +52,8 @@ Main.propTypes = {
   onCellChanged: PropTypes.func,
   isAuthoring: PropTypes.bool,
   isFilling: PropTypes.bool,
-  size: PropTypes.number.isRequired,
+  gridSize: PropTypes.number.isRequired,
+  subGridSize: PropTypes.number.isRequired,
   filledColor: PropTypes.number.isRequired,
   emptyColor: PropTypes.number.isRequired,
   solvedColor: PropTypes.number.isRequired,

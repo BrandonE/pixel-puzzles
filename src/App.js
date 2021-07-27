@@ -1,6 +1,6 @@
 import React from 'react'
 import Grid from './components/Grid'
-import { Container, Form, Button } from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast, ToastContainer } from 'react-toastify'
 import ReactToPrint from 'react-to-print'
@@ -15,11 +15,14 @@ import Buttons from './components/Buttons'
 import Footer from './components/Footer'
 import {
   generateGrid, generateCoordinatesOrder, serializeGridData,
-  jimpToSerializedGridData, serializedGridDataToJimp
+  jimpToSerializedGridData, gridDataToJimp
 } from './lib/util'
 import Print from './components/Print'
 
-const serializedGridDataGitHub = '0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000011000011110001111100000000000000110001111101111111111111111111111111111111111111110111111111111111111111111111111111111111111111111111111111111111111111101111111111111111111111111111111111111111111111111111111100000000110000001111100011111110111111111111111111111111111111110000000000000000000000000000000010000000110000001111000011111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000010000001100000111000011110011111101111111111111111111111111111111111111111111111011111110111111111111111111111111111111111111111111111111000111110000011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110001110000011111100111111101111111111111111111111111111111101111111011111110000000000000000000000001000000010000000110000001110000011110000000011110001111100011111001111110011111100111111011111110111111111111110111111101111111011111110111111101111111011111110111111000000000100000000000000000000000000000000000000000000000000000000111100000000000000000000000000000000000000000000000000000000000000001111000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000011111110111111101111111011111110111111101111111011111110011111111110000111110001111100011111100111111001111110011111110111111100111111101111111111111111111111111111111111111111111111111111111111111001111100011111000111100001111000011110000111100001111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011111100011111000111110000111100001111000011110000111100001111111111101111111011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111000011110000111100001111000011110000111110001111100011111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001111000011110000111100001111000011110001111100011111000111111111111111111111111111111111111111111111111111111111111111111111011111110111111101111111011111110011111100111111000111110001111111111100111111101111111011111111111111111111111110011111110001110000000000000000000000000000000011000000111100001111111011111111000000000000000000000000000000000000000000000000000000001100000000000000000000000000000000000000000000000000000000000000000000110000000000000000000000000000000000000011000011110111111111111111001111110111111101111111111111111111111111111111111111111111111111111110111111101111111011111110111111001111110011111000111110000000111100001111000001110000011100000011000000010000000000000000111001111111001111111010111110011111110011111100111111100111111111111111111111111111111111111111001111100110111100000000100000001100000010000000100000000000000000000000000000000000000000000000000000110000000100000001000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110111100001111000011100000111000001100000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111111100011111000011110000011100000011000000000000000000000000111111111111111111111111111111111111111111111111001111110000111100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111001111000011111110111110001111000011100000110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
+const serializedGridDataGitHub = '0000000000000000000000000000000000000000000110011100001001111111111111111111111111111111111111111111111111111111111111111111110000111001111111111111110000000000000001100011100000000000000000000000000000000000000000100011000110111111111111111111111110111111111111111111110001111111111111111111111111111111111111111111111111111111111111111111111111100011110111111111111111011110000000000100001100011000001110011101111011110111111110111101111011110111100000100000000000000000000110000000000000000000000000011000000000000000000001000000000000000000000000011110111101111011110111111100111001111011110111101111111111111111111111111111101110011100111001110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111100111001110011100111111111111111111111111111111111111111111111111111111110011100111001110011100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111001110011100111001111111111111111111111111111111110111101111011110011111110111111111111111101110000000000100001110011111000000000000000000001000000000000000000000000000010000000000000010011111111011111111111111111111111111111111101111011110111000011100011000110000100000110111110111101111101111111111111111111101101000001000010000000000000000000000010000100000000000000011111111111111111111111111111111111111111111111111111001100011000100000000000000000000000000000000000111100111000110000000000111111111111111111110011100000000000000000000000000000000000000000000000000111111111111111111111110011110111001100000000000000000000000000000000000000'
+
+const defaultGridSize = 8
+const defaultSubGridSize = 5
 
 class App extends React.Component {
   constructor () {
@@ -48,48 +51,42 @@ class App extends React.Component {
     this.importImage = this.importImage.bind(this)
     this.exportImage = this.exportImage.bind(this)
     this.share = this.share.bind(this)
-    this.resizeCanvas = this.resizeCanvas.bind(this)
+    this.resizeGrids = this.resizeGrids.bind(this)
     this.print = this.print.bind(this)
   }
 
   componentDidMount () {
     const searchParams = new URLSearchParams(window.location.search)
     const query = Object.fromEntries(searchParams.entries())
+    let gridSize = parseInt(query.gridSize, 10)
+    let subGridSize = parseInt(query.subGridSize, 10)
+
+    if (!gridSize || gridSize < 2 || gridSize > 9) {
+      gridSize = defaultGridSize
+    }
+
+    if (!subGridSize || subGridSize < 2 || subGridSize > 9) {
+      subGridSize = defaultSubGridSize
+    }
 
     document.onselectstart = () => false
 
+    this.initializeGrid(gridSize, subGridSize, query.gridData)
+
     this.setState({
       isAuthoring: (query.isAuthoring === 'true'),
-      size: this.initializeGrid(query.gridData)
+      gridSize,
+      subGridSize
     })
   }
 
-  initializeGrid (serializedGridData) {
-    let size = 8
-
-    if (serializedGridData) {
-      const deserializedSize = Math.sqrt(Math.sqrt(serializedGridData.length))
-
-      if (deserializedSize % 1 !== 0) {
-        toast.error('Grid must have a size of x^4.')
-        this.gridData = generateGrid(size, serializedGridDataGitHub)
-      } else if (deserializedSize < 3) {
-        toast.error('Grid can be no smaller than 3^4.')
-        this.gridData = generateGrid(size, serializedGridDataGitHub)
-      } else if (deserializedSize > 9) {
-        toast.error('Grid can be no larger than 9^4.')
-        this.gridData = generateGrid(size, serializedGridDataGitHub)
-      } else {
-        size = deserializedSize
-        this.gridData = generateGrid(size, serializedGridData)
-      }
-    } else {
-      this.gridData = generateGrid(size, serializedGridDataGitHub)
+  initializeGrid (gridSize, subGridSize, serializedGridData) {
+    if (!serializedGridData && gridSize === defaultGridSize && subGridSize === defaultSubGridSize) {
+      serializedGridData = serializedGridDataGitHub
     }
 
-    this.coordinatesOrder = generateCoordinatesOrder(size)
-
-    return size
+    this.gridData = generateGrid(gridSize, subGridSize, serializedGridData)
+    this.coordinatesOrder = generateCoordinatesOrder(gridSize)
   }
 
   onCellEdit (filled) {
@@ -146,8 +143,7 @@ class App extends React.Component {
 
             if (isAuthoring) {
               // Clear the canvas.
-              const serializedGridData = serializeGridData(this.gridData)
-              searchParams.set('gridData', '0'.repeat(serializedGridData.length))
+              searchParams.set('gridData', '0')
             } else {
               // Clear your progress, not the grid data (actual puzzle contents).
               searchParams.set('gridData', serializeGridData(this.gridData))
@@ -176,9 +172,9 @@ class App extends React.Component {
               confirmAlert({
                 title: 'Solution',
                 childrenElement: () => {
-                  const { size, filledColor, emptyColor, solvedColor, unsolvedColor } = this.state
+                  const { gridSize, subGridSize, filledColor, emptyColor, solvedColor, unsolvedColor } = this.state
 
-                  if (!size) {
+                  if (!this.gridData) {
                     return <></>
                   }
 
@@ -186,7 +182,8 @@ class App extends React.Component {
                     <Grid
                       isRevealing={true}
                       isFilling={false}
-                      size={size}
+                      gridSize={gridSize}
+                      subGridSize={subGridSize}
                       filledColor={filledColor}
                       emptyColor={emptyColor}
                       solvedColor={solvedColor}
@@ -254,7 +251,9 @@ class App extends React.Component {
     reader.onload = ((_) => {
       return async (e) => {
         const jimpFile = await Jimp.read(Buffer.from(e.target.result))
-        const size = Math.pow(this.gridData.length, 2)
+        const gridSize = this.gridData.length
+        const subGridSize = this.gridData[0][0].length
+        const gridWidthAndHeight = gridSize * subGridSize
 
         if (!stretch) {
           const { width, height } = jimpFile.bitmap
@@ -267,10 +266,10 @@ class App extends React.Component {
 
         jimpFile
           .contrast(1)
-          .resize(size, size)
+          .resize(gridWidthAndHeight, gridWidthAndHeight)
 
         const searchParams = new URLSearchParams(window.location.search)
-        searchParams.set('gridData', jimpToSerializedGridData(jimpFile))
+        searchParams.set('gridData', jimpToSerializedGridData(jimpFile, gridSize, subGridSize))
         window.location.search = searchParams.toString()
       }
     })(file)
@@ -280,7 +279,7 @@ class App extends React.Component {
 
   async exportImage () {
     const { filledColor, emptyColor } = this.state
-    const image = serializedGridDataToJimp(serializeGridData(this.gridData), filledColor, emptyColor)
+    const image = gridDataToJimp(this.gridData, filledColor, emptyColor)
     const u8 = await image.getBufferAsync(Jimp.MIME_PNG)
 
     // https://medium.com/@koteswar.meesala/convert-array-buffer-to-base64-string-to-display-images-in-angular-7-4c443db242cd
@@ -317,7 +316,7 @@ class App extends React.Component {
     toast.success('URL copied to your clipboard!')
   }
 
-  resizeCanvas (size) {
+  resizeGrids (gridSize, subGridSize) {
     confirmAlert({
       title: 'Confirmation',
       message: 'Are you sure you want to resize? This will clear the canvas.',
@@ -326,7 +325,9 @@ class App extends React.Component {
           label: 'Yes',
           onClick: () => {
             const searchParams = new URLSearchParams(window.location.search)
-            searchParams.set('gridData', '0'.repeat(Math.pow(size, 4)))
+            searchParams.set('gridSize', gridSize)
+            searchParams.set('subGridSize', subGridSize)
+            searchParams.set('gridData', '0')
             window.location.search = searchParams.toString()
           }
         },
@@ -344,7 +345,7 @@ class App extends React.Component {
 
     confirmAlert({
       title: 'Print',
-      message: 'Click this button to print the puzzle. We recommend printing in Landscape mode. ',
+      message: 'Click this button to print the puzzle. ',
       childrenElement: () => (
         <ReactToPrint
           trigger={() => (
@@ -363,16 +364,16 @@ class App extends React.Component {
 
   render () {
     const {
-      isAuthoring, isFilling, size, filledColor,
+      isAuthoring, isFilling, gridSize, subGridSize, filledColor,
       emptyColor, solvedColor, unsolvedColor, gridDataToPrint
     } = this.state
 
-    if (!size) {
+    if (!this.gridData) {
       return <></>
     }
 
     return (
-      <Container>
+      <>
         <ToastContainer />
         <Header />
 
@@ -381,7 +382,8 @@ class App extends React.Component {
           onCellChanged={this.onCellChanged}
           isAuthoring={isAuthoring}
           isFilling={isFilling}
-          size={size}
+          gridSize={gridSize}
+          subGridSize={subGridSize}
           filledColor={filledColor}
           emptyColor={emptyColor}
           solvedColor={solvedColor}
@@ -399,7 +401,7 @@ class App extends React.Component {
             importImage={this.importImage}
             exportImage={this.exportImage}
             share={this.share}
-            resizeCanvas={this.resizeCanvas}
+            resizeGrids={this.resizeGrids}
             print={this.print}
             isAuthoring={isAuthoring}
             gridData={this.gridData}
@@ -408,7 +410,8 @@ class App extends React.Component {
           <Footer />
 
           <Print
-            size={size}
+            gridSize={gridSize}
+            subGridSize={subGridSize}
             filledColor={filledColor}
             emptyColor={emptyColor}
             unsolvedColor={unsolvedColor}
@@ -417,7 +420,7 @@ class App extends React.Component {
             ref={this.printableRef}
           />
         </Form>
-      </Container>
+      </>
     )
   }
 }

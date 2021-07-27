@@ -4,7 +4,7 @@ import SubGrid from './SubGrid'
 import { getCoordinateLabel } from '../lib/util'
 
 const Coordinates = props => {
-  const { size, filledColor, emptyColor, solvedColor, unsolvedColor, gridData, coordinatesOrder } = props
+  const { subGridSize, filledColor, emptyColor, solvedColor, unsolvedColor, gridData, coordinatesOrder } = props
 
   return (
     coordinatesOrder.map((coordinates, index) => {
@@ -19,7 +19,7 @@ const Coordinates = props => {
             <tr>
               <SubGrid
                 isCoordinate={true}
-                size={size}
+                subGridSize={subGridSize}
                 filledColor={filledColor}
                 emptyColor={emptyColor}
                 solvedColor={solvedColor}
@@ -37,7 +37,7 @@ const Coordinates = props => {
 }
 
 Coordinates.propTypes = {
-  size: PropTypes.number.isRequired,
+  subGridSize: PropTypes.number.isRequired,
   filledColor: PropTypes.number.isRequired,
   emptyColor: PropTypes.number.isRequired,
   solvedColor: PropTypes.number.isRequired,

@@ -6,17 +6,17 @@ import { decimalToHex } from '../lib/util'
 class SubGrid extends React.Component {
   constructor (props) {
     super()
-    const { isAuthoring, isCoordinate, isRevealing, size } = props
+    const { isAuthoring, isCoordinate, isRevealing, subGridSize } = props
     const { initialSubGridData } = props
 
     const subGridData = []
     const subGridFilling = []
 
-    for (let subGridY = 0; subGridY < size; subGridY++) {
+    for (let subGridY = 0; subGridY < subGridSize; subGridY++) {
       const subGridDataRow = []
       const subGridFillingRow = []
 
-      for (let subGridX = 0; subGridX < size; subGridX++) {
+      for (let subGridX = 0; subGridX < subGridSize; subGridX++) {
         if (initialSubGridData) {
           const initialValue = initialSubGridData[subGridY][subGridX]
 
@@ -130,7 +130,7 @@ SubGrid.propTypes = {
   isCoordinate: PropTypes.bool,
   isFilling: PropTypes.bool,
   isRevealing: PropTypes.bool,
-  size: PropTypes.number.isRequired,
+  subGridSize: PropTypes.number.isRequired,
   filledColor: PropTypes.number.isRequired,
   emptyColor: PropTypes.number.isRequired,
   solvedColor: PropTypes.number.isRequired,

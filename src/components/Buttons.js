@@ -5,8 +5,11 @@ import { Row, Col, Button, Form, Dropdown, DropdownButton } from 'react-bootstra
 const Buttons = props => {
   const {
     changeMode, clear, revealSolution, invert, importImage, exportImage,
-    share, resizeCanvas, print, isAuthoring, gridData
+    share, resizeGrids, print, isAuthoring, gridData
   } = props
+
+  const gridSize = gridData.length
+  const subGridSize = gridData[0][0].length
 
   return (
     <>
@@ -14,16 +17,30 @@ const Buttons = props => {
         <>
           <Row>
             <Col>
-              <DropdownButton title="Resize Canvas">
-                { /* Sizes allowed are 3-9 */ }
+              <DropdownButton title="Resize Grid">
+                { /* Sizes allowed are 2-9 */ }
                 {Array(9).fill(0).map((_, i) => i + 1).filter(
-                  size => size >= 3 && size !== gridData.length
+                  size => size >= 2 && size !== gridSize
                 ).map(size => (
                   <Dropdown.Item
                     key={size}
-                    onSelect={() => resizeCanvas(size)}
+                    onSelect={() => resizeGrids(size, subGridSize)}
                   >
-                    {size}<sup>4</sup>
+                    {size}x{size}
+                  </Dropdown.Item>
+                ))}
+              </DropdownButton>
+
+              <DropdownButton title="Resize Sub-Grid">
+                { /* Sizes allowed are 2-9 */ }
+                {Array(9).fill(0).map((_, i) => i + 1).filter(
+                  size => size >= 2 && size !== subGridSize
+                ).map(size => (
+                  <Dropdown.Item
+                    key={size}
+                    onSelect={() => resizeGrids(gridSize, size)}
+                  >
+                    {size}x{size}
                   </Dropdown.Item>
                 ))}
               </DropdownButton>
@@ -85,7 +102,7 @@ Buttons.propTypes = {
   importImage: PropTypes.func.isRequired,
   exportImage: PropTypes.func.isRequired,
   share: PropTypes.func.isRequired,
-  resizeCanvas: PropTypes.func.isRequired,
+  resizeGrids: PropTypes.func.isRequired,
   print: PropTypes.func.isRequired,
   isAuthoring: PropTypes.bool,
   gridData: PropTypes.array.isRequired
