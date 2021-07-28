@@ -18,7 +18,7 @@ When you first load the application, you will be presented with the sample puzzl
 
 Selecting *Edit* will **reveal the solution to the puzzle you are currently solving**. Afterwards, you can modify the puzzle by toggling pixels using your mouse just as you would when playing. Selecting *Clear* will empty the canvas, allowing you to create a puzzle from scratch.
 
-By default, the canvas is an 8x8 grid, containing 5x5 subgrids. You can change either of these sizes to any value between 2x2 and 9x9. This will also empty the canvas.
+By default, the canvas is an 8x8 grid, containing 5x5 sub-grids. You can change either of these sizes to any value between 2x2 and 9x9. This will also empty the canvas.
 
 You can also *Import* a puzzle from an image. Select an image from your machine to generate the puzzle. Every pixel will either be on or off, so high contrast images work best. If the image is not square, you can *Stretch to Fit* (changes aspect ratio to 1x1) or *Resize Canvas* (maintains aspect ratio, but will not fill entire canvas).
 

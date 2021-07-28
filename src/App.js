@@ -24,6 +24,13 @@ const serializedGridDataGitHub = '0000000000000000000000000000000000000000000110
 const defaultGridSize = 8
 const defaultSubGridSize = 5
 
+const preventUnload = e => {
+  // Cancel the event
+  e.preventDefault() // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+  // Chrome requires returnValue to be set
+  e.returnValue = ''
+}
+
 class App extends React.Component {
   constructor () {
     super()
@@ -71,6 +78,8 @@ class App extends React.Component {
 
     document.onselectstart = () => false
 
+    window.addEventListener('beforeunload', preventUnload)
+
     this.initializeGrid(gridSize, subGridSize, query.gridData)
 
     this.setState({
@@ -78,6 +87,15 @@ class App extends React.Component {
       gridSize,
       subGridSize
     })
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('beforeunload', preventUnload)
+  }
+
+  navigate (searchParams) {
+    window.removeEventListener('beforeunload', preventUnload)
+    window.location.search = searchParams.toString()
   }
 
   initializeGrid (gridSize, subGridSize, serializedGridData) {
@@ -126,7 +144,7 @@ class App extends React.Component {
     const searchParams = new URLSearchParams(window.location.search)
     searchParams.set('gridData', serializeGridData(this.gridData))
     searchParams.set('isAuthoring', JSON.stringify(!isAuthoring))
-    window.location.search = searchParams.toString()
+    this.navigate(searchParams)
   }
 
   clear () {
@@ -150,7 +168,7 @@ class App extends React.Component {
             }
 
             searchParams.set('isAuthoring', JSON.stringify(isAuthoring))
-            window.location.search = searchParams.toString()
+            this.navigate(searchParams)
           }
         },
         {
@@ -218,7 +236,7 @@ class App extends React.Component {
 
     const searchParams = new URLSearchParams(window.location.search)
     searchParams.set('gridData', invertedSerializedGridData)
-    window.location.search = searchParams.toString()
+    this.navigate(searchParams)
   }
 
   importImage (e) {
@@ -270,7 +288,7 @@ class App extends React.Component {
 
         const searchParams = new URLSearchParams(window.location.search)
         searchParams.set('gridData', jimpToSerializedGridData(jimpFile, gridSize, subGridSize))
-        window.location.search = searchParams.toString()
+        this.navigate(searchParams)
       }
     })(file)
 
@@ -328,7 +346,7 @@ class App extends React.Component {
             searchParams.set('gridSize', gridSize)
             searchParams.set('subGridSize', subGridSize)
             searchParams.set('gridData', '0')
-            window.location.search = searchParams.toString()
+            this.navigate(searchParams)
           }
         },
         {
