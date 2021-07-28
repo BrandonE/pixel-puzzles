@@ -77,13 +77,14 @@ class SubGrid extends React.Component {
   isSolved () {
     const { isAuthoring, isCoordinate } = this.props
     const { subGridData, subGridFilling } = this.state
+    // TODO: Hide non-printed coordinates when solved. Show Toast notification when all sub-grids are solved.
     return (!isAuthoring && !isCoordinate && JSON.stringify(subGridData) === JSON.stringify(subGridFilling))
   }
 
   render () {
     const {
-      onCellEdit, isCoordinate, isFilling, filledColor,
-      emptyColor, solvedColor, unsolvedColor, gridY, gridX
+      onCellEdit, isCoordinate, isFilling, gridSize, subGridSize,
+      filledColor, emptyColor, solvedColor, unsolvedColor, gridY, gridX
     } = this.props
     const { subGridFilling } = this.state
 
@@ -105,6 +106,8 @@ class SubGrid extends React.Component {
                     onCellEdit={onCellEdit}
                     onCellChanged={this.onCellChanged}
                     isFilling={isFilling}
+                    gridSize={gridSize}
+                    subGridSize={subGridSize}
                     filledColor={filledColor}
                     emptyColor={emptyColor}
                     gridY={gridY}
@@ -130,6 +133,7 @@ SubGrid.propTypes = {
   isCoordinate: PropTypes.bool,
   isFilling: PropTypes.bool,
   isRevealing: PropTypes.bool,
+  gridSize: PropTypes.number.isRequired,
   subGridSize: PropTypes.number.isRequired,
   filledColor: PropTypes.number.isRequired,
   emptyColor: PropTypes.number.isRequired,

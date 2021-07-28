@@ -32,6 +32,7 @@ class Main extends React.Component {
 
           {!isAuthoring && (
             <Coordinates
+              gridSize={gridSize}
               subGridSize={subGridSize}
               filledColor={filledColor}
               emptyColor={emptyColor}

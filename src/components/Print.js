@@ -36,6 +36,7 @@ class Print extends React.Component {
             </div>
 
             <Coordinates
+              gridSize={gridSize}
               subGridSize={subGridSize}
               filledColor={filledColor}
               emptyColor={emptyColor}

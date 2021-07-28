@@ -30,6 +30,7 @@ const Grid = props => {
                 isAuthoring={isAuthoring}
                 isFilling={isFilling}
                 isRevealing={isRevealing}
+                gridSize={gridSize}
                 subGridSize={subGridSize}
                 filledColor={filledColor}
                 emptyColor={emptyColor}

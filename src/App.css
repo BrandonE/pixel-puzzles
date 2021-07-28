@@ -28,12 +28,11 @@ form {
 
 .subGrid {
   padding: 0;
+  min-width: 32px;
 }
 
 .cell {
   border: 1px solid black;
-  width: 1vw;
-  height: 1vw;
 }
 
 .row {
