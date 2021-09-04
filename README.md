@@ -4,7 +4,7 @@ Copy each square's pattern to the associated coordinates to reveal a secret imag
 
 ![Example puzzle with the GitHub Octocat](./example.png)
 
-![Puzzle generated from a headshot of Brandon Evans, printed and filled out with a pencil](./example-printed.png)
+![Puzzle generated from a headshot of Brandon Evans](./example-import.png)
 
 Inspired by [Pencil Puzzles](https://web.archive.org/web/20111027002447/http://www.tipstricks.com/puzzles.html) from [Tips & Tricks Magazine](https://en.wikipedia.org/wiki/Tips_%26_Tricks_(magazine)).
 
