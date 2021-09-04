@@ -24,6 +24,7 @@
     "react-bootstrap": "^2.0.0-beta.4",
     "react-confirm-alert": "^2.7.0",
     "react-dom": "^17.0.2",
+    "react-element-spinner": "^1.0.4",
     "react-router": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-to-print": "^2.12.6",

@@ -3,6 +3,7 @@ import Grid from './components/Grid'
 import { Form, Button } from 'react-bootstrap'
 import { confirmAlert } from 'react-confirm-alert'
 import { toast, ToastContainer } from 'react-toastify'
+import { SpinnerComponent } from 'react-element-spinner'
 import ReactToPrint from 'react-to-print'
 import Jimp from 'jimp/es'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -42,7 +43,8 @@ class App extends React.Component {
       filledColor: 0x00000000,
       emptyColor: 0xFFFFFFFF,
       solvedColor: 0xFFFF00FF,
-      unsolvedColor: 0x808080FF
+      unsolvedColor: 0x808080FF,
+      isProcessingImage: false
     }
 
     this.printableRef = React.createRef()
@@ -56,6 +58,7 @@ class App extends React.Component {
     this.revealSolution = this.revealSolution.bind(this)
     this.invert = this.invert.bind(this)
     this.importImage = this.importImage.bind(this)
+    this.confirmImportImage = this.confirmImportImage.bind(this)
     this.exportImage = this.exportImage.bind(this)
     this.share = this.share.bind(this)
     this.resizeGrids = this.resizeGrids.bind(this)
@@ -263,6 +266,10 @@ class App extends React.Component {
   }
 
   confirmImportImage (file, stretch, backgroundFilled) {
+    this.setState({
+      isProcessingImage: true
+    })
+
     const reader = new FileReader()
 
     // Closure to capture the file information.
@@ -382,7 +389,7 @@ class App extends React.Component {
   render () {
     const {
       isAuthoring, isFilling, gridSize, subGridSize, filledColor,
-      emptyColor, solvedColor, unsolvedColor, gridDataToPrint
+      emptyColor, solvedColor, unsolvedColor, isProcessingImage, gridDataToPrint
     } = this.state
 
     if (!this.gridData) {
@@ -391,6 +398,8 @@ class App extends React.Component {
 
     return (
       <>
+        <SpinnerComponent loading={isProcessingImage} position="global" />
+
         <ToastContainer />
         <Header />
 

@@ -1,7 +1,7 @@
 import Jimp from 'jimp/es'
 
 // https://stackoverflow.com/a/10142256/12055600
-export const shuffleArray = (arr) => {
+export const shuffleArray = arr => {
   let i = arr.length
   let j
   let temp
