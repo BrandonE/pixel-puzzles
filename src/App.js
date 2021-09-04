@@ -283,7 +283,6 @@ class App extends React.Component {
         }
 
         jimpFile
-          .contrast(1)
           .resize(gridWidthAndHeight, gridWidthAndHeight)
 
         const searchParams = new URLSearchParams(window.location.search)

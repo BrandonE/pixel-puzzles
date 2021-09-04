@@ -85,8 +85,8 @@ export const jimpToSerializedGridData = (jimpFile, gridSize, subGridSize) => {
           const x = gridX * subGridSize + subGridX
           const y = gridY * subGridSize + subGridY
           const { r, g, b, a } = Jimp.intToRGBA(jimpFile.getPixelColor(x, y))
-          const rgb = r * g * b
-          const value = (rgb >= ((255 * 255 * 255) / 2) || a === 0) ? '0' : '1'
+          const rgb = r + g + b
+          const value = (rgb >= ((255 + 255 + 255) / 2) || a === 0) ? '0' : '1'
           serializedGridData += value
         }
       }
