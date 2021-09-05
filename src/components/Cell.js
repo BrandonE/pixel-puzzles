@@ -46,6 +46,8 @@ const Cell = props => {
 
       style={{
         backgroundColor: decimalToHex((isFilled) ? filledColor : emptyColor),
+        minWidth: widthAndHeight,
+        minHeight: widthAndHeight,
         width: widthAndHeight,
         height: widthAndHeight
       }}
