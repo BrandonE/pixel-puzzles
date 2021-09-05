@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/pixel-puzzles/static/css/main.b0c7c854.chunk.css",
-    "main.js": "/pixel-puzzles/static/js/main.61d68558.chunk.js",
-    "main.js.map": "/pixel-puzzles/static/js/main.61d68558.chunk.js.map",
-    "runtime-main.js": "/pixel-puzzles/static/js/runtime-main.2c39ee98.js",
-    "runtime-main.js.map": "/pixel-puzzles/static/js/runtime-main.2c39ee98.js.map",
-    "static/css/2.1f242e10.chunk.css": "/pixel-puzzles/static/css/2.1f242e10.chunk.css",
-    "static/js/2.4bd19c9f.chunk.js": "/pixel-puzzles/static/js/2.4bd19c9f.chunk.js",
-    "static/js/2.4bd19c9f.chunk.js.map": "/pixel-puzzles/static/js/2.4bd19c9f.chunk.js.map",
-    "static/js/3.9148607f.chunk.js": "/pixel-puzzles/static/js/3.9148607f.chunk.js",
-    "static/js/3.9148607f.chunk.js.map": "/pixel-puzzles/static/js/3.9148607f.chunk.js.map",
+    "main.css": "/pixel-puzzles/static/css/main.506fcd90.chunk.css",
+    "main.js": "/pixel-puzzles/static/js/main.9ffffe88.chunk.js",
+    "main.js.map": "/pixel-puzzles/static/js/main.9ffffe88.chunk.js.map",
+    "runtime-main.js": "/pixel-puzzles/static/js/runtime-main.1e9d3faa.js",
+    "runtime-main.js.map": "/pixel-puzzles/static/js/runtime-main.1e9d3faa.js.map",
+    "static/css/2.7446dcc2.chunk.css": "/pixel-puzzles/static/css/2.7446dcc2.chunk.css",
+    "static/js/2.b110d0e2.chunk.js": "/pixel-puzzles/static/js/2.b110d0e2.chunk.js",
+    "static/js/2.b110d0e2.chunk.js.map": "/pixel-puzzles/static/js/2.b110d0e2.chunk.js.map",
+    "static/js/3.29b2092c.chunk.js": "/pixel-puzzles/static/js/3.29b2092c.chunk.js",
+    "static/js/3.29b2092c.chunk.js.map": "/pixel-puzzles/static/js/3.29b2092c.chunk.js.map",
     "index.html": "/pixel-puzzles/index.html",
-    "static/css/2.1f242e10.chunk.css.map": "/pixel-puzzles/static/css/2.1f242e10.chunk.css.map",
-    "static/css/main.b0c7c854.chunk.css.map": "/pixel-puzzles/static/css/main.b0c7c854.chunk.css.map",
-    "static/js/2.4bd19c9f.chunk.js.LICENSE.txt": "/pixel-puzzles/static/js/2.4bd19c9f.chunk.js.LICENSE.txt"
+    "static/css/2.7446dcc2.chunk.css.map": "/pixel-puzzles/static/css/2.7446dcc2.chunk.css.map",
+    "static/css/main.506fcd90.chunk.css.map": "/pixel-puzzles/static/css/main.506fcd90.chunk.css.map",
+    "static/js/2.b110d0e2.chunk.js.LICENSE.txt": "/pixel-puzzles/static/js/2.b110d0e2.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.2c39ee98.js",
-    "static/css/2.1f242e10.chunk.css",
-    "static/js/2.4bd19c9f.chunk.js",
-    "static/css/main.b0c7c854.chunk.css",
-    "static/js/main.61d68558.chunk.js"
+    "static/js/runtime-main.1e9d3faa.js",
+    "static/css/2.7446dcc2.chunk.css",
+    "static/js/2.b110d0e2.chunk.js",
+    "static/css/main.506fcd90.chunk.css",
+    "static/js/main.9ffffe88.chunk.js"
   ]
 }
