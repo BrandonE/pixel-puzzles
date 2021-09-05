@@ -10,10 +10,12 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import 'react-toastify/dist/ReactToastify.css'
 import './App.css'
+import ErrorBoundary from './components/ErrorBoundary'
 import Header from './components/Header'
 import Main from './components/Main'
 import Buttons from './components/Buttons'
 import Footer from './components/Footer'
+import Crop from './components/Crop'
 import {
   generateGrid, generateCoordinatesOrder, serializeGridData,
   jimpToSerializedGridData, gridDataToJimp
@@ -44,7 +46,7 @@ class App extends React.Component {
       emptyColor: 0xFFFFFFFF,
       solvedColor: 0xFFFF00FF,
       unsolvedColor: 0x808080FF,
-      isProcessingImage: false
+      isLoading: false
     }
 
     this.printableRef = React.createRef()
@@ -57,6 +59,7 @@ class App extends React.Component {
     this.clear = this.clear.bind(this)
     this.revealSolution = this.revealSolution.bind(this)
     this.invert = this.invert.bind(this)
+    this.onCropProcessed = this.onCropProcessed.bind(this)
     this.importImage = this.importImage.bind(this)
     this.confirmImportImage = this.confirmImportImage.bind(this)
     this.exportImage = this.exportImage.bind(this)
@@ -242,63 +245,87 @@ class App extends React.Component {
     this.navigate(searchParams)
   }
 
+  onCropProcessed (croppedImageUrl) {
+    this.setState({ croppedImageUrl })
+  }
+
   importImage (e) {
     const file = e.target.files[0]
     e.target.value = ''
 
-    confirmAlert({
-      title: 'Confirmation',
-      message: 'Are you sure you want to import this image? Your current canvas will be overwritten.',
-      buttons: [
-        {
-          label: 'Stretch to Fit',
-          onClick: () => this.confirmImportImage(file, true)
-        },
-        {
-          label: 'Resize Canvas',
-          onClick: () => this.confirmImportImage(file, false, false)
-        },
-        {
-          label: 'Cancel'
-        }
-      ]
-    })
-  }
-
-  confirmImportImage (file, stretch, backgroundFilled) {
     this.setState({
-      isProcessingImage: true
+      isLoading: true
     })
 
     const reader = new FileReader()
 
-    // Closure to capture the file information.
-    reader.onload = ((_) => {
-      return async (e) => {
-        const jimpFile = await Jimp.read(Buffer.from(e.target.result))
-        const gridSize = this.gridData.length
-        const subGridSize = this.gridData[0][0].length
-        const gridWidthAndHeight = gridSize * subGridSize
+    reader.addEventListener('load', async () => {
+      const jimpFile = await Jimp.read(reader.result)
+      const { width, height } = jimpFile.bitmap
 
-        if (!stretch) {
-          const { width, height } = jimpFile.bitmap
-          const largerDimension = (width > height) ? width : height
+      const importedImageSrc = await new Promise((resolve, reject) => {
+        // Converting to PNG ensures GIFs are processed properly.
+        jimpFile.getBase64(Jimp.MIME_PNG, (err, src) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(src)
+          }
+        })
+      })
 
-          jimpFile
-            .background((backgroundFilled) ? 0x00000000 : 0xFFFFFFFF)
-            .contain(largerDimension, largerDimension)
-        }
+      this.setState({
+        isLoading: false
+      })
 
-        jimpFile
-          .resize(gridWidthAndHeight, gridWidthAndHeight)
+      confirmAlert({
+        title: 'Confirmation',
+        message: 'Are you sure you want to import this image? Your current canvas will be overwritten.',
+        childrenElement: () => <Crop
+          imageSrc={importedImageSrc}
+          width={width}
+          height={height}
+          onImageLoaded={this.onImageLoaded}
+          onCropProcessed={this.onCropProcessed}
+        />,
+        buttons: [
+          {
+            label: 'Import',
+            onClick: () => this.confirmImportImage()
+          },
+          {
+            label: 'Cancel'
+          }
+        ]
+      })
+    })
 
-        const searchParams = new URLSearchParams(window.location.search)
-        searchParams.set('gridData', jimpToSerializedGridData(jimpFile, gridSize, subGridSize))
-        this.navigate(searchParams)
-      }
-    })(file)
+    reader.readAsDataURL(file)
+  }
 
-    reader.readAsArrayBuffer(file)
+  async confirmImportImage () {
+    const { croppedImageUrl } = this.state
+
+    this.setState({
+      isLoading: true
+    })
+
+    const jimpFile = await Jimp.read(croppedImageUrl)
+    const gridSize = this.gridData.length
+    const subGridSize = this.gridData[0][0].length
+    const gridWidthAndHeight = gridSize * subGridSize
+
+    const { width, height } = jimpFile.bitmap
+    const largerDimension = (width > height) ? width : height
+
+    jimpFile
+      .background(0xFFFFFFFF)
+      .contain(largerDimension, largerDimension)
+      .resize(gridWidthAndHeight, gridWidthAndHeight)
+
+    const searchParams = new URLSearchParams(window.location.search)
+    searchParams.set('gridData', jimpToSerializedGridData(jimpFile, gridSize, subGridSize))
+    this.navigate(searchParams)
   }
 
   async exportImage () {
@@ -389,8 +416,13 @@ class App extends React.Component {
   render () {
     const {
       isAuthoring, isFilling, gridSize, subGridSize, filledColor,
-      emptyColor, solvedColor, unsolvedColor, isProcessingImage, gridDataToPrint
+      emptyColor, solvedColor, unsolvedColor, isLoading, gridDataToPrint,
+      hasError
     } = this.state
+
+    if (hasError) {
+      <h1>An unexpected error has occurred. Please reload this page.</h1>
+    }
 
     if (!this.gridData) {
       return <></>
@@ -398,54 +430,56 @@ class App extends React.Component {
 
     return (
       <>
-        <SpinnerComponent loading={isProcessingImage} position="global" />
-
         <ToastContainer />
-        <Header />
 
-        <Main
-          onCellEdit={this.onCellEdit}
-          onCellChanged={this.onCellChanged}
-          isAuthoring={isAuthoring}
-          isFilling={isFilling}
-          gridSize={gridSize}
-          subGridSize={subGridSize}
-          filledColor={filledColor}
-          emptyColor={emptyColor}
-          solvedColor={solvedColor}
-          unsolvedColor={unsolvedColor}
-          gridData={this.gridData}
-          coordinatesOrder={this.coordinatesOrder}
-        />
+        <ErrorBoundary onError={err => toast.error(err.toString())}>
+          <SpinnerComponent loading={isLoading} position="global" />
+          <Header />
 
-        <Form>
-          <Buttons
-            changeMode={this.changeMode}
-            clear={this.clear}
-            revealSolution={this.revealSolution}
-            invert={this.invert}
-            importImage={this.importImage}
-            exportImage={this.exportImage}
-            share={this.share}
-            resizeGrids={this.resizeGrids}
-            print={this.print}
+          <Main
+            onCellEdit={this.onCellEdit}
+            onCellChanged={this.onCellChanged}
             isAuthoring={isAuthoring}
-            gridData={this.gridData}
-          />
-
-          <Footer />
-
-          <Print
+            isFilling={isFilling}
             gridSize={gridSize}
             subGridSize={subGridSize}
             filledColor={filledColor}
             emptyColor={emptyColor}
+            solvedColor={solvedColor}
             unsolvedColor={unsolvedColor}
-            gridData={gridDataToPrint}
+            gridData={this.gridData}
             coordinatesOrder={this.coordinatesOrder}
-            ref={this.printableRef}
           />
-        </Form>
+
+          <Form className="mainForm">
+            <Buttons
+              changeMode={this.changeMode}
+              clear={this.clear}
+              revealSolution={this.revealSolution}
+              invert={this.invert}
+              importImage={this.importImage}
+              exportImage={this.exportImage}
+              share={this.share}
+              resizeGrids={this.resizeGrids}
+              print={this.print}
+              isAuthoring={isAuthoring}
+              gridData={this.gridData}
+            />
+
+            <Footer />
+
+            <Print
+              gridSize={gridSize}
+              subGridSize={subGridSize}
+              filledColor={filledColor}
+              emptyColor={emptyColor}
+              unsolvedColor={unsolvedColor}
+              gridData={gridDataToPrint}
+              coordinatesOrder={this.coordinatesOrder}
+              ref={this.printableRef}
+            />
+          </Form>
+        </ErrorBoundary>
       </>
     )
   }

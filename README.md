@@ -20,7 +20,7 @@ Selecting *Edit* will **reveal the solution to the puzzle you are currently solv
 
 By default, the canvas is an 8x8 grid, containing 5x5 sub-grids. You can change either of these sizes to any value between 2x2 and 9x9. This will also empty the canvas.
 
-You can also *Import* a puzzle from an image. Select an image from your machine to generate the puzzle. Every pixel will either be on or off, so high contrast images work best. If the image is not square, you can *Stretch to Fit* (changes aspect ratio to 1x1) or *Resize Canvas* (maintains aspect ratio, but will not fill entire canvas).
+You can also *Import* a puzzle from an image. Select an image from your device to generate the puzzle. Every pixel will either be filled or empty, so high contrast images work best. Before importing, you can crop the image. By default, the cropping will be square. Although unchecking *Square Aspect Ratio (1:1)* allows free-form crops, the resulting puzzle will always be square, so the remainder of the canvas will be empty.
 
 If you would like, you can *Export* the current canvas as an image. Importing the image will result in the canvas being restored.
 

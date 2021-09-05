@@ -10,12 +10,6 @@ table tbody tr td {
   text-align: center;
 }
 
-form {
-  width: 100%;
-  float: right;
-  padding: 20px;
-}
-
 .grid {
   float: left;
   padding-right: 20px;
@@ -39,6 +33,12 @@ form {
   margin-bottom: 20px;
 }
 
+.mainForm {
+  width: 100%;
+  float: right;
+  padding: 20px;
+}
+
 .btn {
   margin-right: 40px;
 }
@@ -53,6 +53,10 @@ form {
 
 .react-confirm-alert-body {
   width: auto;
+}
+
+.scrollarea {
+  max-height: 500px;
 }
 
 .fa-github {
