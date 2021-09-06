@@ -296,7 +296,8 @@ class App extends React.Component {
           {
             label: 'Cancel'
           }
-        ]
+        ],
+        closeOnClickOutside: false
       })
     })
 

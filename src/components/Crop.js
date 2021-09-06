@@ -15,6 +15,8 @@ class Crop extends React.Component {
       crop: {}
     }
 
+    this.cropComponentRef = React.createRef()
+
     this.onImageLoaded = this.onImageLoaded.bind(this)
     this.getCroppedImg = this.getCroppedImg.bind(this)
     this.onCropComplete = this.onCropComplete.bind(this)
@@ -23,7 +25,7 @@ class Crop extends React.Component {
   }
 
   componentDidMount () {
-    this.onAspectChange()
+    this.onAspectChange(true)
   }
 
   onImageLoaded (image) {
@@ -75,6 +77,7 @@ class Crop extends React.Component {
   }
 
   async onCropComplete (crop) {
+    console.log(crop)
     if (this.imageRef && crop.width && crop.height) {
       this.setState({
         isCropping: true
@@ -94,32 +97,41 @@ class Crop extends React.Component {
     }
   }
 
-  onCropChange (crop) {
-    this.setState({ crop })
+  onCropChange (crop, percentCrop) {
+    this.setState({ crop: percentCrop })
   }
 
-  onAspectChange () {
+  onAspectChange (isInitializing) {
     const { width, height } = this.props
     const { crop } = this.state
     const isSquare = !crop.aspect
-    let unit, newDimension
+    let widthPercentage, heightPercentage
 
     if (isSquare) {
-      unit = 'px'
-      newDimension = (width < height) ? width : height
+      if (width < height) {
+        widthPercentage = 100
+        heightPercentage = width / height * 100
+      } else {
+        heightPercentage = 100
+        widthPercentage = height / width * 100
+      }
     } else {
-      unit = '%'
-      newDimension = 100
+      widthPercentage = 100
+      heightPercentage = 100
     }
 
     this.setState({
       crop: {
-        unit,
-        width: newDimension,
-        height: newDimension,
+        unit: '%',
+        width: widthPercentage,
+        height: heightPercentage,
         x: 0,
         y: 0,
         aspect: (isSquare) ? 1 : undefined
+      }
+    }, () => {
+      if (!isInitializing) {
+        this.cropComponentRef.current.onMediaLoaded()
       }
     })
   }
@@ -140,6 +152,7 @@ class Crop extends React.Component {
             onImageLoaded={this.onImageLoaded}
             onComplete={this.onCropComplete}
             onChange={this.onCropChange}
+            ref={this.cropComponentRef}
           />
         </ScrollArea>
 
@@ -147,7 +160,7 @@ class Crop extends React.Component {
           <Form.Group controlId="formBasicCheckbox">
             <Form.Check
               type="checkbox" label="Square Aspect Ratio (1:1)"
-              checked={!!crop.aspect} onChange={this.onAspectChange}
+              checked={!!crop.aspect} onChange={() => this.onAspectChange()}
             />
           </Form.Group>
         </Form>
