@@ -116,21 +116,15 @@ export const gridDataToJimp = (gridData, filledColor, emptyColor) => {
           const x = gridX * subGridSize + subGridX
           const y = gridY * subGridSize + subGridY
           let r, g, b
-          const middle = (255 + 255 + 255) / 2
 
           do {
-            r = getRandomArbitrary(127, 128)
-            g = getRandomArbitrary(127, 128)
-            b = getRandomArbitrary(127, 128)
+            r = getRandomArbitrary(127, 129)
+            g = getRandomArbitrary(127, 129)
+            b = getRandomArbitrary(127, 129)
+            const rgb = r + g + b
 
-            if (serializedGridData[count] === '1') {
-              if (r + g + b < middle) {
-                break
-              }
-            } else {
-              if (r + g + b >= middle) {
-                break
-              }
+            if (serializedGridData[count] === '0' ? rgb === 386 : rgb === 381) {
+              break
             }
           } while (true)
 
