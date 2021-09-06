@@ -70,8 +70,7 @@ class Crop extends React.Component {
           this.fileUrl = window.URL.createObjectURL(blob)
           resolve(this.fileUrl)
         },
-        'image/png',
-        1
+        'image/png'
       )
     })
   }

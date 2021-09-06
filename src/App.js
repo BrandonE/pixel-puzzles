@@ -332,7 +332,7 @@ class App extends React.Component {
   async exportImage () {
     const { filledColor, emptyColor } = this.state
     const image = gridDataToJimp(this.gridData, filledColor, emptyColor)
-    const u8 = await image.getBufferAsync(Jimp.MIME_PNG)
+    const u8 = await image.getBufferAsync(Jimp.MIME_JPEG)
 
     // https://medium.com/@koteswar.meesala/convert-array-buffer-to-base64-string-to-display-images-in-angular-7-4c443db242cd
     const stringChar = u8.reduce((data, byte) => {
@@ -347,7 +347,7 @@ class App extends React.Component {
         return (
           <>
             Right-click and &quot;Save Image As&quot; to download the image.
-            <div><img src={`data:image/png;base64, ${b64Encoded}`} /></div>
+            <div><img src={`data:image/jpeg;base64, ${b64Encoded}`} /></div>
           </>
         )
       },
