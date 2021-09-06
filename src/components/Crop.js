@@ -77,7 +77,6 @@ class Crop extends React.Component {
   }
 
   async onCropComplete (crop) {
-    console.log(crop)
     if (this.imageRef && crop.width && crop.height) {
       this.setState({
         isCropping: true
