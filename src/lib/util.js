@@ -96,6 +96,10 @@ export const jimpToSerializedGridData = (jimpFile, gridSize, subGridSize) => {
   return serializedGridData
 }
 
+export const getRandomArbitrary = (min, max) => {
+  return Math.round(Math.random() * (max - min) + min)
+}
+
 export const gridDataToJimp = (gridData, filledColor, emptyColor) => {
   const serializedGridData = serializeGridData(gridData)
   const gridSize = gridData.length
@@ -111,7 +115,26 @@ export const gridDataToJimp = (gridData, filledColor, emptyColor) => {
         for (let subGridX = 0; subGridX < subGridSize; subGridX++) {
           const x = gridX * subGridSize + subGridX
           const y = gridY * subGridSize + subGridY
-          const { r, g, b } = Jimp.intToRGBA((serializedGridData[count] === '1') ? filledColor : emptyColor)
+          let r, g, b
+          const middle = (255 + 255 + 255) / 2
+
+          do {
+            r = getRandomArbitrary(127, 128)
+            g = getRandomArbitrary(127, 128)
+            b = getRandomArbitrary(127, 128)
+
+            if (serializedGridData[count] === '1') {
+              if (r + g + b < middle) {
+                console.log('Filled', r, g, b)
+                break
+              }
+            } else {
+              if (r + g + b >= middle) {
+                console.log('Empty', r, g, b)
+                break
+              }
+            }
+          } while (true)
 
           jimpFile.setPixelColor(Jimp.rgbaToInt(r, g, b, 255), x, y)
 
