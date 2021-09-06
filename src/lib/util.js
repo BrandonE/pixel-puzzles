@@ -125,12 +125,10 @@ export const gridDataToJimp = (gridData, filledColor, emptyColor) => {
 
             if (serializedGridData[count] === '1') {
               if (r + g + b < middle) {
-                console.log('Filled', r, g, b)
                 break
               }
             } else {
               if (r + g + b >= middle) {
-                console.log('Empty', r, g, b)
                 break
               }
             }
