@@ -40,6 +40,7 @@ class App extends React.Component {
 
     this.state = {
       isAuthoring: false,
+      isReadOnly: false,
       // TODO: Move this down to Grid to avoid re-rendering coordinates and make things faster.
       isFilling: false,
       filledColor: 0x00000000,
@@ -88,8 +89,11 @@ class App extends React.Component {
 
     this.initializeGrid(gridSize, subGridSize, query.gridData)
 
+    const isAuthoring = (query.isAuthoring === 'true')
+
     this.setState({
-      isAuthoring: (query.isAuthoring === 'true'),
+      isAuthoring,
+      isReadOnly: (query.isReadOnly === 'true') && !isAuthoring,
       gridSize,
       subGridSize
     })
@@ -150,6 +154,7 @@ class App extends React.Component {
     const searchParams = new URLSearchParams(window.location.search)
     searchParams.set('gridData', serializeGridData(this.gridData))
     searchParams.set('isAuthoring', JSON.stringify(!isAuthoring))
+    searchParams.delete('isReadOnly')
     this.navigate(searchParams)
   }
 
@@ -363,6 +368,7 @@ class App extends React.Component {
     const { protocol, host, pathname } = window.location
     const searchParams = new URLSearchParams(window.location.search)
     searchParams.set('isAuthoring', 'false')
+    searchParams.delete('isReadOnly')
     searchParams.set('gridData', serializeGridData(this.gridData))
     navigator.clipboard.writeText(`${protocol}//${host}${pathname}?${searchParams.toString()}`)
     toast.success('URL copied to your clipboard!')
@@ -397,7 +403,7 @@ class App extends React.Component {
 
     confirmAlert({
       title: 'Print',
-      message: 'Click this button to print the puzzle. ',
+      message: 'Click this button to print the puzzle. Works best on Google Chrome. ',
       childrenElement: () => (
         <ReactToPrint
           trigger={() => (
@@ -416,7 +422,7 @@ class App extends React.Component {
 
   render () {
     const {
-      isAuthoring, isFilling, gridSize, subGridSize, filledColor,
+      isAuthoring, isReadOnly, isFilling, gridSize, subGridSize, filledColor,
       emptyColor, solvedColor, unsolvedColor, isLoading, gridDataToPrint,
       hasError
     } = this.state
@@ -434,52 +440,59 @@ class App extends React.Component {
         <ToastContainer />
 
         <ErrorBoundary onError={err => toast.error(err.toString())}>
-          <SpinnerComponent loading={isLoading} position="global" />
-          <Header />
+          <div className="no-print">
+            <SpinnerComponent loading={isLoading} position="global" />
+            <Header />
 
-          <Main
-            onCellEdit={this.onCellEdit}
-            onCellChanged={this.onCellChanged}
-            isAuthoring={isAuthoring}
-            isFilling={isFilling}
-            gridSize={gridSize}
-            subGridSize={subGridSize}
-            filledColor={filledColor}
-            emptyColor={emptyColor}
-            solvedColor={solvedColor}
-            unsolvedColor={unsolvedColor}
-            gridData={this.gridData}
-            coordinatesOrder={this.coordinatesOrder}
-          />
-
-          <Form className="mainForm">
-            <Buttons
-              changeMode={this.changeMode}
-              clear={this.clear}
-              revealSolution={this.revealSolution}
-              invert={this.invert}
-              importImage={this.importImage}
-              exportImage={this.exportImage}
-              share={this.share}
-              resizeGrids={this.resizeGrids}
-              print={this.print}
+            <Main
+              onCellEdit={this.onCellEdit}
+              onCellChanged={this.onCellChanged}
               isAuthoring={isAuthoring}
-              gridData={this.gridData}
-            />
-
-            <Footer />
-
-            <Print
+              isFilling={isFilling}
               gridSize={gridSize}
               subGridSize={subGridSize}
               filledColor={filledColor}
               emptyColor={emptyColor}
+              solvedColor={solvedColor}
               unsolvedColor={unsolvedColor}
-              gridData={gridDataToPrint}
+              gridData={this.gridData}
               coordinatesOrder={this.coordinatesOrder}
-              ref={this.printableRef}
             />
-          </Form>
+
+            <Form className="mainForm">
+              <Buttons
+                changeMode={this.changeMode}
+                clear={this.clear}
+                revealSolution={this.revealSolution}
+                invert={this.invert}
+                importImage={this.importImage}
+                exportImage={this.exportImage}
+                share={this.share}
+                resizeGrids={this.resizeGrids}
+                print={this.print}
+                isAuthoring={isAuthoring}
+                isReadOnly={isReadOnly}
+                gridData={this.gridData}
+              />
+
+              <Footer />
+
+              <Print
+                gridSize={gridSize}
+                subGridSize={subGridSize}
+                filledColor={filledColor}
+                emptyColor={emptyColor}
+                unsolvedColor={unsolvedColor}
+                gridData={gridDataToPrint}
+                coordinatesOrder={this.coordinatesOrder}
+                ref={this.printableRef}
+              />
+            </Form>
+          </div>
+
+          <div className="print">
+            <h3>Unsupported operation! To print this puzzle, please click the <em>Print</em> button on the webpage itself</h3>
+          </div>
         </ErrorBoundary>
       </>
     )

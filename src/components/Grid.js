@@ -5,7 +5,7 @@ import { getXLabel, getYLabel } from '../lib/util'
 
 const Grid = props => {
   const {
-    onCellEdit, onCellChanged, isAuthoring, isFilling, isRevealing,
+    onCellEdit, onCellChanged, isAuthoring, isFilling, isRevealing, isPrinting,
     gridSize, subGridSize, filledColor, emptyColor, solvedColor, unsolvedColor, gridData
   } = props
 
@@ -30,6 +30,7 @@ const Grid = props => {
                 isAuthoring={isAuthoring}
                 isFilling={isFilling}
                 isRevealing={isRevealing}
+                isPrinting={isPrinting}
                 gridSize={gridSize}
                 subGridSize={subGridSize}
                 filledColor={filledColor}
@@ -54,6 +55,7 @@ Grid.propTypes = {
   isAuthoring: PropTypes.bool,
   isFilling: PropTypes.bool,
   isRevealing: PropTypes.bool,
+  isPrinting: PropTypes.bool,
   gridSize: PropTypes.number.isRequired,
   subGridSize: PropTypes.number.isRequired,
   filledColor: PropTypes.number.isRequired,

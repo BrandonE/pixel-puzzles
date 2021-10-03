@@ -85,6 +85,10 @@ table tbody tr td {
     padding-left: 5%;
     padding-right: 5%;
   }
+
+  .no-print {
+    display: none;
+  }
 }
 
 @media not print {

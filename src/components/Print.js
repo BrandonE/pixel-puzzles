@@ -25,6 +25,7 @@ class Print extends React.Component {
           <>
             <div className="grid">
               <Grid
+                isPrinting={true}
                 gridSize={gridSize}
                 subGridSize={subGridSize}
                 filledColor={filledColor}

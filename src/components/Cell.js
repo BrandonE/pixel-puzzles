@@ -33,12 +33,13 @@ const Cell = props => {
   })
 
   const {
-    onCellEdit, onCellChanged, gridSize, subGridSize,
+    onCellEdit, onCellChanged, isPrinting, gridSize, subGridSize,
     filledColor, emptyColor, gridY, gridX, subGridY, subGridX, isFilled
   } = props
 
   const windowWidth = dimensions.width
-  const widthAndHeight = (windowWidth > verySmallWidth) ? `${40 / (gridSize * subGridSize)}vw` : '6px'
+  const scale = (isPrinting) ? 50 : 40
+  const widthAndHeight = (windowWidth > verySmallWidth) ? `${scale / (gridSize * subGridSize)}vw` : '6px'
 
   return (
     <td
@@ -80,6 +81,7 @@ Cell.propTypes = {
   onCellEdit: PropTypes.func,
   onCellChanged: PropTypes.func,
   isFilling: PropTypes.bool,
+  isPrinting: PropTypes.bool,
   gridSize: PropTypes.number.isRequired,
   subGridSize: PropTypes.number.isRequired,
   filledColor: PropTypes.number.isRequired,

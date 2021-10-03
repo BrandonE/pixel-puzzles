@@ -5,7 +5,7 @@ import { Row, Col, Button, Form, Dropdown, DropdownButton } from 'react-bootstra
 const Buttons = props => {
   const {
     changeMode, clear, revealSolution, invert, importImage, exportImage,
-    share, resizeGrids, print, isAuthoring, gridData
+    share, resizeGrids, print, isAuthoring, isReadOnly, gridData
   } = props
 
   const gridSize = gridData.length
@@ -65,24 +65,24 @@ const Buttons = props => {
         </>
       )}
 
-      {!isAuthoring && (
-        <div>
-          <Row>
-            <Col>
-              <Form.Group className="mb-3">
-                <Button variant="warning" onClick={revealSolution}>Reveal Solution</Button>
-              </Form.Group>
-            </Col>
-          </Row>
-        </div>
+      {!isAuthoring && !isReadOnly && (
+        <Row>
+          <Col>
+            <Form.Group className="mb-3">
+              <Button variant="warning" onClick={revealSolution}>Reveal Solution</Button>
+            </Form.Group>
+          </Col>
+        </Row>
       )}
 
-      <Row>
-        <Col>
-          <Button variant="danger" onClick={clear}>Clear</Button>
-          <Button variant="danger" onClick={changeMode}>{(isAuthoring) ? 'Play' : 'Edit'}</Button>
-        </Col>
-      </Row>
+      {!isReadOnly && (
+        <Row>
+          <Col>
+            <Button variant="danger" onClick={clear}>Clear</Button>
+            <Button variant="danger" onClick={changeMode}>{(isAuthoring) ? 'Play' : 'Edit'}</Button>
+          </Col>
+        </Row>
+      )}
 
       <Row>
         <Col>
@@ -105,6 +105,7 @@ Buttons.propTypes = {
   resizeGrids: PropTypes.func.isRequired,
   print: PropTypes.func.isRequired,
   isAuthoring: PropTypes.bool,
+  isReadOnly: PropTypes.bool,
   gridData: PropTypes.array.isRequired
 }
 

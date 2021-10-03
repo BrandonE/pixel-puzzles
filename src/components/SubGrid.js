@@ -83,7 +83,7 @@ class SubGrid extends React.Component {
 
   render () {
     const {
-      onCellEdit, isCoordinate, isFilling, gridSize, subGridSize,
+      onCellEdit, isCoordinate, isFilling, isPrinting, gridSize, subGridSize,
       filledColor, emptyColor, solvedColor, unsolvedColor, gridY, gridX
     } = this.props
     const { subGridFilling } = this.state
@@ -106,6 +106,7 @@ class SubGrid extends React.Component {
                     onCellEdit={onCellEdit}
                     onCellChanged={this.onCellChanged}
                     isFilling={isFilling}
+                    isPrinting={isPrinting}
                     gridSize={gridSize}
                     subGridSize={subGridSize}
                     filledColor={filledColor}
@@ -133,6 +134,7 @@ SubGrid.propTypes = {
   isCoordinate: PropTypes.bool,
   isFilling: PropTypes.bool,
   isRevealing: PropTypes.bool,
+  isPrinting: PropTypes.bool,
   gridSize: PropTypes.number.isRequired,
   subGridSize: PropTypes.number.isRequired,
   filledColor: PropTypes.number.isRequired,
