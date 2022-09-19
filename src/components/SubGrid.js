@@ -83,7 +83,7 @@ class SubGrid extends React.Component {
 
   render () {
     const {
-      onCellEdit, isCoordinate, isFilling, isPrinting, gridSize, subGridSize,
+      onCellEdit, isCoordinate, game, isFilling, isPrinting, gridSize, subGridSize,
       filledColor, emptyColor, solvedColor, unsolvedColor, gridY, gridX
     } = this.props
     const { subGridFilling } = this.state
@@ -92,7 +92,8 @@ class SubGrid extends React.Component {
       <td
         className="subGrid"
         style={{
-          border: `1px solid ${decimalToHex(this.isSolved() ? solvedColor : unsolvedColor)}`,
+          border: (game === 'classic') ? `1px solid ${decimalToHex(this.isSolved() ? solvedColor : unsolvedColor)}` : undefined,
+          minWidth: (game === 'classic') ? '32px' : undefined,
           touchAction: (isCoordinate) ? 'auto' : 'none'
         }}
       >
@@ -105,6 +106,7 @@ class SubGrid extends React.Component {
                     key={colIndex}
                     onCellEdit={onCellEdit}
                     onCellChanged={this.onCellChanged}
+                    game={game}
                     isFilling={isFilling}
                     isPrinting={isPrinting}
                     gridSize={gridSize}
@@ -130,6 +132,7 @@ class SubGrid extends React.Component {
 SubGrid.propTypes = {
   onCellEdit: PropTypes.func,
   onCellChanged: PropTypes.func,
+  game: PropTypes.string,
   isAuthoring: PropTypes.bool,
   isCoordinate: PropTypes.bool,
   isFilling: PropTypes.bool,

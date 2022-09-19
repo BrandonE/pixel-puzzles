@@ -22,10 +22,12 @@ import {
 } from './lib/util'
 import Print from './components/Print'
 
-const serializedGridDataGitHub = '0000000000000000000000000000000000000000000110011100001001111111111111111111111111111111111111111111111111111111111111111111110000111001111111111111110000000000000001100011100000000000000000000000000000000000000000100011000110111111111111111111111110111111111111111111110001111111111111111111111111111111111111111111111111111111111111111111111111100011110111111111111111011110000000000100001100011000001110011101111011110111111110111101111011110111100000100000000000000000000110000000000000000000000000011000000000000000000001000000000000000000000000011110111101111011110111111100111001111011110111101111111111111111111111111111101110011100111001110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111100111001110011100111111111111111111111111111111111111111111111111111111110011100111001110011100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111001110011100111001111111111111111111111111111111110111101111011110011111110111111111111111101110000000000100001110011111000000000000000000001000000000000000000000000000010000000000000010011111111011111111111111111111111111111111101111011110111000011100011000110000100000110111110111101111101111111111111111111101101000001000010000000000000000000000010000100000000000000011111111111111111111111111111111111111111111111111111001100011000100000000000000000000000000000000000111100111000110000000000111111111111111111110011100000000000000000000000000000000000000000000000000111111111111111111111110011110111001100000000000000000000000000000000000000'
+const serializedGridDataGitHub30x30 = '0000000000000000000000000000000000000000000110011100001001111111111111111111111111111111111111111111111111111111111111111111110000111001111111111111110000000000000001100011100000000000000000000000000000000000000000100011000110111111111111111111111110111111111111111111110001111111111111111111111111111111111111111111111111111111111111111111111111100011110111111111111111011110000000000100001100011000001110011101111011110111111110111101111011110111100000100000000000000000000110000000000000000000000000011000000000000000000001000000000000000000000000011110111101111011110111111100111001111011110111101111111111111111111111111111101110011100111001110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111100111001110011100111111111111111111111111111111111111111111111111111111110011100111001110011100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111001110011100111001111111111111111111111111111111110111101111011110011111110111111111111111101110000000000100001110011111000000000000000000001000000000000000000000000000010000000000000010011111111011111111111111111111111111111111101111011110111000011100011000110000100000110111110111101111101111111111111111111101101000001000010000000000000000000000010000100000000000000011111111111111111111111111111111111111111111111111111001100011000100000000000000000000000000000000000111100111000110000000000111111111111111111110011100000000000000000000000000000000000000000000000000111111111111111111111110011110111001100000000000000000000000000000000000000'
+const serializedGridDataGitHub16x16 = '0000011111100000000111111111100000111111111111000111011111101110011000000000011011100000000001111110000000000111111000000000011111100000000001111110000000000111111000000000111111111000000111100110110000111110001000000011110000011100001110000000110000110000'
 
 const defaultGridSize = 8
 const defaultSubGridSize = 5
+const defaultNonogramGridSize = 16
 
 const preventUnload = e => {
   // Cancel the event
@@ -39,6 +41,7 @@ class App extends React.Component {
     super()
 
     this.state = {
+      game: 'classic',
       isAuthoring: false,
       isReadOnly: false,
       // TODO: Move this down to Grid to avoid re-rendering coordinates and make things faster.
@@ -55,6 +58,8 @@ class App extends React.Component {
     this.initializeGrid = this.initializeGrid.bind(this)
     this.onCellEdit = this.onCellEdit.bind(this)
     this.onCellChanged = this.onCellChanged.bind(this)
+    this.changeGame = this.changeGame.bind(this)
+    this.confirmChangeGame = this.confirmChangeGame.bind(this)
     this.changeMode = this.changeMode.bind(this)
     this.confirmChangeMode = this.confirmChangeMode.bind(this)
     this.clear = this.clear.bind(this)
@@ -72,26 +77,38 @@ class App extends React.Component {
   componentDidMount () {
     const searchParams = new URLSearchParams(window.location.search)
     const query = Object.fromEntries(searchParams.entries())
+
+    const game = (['classic', 'nonogram'].includes(query.game)) ? query.game : 'classic'
+
     let gridSize = parseInt(query.gridSize, 10)
     let subGridSize = parseInt(query.subGridSize, 10)
 
-    if (!gridSize || gridSize < 2 || gridSize > 9) {
-      gridSize = defaultGridSize
-    }
+    if (game === 'classic') {
+      if (!gridSize || gridSize < 2 || gridSize > 9) {
+        gridSize = defaultGridSize
+      }
 
-    if (!subGridSize || subGridSize < 2 || subGridSize > 9) {
-      subGridSize = defaultSubGridSize
+      if (!subGridSize || subGridSize < 2 || subGridSize > 9) {
+        subGridSize = defaultSubGridSize
+      }
+    } else if (game === 'nonogram') {
+      if (!gridSize || gridSize < 4 || gridSize > 81) {
+        gridSize = defaultNonogramGridSize
+      }
+
+      subGridSize = 1
     }
 
     document.onselectstart = () => false
 
     window.addEventListener('beforeunload', preventUnload)
 
-    this.initializeGrid(gridSize, subGridSize, query.gridData)
+    this.initializeGrid(game, gridSize, subGridSize, query.gridData)
 
     const isAuthoring = (query.isAuthoring === 'true')
 
     this.setState({
+      game,
       isAuthoring,
       isReadOnly: (query.isReadOnly === 'true') && !isAuthoring,
       gridSize,
@@ -108,9 +125,13 @@ class App extends React.Component {
     window.location.search = searchParams.toString()
   }
 
-  initializeGrid (gridSize, subGridSize, serializedGridData) {
-    if (!serializedGridData && gridSize === defaultGridSize && subGridSize === defaultSubGridSize) {
-      serializedGridData = serializedGridDataGitHub
+  initializeGrid (game, gridSize, subGridSize, serializedGridData) {
+    if (!serializedGridData && game === 'classic' && gridSize === defaultGridSize && subGridSize === defaultSubGridSize) {
+      serializedGridData = serializedGridDataGitHub30x30
+    }
+
+    if (!serializedGridData && game === 'nonogram' && gridSize === defaultNonogramGridSize) {
+      serializedGridData = serializedGridDataGitHub16x16
     }
 
     this.gridData = generateGrid(gridSize, subGridSize, serializedGridData)
@@ -125,6 +146,34 @@ class App extends React.Component {
 
   onCellChanged (gridY, gridX, subGridY, subGridX, value) {
     this.gridData[gridY][gridX][subGridY][subGridX] = (value) ? 1 : 0
+  }
+
+  changeGame (game) {
+    const { isAuthoring } = this.state
+
+    confirmAlert({
+      title: 'Confirmation',
+      message: `Are you sure you want to change the game mode? ${(isAuthoring) ? 'This will clear the canvas and cannot be undone.' : 'This will undo your progress.'}`,
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => this.confirmChangeGame(game)
+        },
+        {
+          label: 'No'
+        }
+      ]
+    })
+  }
+
+  confirmChangeGame (game) {
+    const searchParams = new URLSearchParams(window.location.search)
+    searchParams.set('game', game)
+    searchParams.delete('gridData', serializeGridData(this.gridData))
+    searchParams.delete('gridSize')
+    searchParams.delete('subGridSize')
+    searchParams.delete('isReadOnly')
+    this.navigate(searchParams)
   }
 
   changeMode () {
@@ -201,7 +250,7 @@ class App extends React.Component {
               confirmAlert({
                 title: 'Solution',
                 childrenElement: () => {
-                  const { gridSize, subGridSize, filledColor, emptyColor, solvedColor, unsolvedColor } = this.state
+                  const { game, gridSize, subGridSize, filledColor, emptyColor, solvedColor, unsolvedColor } = this.state
 
                   if (!this.gridData) {
                     return <></>
@@ -209,6 +258,7 @@ class App extends React.Component {
 
                   return (
                     <Grid
+                      game={game}
                       isRevealing={true}
                       isFilling={false}
                       gridSize={gridSize}
@@ -422,7 +472,7 @@ class App extends React.Component {
 
   render () {
     const {
-      isAuthoring, isReadOnly, isFilling, gridSize, subGridSize, filledColor,
+      game, isAuthoring, isReadOnly, isFilling, gridSize, subGridSize, filledColor,
       emptyColor, solvedColor, unsolvedColor, isLoading, gridDataToPrint,
       hasError
     } = this.state
@@ -442,11 +492,16 @@ class App extends React.Component {
         <ErrorBoundary onError={err => toast.error(err.toString())}>
           <div className="no-print">
             <SpinnerComponent loading={isLoading} position="global" />
-            <Header />
+
+            <Header
+              changeGame={this.changeGame}
+              game={game}
+            />
 
             <Main
               onCellEdit={this.onCellEdit}
               onCellChanged={this.onCellChanged}
+              game={game}
               isAuthoring={isAuthoring}
               isFilling={isFilling}
               gridSize={gridSize}
@@ -461,6 +516,7 @@ class App extends React.Component {
 
             <Form className="mainForm">
               <Buttons
+                game={game}
                 changeMode={this.changeMode}
                 clear={this.clear}
                 revealSolution={this.revealSolution}
@@ -485,6 +541,7 @@ class App extends React.Component {
                 unsolvedColor={unsolvedColor}
                 gridData={gridDataToPrint}
                 coordinatesOrder={this.coordinatesOrder}
+                game={game}
                 ref={this.printableRef}
               />
             </Form>

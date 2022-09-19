@@ -4,12 +4,13 @@ import { Row, Col, Button, Form, Dropdown, DropdownButton } from 'react-bootstra
 
 const Buttons = props => {
   const {
-    changeMode, clear, revealSolution, invert, importImage, exportImage,
+    game, changeMode, clear, revealSolution, invert, importImage, exportImage,
     share, resizeGrids, print, isAuthoring, isReadOnly, gridData
   } = props
 
   const gridSize = gridData.length
   const subGridSize = gridData[0][0].length
+  const gridSizeMax = (game === 'classic') ? 9 : 81
 
   return (
     <>
@@ -18,8 +19,7 @@ const Buttons = props => {
           <Row>
             <Col>
               <DropdownButton title="Resize Grid">
-                { /* Sizes allowed are 2-9 */ }
-                {Array(9).fill(0).map((_, i) => i + 1).filter(
+                {Array(gridSizeMax).fill(0).map((_, i) => i + 1).filter(
                   size => size >= 2 && size !== gridSize
                 ).map(size => (
                   <Dropdown.Item
@@ -31,7 +31,8 @@ const Buttons = props => {
                 ))}
               </DropdownButton>
 
-              <DropdownButton title="Resize Sub-Grid">
+              {game === 'classic' && (
+                <DropdownButton title="Resize Sub-Grid">
                 { /* Sizes allowed are 2-9 */ }
                 {Array(9).fill(0).map((_, i) => i + 1).filter(
                   size => size >= 2 && size !== subGridSize
@@ -44,6 +45,7 @@ const Buttons = props => {
                   </Dropdown.Item>
                 ))}
               </DropdownButton>
+              )}
               <Button onClick={invert}>Invert</Button>
             </Col>
           </Row>
@@ -95,6 +97,7 @@ const Buttons = props => {
 }
 
 Buttons.propTypes = {
+  game: PropTypes.string,
   changeMode: PropTypes.func.isRequired,
   clear: PropTypes.func.isRequired,
   revealSolution: PropTypes.func.isRequired,

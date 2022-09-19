@@ -124,7 +124,63 @@ export const gridDataToJimp = (gridData, filledColor, emptyColor) => {
   return jimpFile
 }
 
+export const getXLabelValues = (x, game, gridData, gridSize) => {
+  if (!game || game === 'classic') {
+    return ['ABCDEFGHIJK'[x]]
+  } else if (game === 'nonogram') {
+    const labelValues = []
+    let continuousCells = 0
+
+    for (let gridY = 0; gridY < gridSize; gridY++) {
+      if (gridData[gridY][x][0][0]) {
+        continuousCells++
+      } else {
+        if (continuousCells) {
+          labelValues.push(continuousCells)
+        }
+
+        continuousCells = 0
+      }
+    }
+
+    if (labelValues.length === 0) {
+      labelValues.push(0)
+    } else if (continuousCells !== 0) {
+      labelValues.push(continuousCells)
+    }
+
+    return labelValues
+  }
+}
+
+export const getYLabel = (y, game, gridData, gridSize) => {
+  if (!game || game === 'classic') {
+    return y + 1
+  } else if (game === 'nonogram') {
+    const labelValues = []
+    let continuousCells = 0
+
+    for (let gridX = 0; gridX < gridSize; gridX++) {
+      if (gridData[y][gridX][0][0]) {
+        continuousCells++
+      } else {
+        if (continuousCells) {
+          labelValues.push(continuousCells)
+        }
+
+        continuousCells = 0
+      }
+    }
+
+    if (labelValues.length === 0) {
+      labelValues.push(0)
+    } else if (continuousCells !== 0) {
+      labelValues.push(continuousCells)
+    }
+
+    return labelValues.join(' ')
+  }
+}
+
 export const decimalToHex = dec => `#${dec.toString(16).toUpperCase().padStart(6, '0')}`
-export const getXLabel = x => 'ABCDEFGHIJK'[x]
-export const getYLabel = y => y + 1
-export const getCoordinateLabel = (x, y) => getXLabel(x) + getYLabel(y)
+export const getCoordinateLabel = (x, y) => getXLabelValues(x)[0] + getYLabel(y)

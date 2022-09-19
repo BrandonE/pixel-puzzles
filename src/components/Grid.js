@@ -1,32 +1,43 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import SubGrid from './SubGrid'
-import { getXLabel, getYLabel } from '../lib/util'
+import { getXLabelValues, getYLabel } from '../lib/util'
 
 const Grid = props => {
   const {
-    onCellEdit, onCellChanged, isAuthoring, isFilling, isRevealing, isPrinting,
+    onCellEdit, onCellChanged, game, isAuthoring, isFilling, isRevealing, isPrinting,
     gridSize, subGridSize, filledColor, emptyColor, solvedColor, unsolvedColor, gridData
   } = props
 
   return (
     <table>
       <tbody>
-        <tr>
-          <td></td>
-          {Array(gridSize).fill().map((_, colIndex) => (
-            <td key={colIndex}>{getXLabel(colIndex)}</td>
-          ))}
-        </tr>
+        {(game === 'classic' || !isAuthoring) && (
+          <tr>
+            <td></td>
+
+            {Array(gridSize).fill().map((_, colIndex) => (
+                <td key={colIndex}>
+                  {getXLabelValues(colIndex, game, gridData, gridSize).map((value, valueIndex) => (
+                    <span key={valueIndex}>{value}<br /></span>
+                  ))}
+                </td>
+            ))}
+          </tr>
+        )}
 
         {Array(gridSize).fill().map((_, rowIndex) => (
           <tr key={rowIndex}>
-            <td>{getYLabel(rowIndex)}</td>
+            {(game === 'classic' || !isAuthoring) && (
+              <td>{getYLabel(rowIndex, game, gridData, gridSize)}</td>
+            )}
+
             {Array(gridSize).fill().map((_, colIndex) => (
               <SubGrid
                 key={colIndex}
                 onCellEdit={onCellEdit}
                 onCellChanged={onCellChanged}
+                game={game}
                 isAuthoring={isAuthoring}
                 isFilling={isFilling}
                 isRevealing={isRevealing}
@@ -52,6 +63,7 @@ const Grid = props => {
 Grid.propTypes = {
   onCellEdit: PropTypes.func,
   onCellChanged: PropTypes.func,
+  game: PropTypes.string,
   isAuthoring: PropTypes.bool,
   isFilling: PropTypes.bool,
   isRevealing: PropTypes.bool,

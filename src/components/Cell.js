@@ -33,13 +33,19 @@ const Cell = props => {
   })
 
   const {
-    onCellEdit, onCellChanged, isPrinting, gridSize, subGridSize,
+    onCellEdit, onCellChanged, game, isPrinting, gridSize, subGridSize,
     filledColor, emptyColor, gridY, gridX, subGridY, subGridX, isFilled
   } = props
 
   const windowWidth = dimensions.width
   const scale = (isPrinting) ? 50 : 40
-  const widthAndHeight = (windowWidth > verySmallWidth) ? `${scale / (gridSize * subGridSize)}vw` : '6px'
+  let widthAndHeight
+
+  if (game === 'classic') {
+    widthAndHeight = (windowWidth > verySmallWidth) ? `${scale / (gridSize * subGridSize)}vw` : '6px'
+  } else if (game === 'nonogram') {
+    widthAndHeight = `${scale / (20)}em`
+  }
 
   return (
     <td
@@ -80,6 +86,7 @@ const Cell = props => {
 Cell.propTypes = {
   onCellEdit: PropTypes.func,
   onCellChanged: PropTypes.func,
+  game: PropTypes.string,
   isFilling: PropTypes.bool,
   isPrinting: PropTypes.bool,
   gridSize: PropTypes.number.isRequired,

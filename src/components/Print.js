@@ -8,7 +8,7 @@ import Footer from './Footer'
 class Print extends React.Component {
   render () {
     const {
-      gridSize, subGridSize, filledColor, emptyColor,
+      game, gridSize, subGridSize, filledColor, emptyColor,
       // Don't indicate which boxes are empty to begin with; always use unsolved color.
       unsolvedColor, gridData, coordinatesOrder
     } = this.props
@@ -19,12 +19,16 @@ class Print extends React.Component {
 
     return (
       <div className="print">
-        <Header showUrl={true} />
+        <Header
+          game={game}
+          isPrinting={true}
+        />
 
         {gridData && (
           <>
             <div className="grid">
               <Grid
+                game={game}
                 isPrinting={true}
                 gridSize={gridSize}
                 subGridSize={subGridSize}
@@ -36,16 +40,18 @@ class Print extends React.Component {
               />
             </div>
 
-            <Coordinates
-              gridSize={gridSize}
-              subGridSize={subGridSize}
-              filledColor={filledColor}
-              emptyColor={emptyColor}
-              solvedColor={unsolvedColor}
-              unsolvedColor={unsolvedColor}
-              gridData={gridData}
-              coordinatesOrder={coordinatesOrder}
-            />
+            {game === 'classic' && (
+              <Coordinates
+                gridSize={gridSize}
+                subGridSize={subGridSize}
+                filledColor={filledColor}
+                emptyColor={emptyColor}
+                solvedColor={unsolvedColor}
+                unsolvedColor={unsolvedColor}
+                gridData={gridData}
+                coordinatesOrder={coordinatesOrder}
+              />
+            )}
           </>
         )}
 
@@ -56,6 +62,7 @@ class Print extends React.Component {
 }
 
 Print.propTypes = {
+  game: PropTypes.string,
   gridSize: PropTypes.number.isRequired,
   subGridSize: PropTypes.number.isRequired,
   filledColor: PropTypes.number.isRequired,

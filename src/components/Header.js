@@ -3,14 +3,54 @@ import PropTypes from 'prop-types'
 
 const Header = props => (
   <>
-    <h1>Pixel Puzzles</h1>
-    <h4>Copy each square&apos;s pattern to the associated coordinates to reveal a secret image!</h4>
-    <h6>Fill the grid in your browser or print the puzzle to complete by hand. Edit the puzzle or generate your own using any image. Share puzzles with your friends and family! {props.showUrl && <>https://brandone.github.io/pixel-puzzles/</>}</h6>
+    {props.game === 'classic' && (
+      <>
+        <h1>Pixel Puzzles - Classic</h1>
+        <h4>Copy each square&apos;s pattern to the associated coordinates to reveal a secret image!</h4>
+      </>
+    )}
+
+    {props.game === 'nonogram' && (
+      <>
+        <h1>Pixel Puzzles - Nonogram</h1>
+        <h4>
+          Solve the {props.isPrinting && <>Nonogram</>} {!props.isPrinting && <a href="https://en.wikipedia.org/wiki/Nonogram">Nonogram</a>} to reveal a secret image!&nbsp;
+
+          {props.isPrinting && (
+            <>How to play: https://www.youtube.com/watch?v=zisu0Qf4TAI</>
+          )}
+
+          {!props.isPrinting && (
+            <a href="https://www.youtube.com/watch?v=zisu0Qf4TAI">How to play</a>
+          )}
+        </h4>
+      </>
+    )}
+
+    <h6>Fill the grid in your browser or print the puzzle to complete by hand. Edit the puzzle or generate your own using any image. Share puzzles with your friends and family! {props.isPrinting && <>https://brandone.github.io/pixel-puzzles/</>}</h6>
+
+    {!props.isPrinting && (
+      <>
+        {props.game === 'classic' && (
+          <>
+            <h6><a href="#" onClick={() => props.changeGame('nonogram') }>Switch to Nonogram mode</a></h6>
+          </>
+        )}
+
+        {props.game === 'nonogram' && (
+          <>
+            <h6><a href="#" onClick={() => props.changeGame('classic') }>Switch to Classic mode</a></h6>
+          </>
+        )}
+      </>
+    )}
   </>
 )
 
 Header.propTypes = {
-  showUrl: PropTypes.bool
+  changeGame: PropTypes.function,
+  game: PropTypes.string,
+  isPrinting: PropTypes.bool
 }
 
 export default Header

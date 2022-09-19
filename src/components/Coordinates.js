@@ -21,6 +21,7 @@ const Coordinates = props => {
             </tr>
             <tr>
               <SubGrid
+                game="classic"
                 isCoordinate={true}
                 gridSize={gridSize}
                 subGridSize={subGridSize}
