@@ -33,13 +33,17 @@ const Header = props => (
       <>
         {props.changeGame && props.game === 'classic' && (
           <>
-            <h6><a href="#" onClick={() => props.changeGame('nonogram') }>Switch to Nonogram mode</a></h6>
+            <h6><strong>Left-click to fill or unfill a cell</strong></h6>
+            <br />
+            <h4><a href="#" onClick={() => props.changeGame('nonogram') }>Switch to Nonogram mode</a></h4>
           </>
         )}
 
         {props.changeGame && props.game === 'nonogram' && (
           <>
-            <h6><a href="#" onClick={() => props.changeGame('classic') }>Switch to Classic mode</a></h6>
+            <h6><strong>Left-click to fill or unfill a cell. Right-click to cross out or uncross out a cell</strong></h6>
+            <br />
+            <h4><a href="#" onClick={() => props.changeGame('classic') }>Switch to Classic mode</a></h4>
           </>
         )}
       </>

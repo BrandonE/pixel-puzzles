@@ -10,55 +10,63 @@ const Grid = props => {
   } = props
 
   return (
-    <table>
-      <tbody>
-        {(game === 'classic' || !isAuthoring) && (
-          <tr>
-            <td></td>
+    <div
+      className="grid"
+      style={{
+        float: (game === 'classic') ? 'left' : undefined,
+        paddingRight: (game === 'classic') ? '20px' : undefined
+      }}
+    >
+      <table>
+        <tbody>
+          {(game === 'classic' || !isAuthoring) && (
+            <tr>
+              <td></td>
 
-            {Array(gridSize).fill().map((_, colIndex) => (
-                <td key={colIndex}>
-                  {getXLabelValues(colIndex, game, gridData, gridSize).map((value, valueIndex) => (
-                    <span key={valueIndex}>{value}<br /></span>
-                  ))}
-                </td>
-            ))}
-          </tr>
-        )}
+              {Array(gridSize).fill().map((_, colIndex) => (
+                  <td key={colIndex}>
+                    {getXLabelValues(colIndex, game, gridData, gridSize).map((value, valueIndex) => (
+                      <span key={valueIndex}>{value}<br /></span>
+                    ))}
+                  </td>
+              ))}
+            </tr>
+          )}
 
-        {Array(gridSize).fill().map((_, rowIndex) => (
-          <tr key={rowIndex}>
-            {(game === 'classic' || !isAuthoring) && (
-              <td>{getYLabel(rowIndex, game, gridData, gridSize)}</td>
-            )}
+          {Array(gridSize).fill().map((_, rowIndex) => (
+            <tr key={rowIndex}>
+              {(game === 'classic' || !isAuthoring) && (
+                <td>{getYLabel(rowIndex, game, gridData, gridSize)}</td>
+              )}
 
-            {Array(gridSize).fill().map((_, colIndex) => (
-              <SubGrid
-                key={colIndex}
-                onCellEdit={onCellEdit}
-                onCellChanged={onCellChanged}
-                onCrossOut={onCrossOut}
-                game={game}
-                isAuthoring={isAuthoring}
-                isFilling={isFilling}
-                isCrossingOut={isCrossingOut}
-                isRevealing={isRevealing}
-                isPrinting={isPrinting}
-                gridSize={gridSize}
-                subGridSize={subGridSize}
-                filledColor={filledColor}
-                emptyColor={emptyColor}
-                solvedColor={solvedColor}
-                unsolvedColor={unsolvedColor}
-                gridY={rowIndex}
-                gridX={colIndex}
-                initialSubGridData={gridData[rowIndex][colIndex]}
-              />
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+              {Array(gridSize).fill().map((_, colIndex) => (
+                <SubGrid
+                  key={colIndex}
+                  onCellEdit={onCellEdit}
+                  onCellChanged={onCellChanged}
+                  onCrossOut={onCrossOut}
+                  game={game}
+                  isAuthoring={isAuthoring}
+                  isFilling={isFilling}
+                  isCrossingOut={isCrossingOut}
+                  isRevealing={isRevealing}
+                  isPrinting={isPrinting}
+                  gridSize={gridSize}
+                  subGridSize={subGridSize}
+                  filledColor={filledColor}
+                  emptyColor={emptyColor}
+                  solvedColor={solvedColor}
+                  unsolvedColor={unsolvedColor}
+                  gridY={rowIndex}
+                  gridX={colIndex}
+                  initialSubGridData={gridData[rowIndex][colIndex]}
+                />
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
 

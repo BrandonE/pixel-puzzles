@@ -26,19 +26,17 @@ class Print extends React.Component {
 
         {gridData && (
           <>
-            <div className="grid">
-              <Grid
-                game={game}
-                isPrinting={true}
-                gridSize={gridSize}
-                subGridSize={subGridSize}
-                filledColor={filledColor}
-                emptyColor={emptyColor}
-                solvedColor={unsolvedColor}
-                unsolvedColor={unsolvedColor}
-                gridData={gridData}
-              />
-            </div>
+            <Grid
+              game={game}
+              isPrinting={true}
+              gridSize={gridSize}
+              subGridSize={subGridSize}
+              filledColor={filledColor}
+              emptyColor={emptyColor}
+              solvedColor={unsolvedColor}
+              unsolvedColor={unsolvedColor}
+              gridData={gridData}
+            />
 
             {game === 'classic' && (
               <Coordinates
@@ -55,7 +53,7 @@ class Print extends React.Component {
           </>
         )}
 
-        <Footer />
+        <Footer game={game} />
       </div>
     )
   }

@@ -10,7 +10,8 @@ const Buttons = props => {
 
   const gridSize = gridData.length
   const subGridSize = gridData[0][0].length
-  const gridSizeMax = (game === 'classic') ? 9 : 81
+  const gridSizeMin = (game === 'classic') ? 2 : 5
+  const gridSizeMax = (game === 'classic') ? 9 : 20
 
   return (
     <>
@@ -20,7 +21,7 @@ const Buttons = props => {
             <Col>
               <DropdownButton title="Resize Grid">
                 {Array(gridSizeMax).fill(0).map((_, i) => i + 1).filter(
-                  size => size >= 2 && size !== gridSize
+                  size => size >= gridSizeMin && size !== gridSize
                 ).map(size => (
                   <Dropdown.Item
                     key={size}

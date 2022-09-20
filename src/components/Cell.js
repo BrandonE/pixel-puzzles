@@ -1,25 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import X from '../images/x.svg'
 import { decimalToHex } from '../lib/util'
 
 const Cell = props => {
-  const verySmallWidth = 600
-
-  const [state, setState] = React.useState({
+  const [dimensions, setDimensions] = React.useState({
     height: window.innerHeight,
-    width: window.innerWidth,
+    width: window.innerWidth
+  })
+
+  const [crossedOut, setCrossedOut] = React.useState({
     isCrossedOut: false
   })
 
   React.useEffect(() => {
     const handleResize = () => {
-      const currentWidth = state.width
+      const currentWidth = dimensions.width
 
       if (
         (currentWidth > verySmallWidth && window.innerWidth <= verySmallWidth) ||
           (currentWidth <= verySmallWidth && window.innerWidth > verySmallWidth)
       ) {
-        setState({
+        setDimensions({
           height: window.innerHeight,
           width: window.innerWidth
         })
@@ -38,22 +40,28 @@ const Cell = props => {
     filledColor, emptyColor, gridY, gridX, subGridY, subGridX, isFilled
   } = props
 
-  const windowWidth = state.width
-  const scale = (isPrinting) ? 50 : 40
-  let widthAndHeight
+  const windowWidth = dimensions.width
+  const verySmallWidth = 600
+  let scale
+  let minimumWidthAndHeight
 
   if (game === 'classic') {
-    widthAndHeight = (windowWidth > verySmallWidth) ? `${scale / (gridSize * subGridSize)}vw` : '6px'
+    scale = isPrinting ? 50 : 40
+    minimumWidthAndHeight = '6px'
   } else if (game === 'nonogram') {
-    widthAndHeight = `${scale / (20)}em`
+    scale = isPrinting ? 80 : 40
+    minimumWidthAndHeight = '40px'
   }
+
+  const widthAndHeight = (!windowWidth || windowWidth > verySmallWidth) ? `${scale / (gridSize * subGridSize)}vw` : minimumWidthAndHeight
 
   return (
     <td
       className="cell"
 
       style={{
-        backgroundColor: decimalToHex((isFilled) ? filledColor : emptyColor),
+        backgroundColor: crossedOut.isCrossedOut ? undefined : decimalToHex((isFilled) ? filledColor : emptyColor),
+        backgroundImage: crossedOut.isCrossedOut ? `url(${X})` : undefined,
         minWidth: widthAndHeight,
         minHeight: widthAndHeight,
         width: widthAndHeight,
@@ -81,30 +89,33 @@ const Cell = props => {
       onContextMenu={(e) => {
         e.preventDefault()
 
+        if (game !== 'nonogram' || props.isAuthoring) {
+          return
+        }
+
         const { onCrossOut } = props
-        const isCrossingOut = !state.isCrossedOut
+        const isCrossingOut = !crossedOut.isCrossedOut
 
         onCrossOut(isCrossingOut)
-        setState({ isCrossedOut: isCrossingOut })
+        setCrossedOut({ isCrossedOut: isCrossingOut })
         onCellChanged(gridY, gridX, subGridY, subGridX, false)
       }}
 
       onMouseEnter={e => {
-        const { isFilling, isCrossingOut } = props
+        const { isAuthoring, isFilling, isCrossingOut } = props
 
         if (onCellChanged && e.buttons === undefined ? e.which === 1 : e.buttons === 1) {
           onCellChanged(gridY, gridX, subGridY, subGridX, isFilling)
 
           if (isFilling) {
-            setState({ isCrossedOut: false })
+            setCrossedOut({ isCrossedOut: false })
           }
-        } else if (game === 'nonogram' && e.buttons === 2) {
-          setState({ isCrossedOut: isCrossingOut })
+        } else if (game === 'nonogram' && e.buttons === 2 && !isAuthoring) {
+          setCrossedOut({ isCrossedOut: isCrossingOut })
           onCellChanged(gridY, gridX, subGridY, subGridX, false)
         }
       }}
     >
-    {state.isCrossedOut && 'x'}
     </td>
   )
 }
@@ -114,6 +125,7 @@ Cell.propTypes = {
   onCellChanged: PropTypes.func,
   onCrossOut: PropTypes.func,
   game: PropTypes.string.isRequired,
+  isAuthoring: PropTypes.bool,
   isFilling: PropTypes.bool,
   isCrossingOut: PropTypes.bool,
   isPrinting: PropTypes.bool,

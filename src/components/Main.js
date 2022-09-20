@@ -12,41 +12,44 @@ class Main extends React.Component {
     } = this.props
 
     return (
-      <>
-        <div>
-          <div className="grid">
-            <Grid
-              onCellEdit={onCellEdit}
-              onCellChanged={onCellChanged}
-              onCrossOut={onCrossOut}
-              game={game}
-              isAuthoring={isAuthoring}
-              isFilling={isFilling}
-              isCrossingOut={isCrossingOut}
-              gridSize={gridSize}
-              subGridSize={subGridSize}
-              filledColor={filledColor}
-              emptyColor={emptyColor}
-              solvedColor={solvedColor}
-              unsolvedColor={unsolvedColor}
-              gridData={gridData}
-            />
-          </div>
+      <div>
+        <Grid
+          onCellEdit={onCellEdit}
+          onCellChanged={onCellChanged}
+          onCrossOut={onCrossOut}
+          game={game}
+          isAuthoring={isAuthoring}
+          isFilling={isFilling}
+          isCrossingOut={isCrossingOut}
+          gridSize={gridSize}
+          subGridSize={subGridSize}
+          filledColor={filledColor}
+          emptyColor={emptyColor}
+          solvedColor={solvedColor}
+          unsolvedColor={unsolvedColor}
+          gridData={gridData}
+        />
 
-          {!isAuthoring && game === 'classic' && (
-            <Coordinates
-              gridSize={gridSize}
-              subGridSize={subGridSize}
-              filledColor={filledColor}
-              emptyColor={emptyColor}
-              solvedColor={solvedColor}
-              unsolvedColor={unsolvedColor}
-              gridData={gridData}
-              coordinatesOrder={coordinatesOrder}
-            />
-          )}
-        </div>
-      </>
+        {!isAuthoring && game === 'classic' && (
+          <Coordinates
+            gridSize={gridSize}
+            subGridSize={subGridSize}
+            filledColor={filledColor}
+            emptyColor={emptyColor}
+            solvedColor={solvedColor}
+            unsolvedColor={unsolvedColor}
+            gridData={gridData}
+            coordinatesOrder={coordinatesOrder}
+          />
+        )}
+
+        {!isAuthoring && game === 'nonogram' && (
+          <>
+            <br />
+            <p><strong>Grid size: {gridSize}x{gridSize}</strong></p>
+          </>
+        )}
+      </div>
     )
   }
 }

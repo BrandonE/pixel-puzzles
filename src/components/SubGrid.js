@@ -83,7 +83,7 @@ class SubGrid extends React.Component {
 
   render () {
     const {
-      onCellEdit, onCrossOut, isCoordinate, game, isFilling, isCrossingOut, isPrinting,
+      onCellEdit, onCrossOut, isCoordinate, game, isAuthoring, isFilling, isCrossingOut, isPrinting,
       gridSize, subGridSize, filledColor, emptyColor, solvedColor, unsolvedColor,
       gridY, gridX
     } = this.props
@@ -109,6 +109,7 @@ class SubGrid extends React.Component {
                     onCellChanged={this.onCellChanged}
                     onCrossOut={onCrossOut}
                     game={game}
+                    isAuthoring={isAuthoring}
                     isFilling={isFilling}
                     isCrossingOut={isCrossingOut}
                     isPrinting={isPrinting}
