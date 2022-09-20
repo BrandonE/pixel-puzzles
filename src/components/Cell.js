@@ -5,20 +5,21 @@ import { decimalToHex } from '../lib/util'
 const Cell = props => {
   const verySmallWidth = 600
 
-  const [dimensions, setDimensions] = React.useState({
+  const [state, setState] = React.useState({
     height: window.innerHeight,
-    width: window.innerWidth
+    width: window.innerWidth,
+    isCrossedOut: false
   })
 
   React.useEffect(() => {
     const handleResize = () => {
-      const currentWidth = dimensions.width
+      const currentWidth = state.width
 
       if (
         (currentWidth > verySmallWidth && window.innerWidth <= verySmallWidth) ||
           (currentWidth <= verySmallWidth && window.innerWidth > verySmallWidth)
       ) {
-        setDimensions({
+        setState({
           height: window.innerHeight,
           width: window.innerWidth
         })
@@ -37,7 +38,7 @@ const Cell = props => {
     filledColor, emptyColor, gridY, gridX, subGridY, subGridX, isFilled
   } = props
 
-  const windowWidth = dimensions.width
+  const windowWidth = state.width
   const scale = (isPrinting) ? 50 : 40
   let widthAndHeight
 
@@ -59,7 +60,12 @@ const Cell = props => {
         height: widthAndHeight
       }}
 
-      onPointerDown={() => {
+      onPointerDown={(e) => {
+        // Ignore right-click.
+        if (e.button === 2) {
+          return
+        }
+
         const { isFilled } = props
 
         if (onCellEdit) {
@@ -71,14 +77,34 @@ const Cell = props => {
         }
       }}
 
+      // Right-click
+      onContextMenu={(e) => {
+        e.preventDefault()
+
+        const { onCrossOut } = props
+        const isCrossingOut = !state.isCrossedOut
+
+        onCrossOut(isCrossingOut)
+        setState({ isCrossedOut: isCrossingOut })
+        onCellChanged(gridY, gridX, subGridY, subGridX, false)
+      }}
+
       onMouseEnter={e => {
-        const { isFilling } = props
+        const { isFilling, isCrossingOut } = props
 
         if (onCellChanged && e.buttons === undefined ? e.which === 1 : e.buttons === 1) {
           onCellChanged(gridY, gridX, subGridY, subGridX, isFilling)
+
+          if (isFilling) {
+            setState({ isCrossedOut: false })
+          }
+        } else if (game === 'nonogram' && e.buttons === 2) {
+          setState({ isCrossedOut: isCrossingOut })
+          onCellChanged(gridY, gridX, subGridY, subGridX, false)
         }
       }}
     >
+    {state.isCrossedOut && 'x'}
     </td>
   )
 }
@@ -86,8 +112,10 @@ const Cell = props => {
 Cell.propTypes = {
   onCellEdit: PropTypes.func,
   onCellChanged: PropTypes.func,
-  game: PropTypes.string,
+  onCrossOut: PropTypes.func,
+  game: PropTypes.string.isRequired,
   isFilling: PropTypes.bool,
+  isCrossingOut: PropTypes.bool,
   isPrinting: PropTypes.bool,
   gridSize: PropTypes.number.isRequired,
   subGridSize: PropTypes.number.isRequired,

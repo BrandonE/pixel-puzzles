@@ -97,7 +97,7 @@ const Buttons = props => {
 }
 
 Buttons.propTypes = {
-  game: PropTypes.string,
+  game: PropTypes.string.isRequired,
   changeMode: PropTypes.func.isRequired,
   clear: PropTypes.func.isRequired,
   revealSolution: PropTypes.func.isRequired,

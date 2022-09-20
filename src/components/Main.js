@@ -6,9 +6,9 @@ import Coordinates from './Coordinates'
 class Main extends React.Component {
   render () {
     const {
-      onCellEdit, onCellChanged, game, isAuthoring, isFilling, gridSize, subGridSize,
-      filledColor, emptyColor, solvedColor, unsolvedColor, gridData,
-      coordinatesOrder
+      onCellEdit, onCellChanged, onCrossOut, game, isAuthoring, isFilling, isCrossingOut,
+      gridSize, subGridSize, filledColor, emptyColor, solvedColor, unsolvedColor,
+      gridData, coordinatesOrder
     } = this.props
 
     return (
@@ -18,9 +18,11 @@ class Main extends React.Component {
             <Grid
               onCellEdit={onCellEdit}
               onCellChanged={onCellChanged}
+              onCrossOut={onCrossOut}
               game={game}
               isAuthoring={isAuthoring}
               isFilling={isFilling}
+              isCrossingOut={isCrossingOut}
               gridSize={gridSize}
               subGridSize={subGridSize}
               filledColor={filledColor}
@@ -52,9 +54,11 @@ class Main extends React.Component {
 Main.propTypes = {
   onCellEdit: PropTypes.func,
   onCellChanged: PropTypes.func,
-  game: PropTypes.string,
+  onCrossOut: PropTypes.func,
+  game: PropTypes.string.isRequired,
   isAuthoring: PropTypes.bool,
   isFilling: PropTypes.bool,
+  isCrossingOut: PropTypes.bool,
   gridSize: PropTypes.number.isRequired,
   subGridSize: PropTypes.number.isRequired,
   filledColor: PropTypes.number.isRequired,

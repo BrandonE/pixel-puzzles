@@ -62,7 +62,7 @@ class Print extends React.Component {
 }
 
 Print.propTypes = {
-  game: PropTypes.string,
+  game: PropTypes.string.isRequired,
   gridSize: PropTypes.number.isRequired,
   subGridSize: PropTypes.number.isRequired,
   filledColor: PropTypes.number.isRequired,

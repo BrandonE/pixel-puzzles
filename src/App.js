@@ -46,6 +46,7 @@ class App extends React.Component {
       isReadOnly: false,
       // TODO: Move this down to Grid to avoid re-rendering coordinates and make things faster.
       isFilling: false,
+      isCrossingOut: false,
       filledColor: 0x00000000,
       emptyColor: 0xFFFFFFFF,
       solvedColor: 0xFFFF00FF,
@@ -58,6 +59,7 @@ class App extends React.Component {
     this.initializeGrid = this.initializeGrid.bind(this)
     this.onCellEdit = this.onCellEdit.bind(this)
     this.onCellChanged = this.onCellChanged.bind(this)
+    this.onCrossOut = this.onCrossOut.bind(this)
     this.changeGame = this.changeGame.bind(this)
     this.confirmChangeGame = this.confirmChangeGame.bind(this)
     this.changeMode = this.changeMode.bind(this)
@@ -146,6 +148,12 @@ class App extends React.Component {
 
   onCellChanged (gridY, gridX, subGridY, subGridX, value) {
     this.gridData[gridY][gridX][subGridY][subGridX] = (value) ? 1 : 0
+  }
+
+  onCrossOut (crossed) {
+    this.setState({
+      isCrossingOut: crossed
+    })
   }
 
   changeGame (game) {
@@ -261,6 +269,7 @@ class App extends React.Component {
                       game={game}
                       isRevealing={true}
                       isFilling={false}
+                      isCrossingOut={false}
                       gridSize={gridSize}
                       subGridSize={subGridSize}
                       filledColor={filledColor}
@@ -472,8 +481,8 @@ class App extends React.Component {
 
   render () {
     const {
-      game, isAuthoring, isReadOnly, isFilling, gridSize, subGridSize, filledColor,
-      emptyColor, solvedColor, unsolvedColor, isLoading, gridDataToPrint,
+      game, isAuthoring, isReadOnly, isFilling, isCrossingOut, gridSize, subGridSize,
+      filledColor, emptyColor, solvedColor, unsolvedColor, isLoading, gridDataToPrint,
       hasError
     } = this.state
 
@@ -501,9 +510,11 @@ class App extends React.Component {
             <Main
               onCellEdit={this.onCellEdit}
               onCellChanged={this.onCellChanged}
+              onCrossOut={this.onCrossOut}
               game={game}
               isAuthoring={isAuthoring}
               isFilling={isFilling}
+              isCrossingOut={isCrossingOut}
               gridSize={gridSize}
               subGridSize={subGridSize}
               filledColor={filledColor}

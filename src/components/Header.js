@@ -31,13 +31,13 @@ const Header = props => (
 
     {!props.isPrinting && (
       <>
-        {props.game === 'classic' && (
+        {props.changeGame && props.game === 'classic' && (
           <>
             <h6><a href="#" onClick={() => props.changeGame('nonogram') }>Switch to Nonogram mode</a></h6>
           </>
         )}
 
-        {props.game === 'nonogram' && (
+        {props.changeGame && props.game === 'nonogram' && (
           <>
             <h6><a href="#" onClick={() => props.changeGame('classic') }>Switch to Classic mode</a></h6>
           </>
@@ -48,8 +48,8 @@ const Header = props => (
 )
 
 Header.propTypes = {
-  changeGame: PropTypes.function,
-  game: PropTypes.string,
+  changeGame: PropTypes.func,
+  game: PropTypes.string.isRequired,
   isPrinting: PropTypes.bool
 }
 
