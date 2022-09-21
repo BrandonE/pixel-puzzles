@@ -32,10 +32,18 @@ const Cell = props => {
           return
         }
 
-        const { isFilled } = props
+        const { isAuthoring, isFilled } = props
 
         if (onCellEdit) {
           onCellEdit(isFilled)
+
+          if (
+            game === 'nonogram' && e.pointerType === 'touch' &&
+              !isAuthoring && isFilled && !crossedOut.isCrossedOut
+          ) {
+            setCrossedOut({ isCrossedOut: isFilled })
+            return
+          }
         }
 
         if (onCellChanged) {
@@ -73,7 +81,10 @@ const Cell = props => {
           }
         } else if (game === 'nonogram' && e.buttons === 2 && !isAuthoring) {
           setCrossedOut({ isCrossedOut: isCrossingOut })
-          onCellChanged(gridY, gridX, subGridY, subGridX, false)
+
+          if (isCrossingOut) {
+            onCellChanged(gridY, gridX, subGridY, subGridX, false)
+          }
         }
       }}
     >

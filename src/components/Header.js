@@ -29,7 +29,7 @@ const Header = props => (
       <>
         {props.changeGame && props.game === 'classic' && (
           <>
-            <h6><strong>Left-click to fill or unfill a cell</strong></h6>
+            <h6><strong>Left-click or touch to fill or unfill a cell</strong></h6>
             <br />
             <h4>
               <a href="" onClick={e => {
@@ -42,7 +42,7 @@ const Header = props => (
 
         {props.changeGame && props.game === 'nonogram' && (
           <>
-            <h6><strong>Left-click to fill or unfill a cell. Right-click to cross out or uncross out a cell</strong></h6>
+            <h6><strong>Left-click or touch to fill or unfill a cell. Right-click to cross out or uncross out a cell. On mobile, touching a filled cell will cross it out, and touching a crossed out cell will unfill it</strong></h6>
             <br />
             <h4>
               <a href="" onClick={e => {
