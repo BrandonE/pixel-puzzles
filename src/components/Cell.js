@@ -49,11 +49,13 @@ const Cell = props => {
     scale = isPrinting ? 50 : 40
     minimumWidthAndHeight = '6px'
   } else if (game === 'nonogram') {
-    scale = isPrinting ? 80 : 40
+    scale = 75
     minimumWidthAndHeight = '40px'
   }
 
-  const widthAndHeight = (!windowWidth || windowWidth > verySmallWidth) ? `${scale / (gridSize * subGridSize)}vw` : minimumWidthAndHeight
+  const widthAndHeight = ((game === 'classic' || isPrinting) && windowWidth > verySmallWidth)
+    ? `${scale / (gridSize * subGridSize)}vw`
+    : minimumWidthAndHeight
 
   return (
     <td
@@ -83,17 +85,20 @@ const Cell = props => {
         if (onCellChanged) {
           onCellChanged(gridY, gridX, subGridY, subGridX, !isFilled)
         }
+
+        setCrossedOut({ isCrossedOut: false })
       }}
 
       // Right-click
       onContextMenu={(e) => {
         e.preventDefault()
 
-        if (game !== 'nonogram' || props.isAuthoring) {
+        const { onCrossOut } = props
+
+        if (game !== 'nonogram' || props.isAuthoring || !onCrossOut) {
           return
         }
 
-        const { onCrossOut } = props
         const isCrossingOut = !crossedOut.isCrossedOut
 
         onCrossOut(isCrossingOut)

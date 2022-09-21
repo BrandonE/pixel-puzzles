@@ -17,14 +17,25 @@ const Grid = props => {
         paddingRight: (game === 'classic') ? '20px' : undefined
       }}
     >
-      <table>
+      <table
+        style={{
+          margin: (game === 'nonogram') ? 'auto' : undefined
+        }}
+      >
         <tbody>
           {(game === 'classic' || !isAuthoring) && (
             <tr>
               <td></td>
 
               {Array(gridSize).fill().map((_, colIndex) => (
-                  <td key={colIndex}>
+                  <td
+                    key={colIndex}
+
+                    style={{
+                      verticalAlign: 'bottom',
+                      paddingDown: '5px'
+                    }}
+                  >
                     {getXLabelValues(colIndex, game, gridData, gridSize).map((value, valueIndex) => (
                       <span key={valueIndex}>{value}<br /></span>
                     ))}
@@ -36,7 +47,15 @@ const Grid = props => {
           {Array(gridSize).fill().map((_, rowIndex) => (
             <tr key={rowIndex}>
               {(game === 'classic' || !isAuthoring) && (
-                <td>{getYLabel(rowIndex, game, gridData, gridSize)}</td>
+                <td
+                  style={{
+                    minWidth: game === 'nonogram' ? '120px' : undefined,
+                    textAlign: 'right',
+                    paddingRight: '5px'
+                  }}
+                >
+                  {getYLabel(rowIndex, game, gridData, gridSize)}
+                </td>
               )}
 
               {Array(gridSize).fill().map((_, colIndex) => (
@@ -66,6 +85,12 @@ const Grid = props => {
           ))}
         </tbody>
       </table>
+
+      {!isAuthoring && game === 'nonogram' && (
+        <>
+          <p style={{ textAlign: 'center' }}><strong>Grid size: {gridSize}x{gridSize}</strong></p>
+        </>
+      )}
     </div>
   )
 }

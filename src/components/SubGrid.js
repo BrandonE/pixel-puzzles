@@ -94,7 +94,8 @@ class SubGrid extends React.Component {
         className="subGrid"
         style={{
           border: (game === 'classic') ? `1px solid ${decimalToHex(this.isSolved() ? solvedColor : unsolvedColor)}` : undefined,
-          minWidth: (game === 'classic') ? '32px' : undefined,
+          minWidth: '32px',
+          minHeight: '32px',
           touchAction: (isCoordinate) ? 'auto' : 'none'
         }}
       >

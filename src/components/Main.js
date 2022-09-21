@@ -42,13 +42,6 @@ class Main extends React.Component {
             coordinatesOrder={coordinatesOrder}
           />
         )}
-
-        {!isAuthoring && game === 'nonogram' && (
-          <>
-            <br />
-            <p><strong>Grid size: {gridSize}x{gridSize}</strong></p>
-          </>
-        )}
       </div>
     )
   }

@@ -16,10 +16,6 @@ const Header = props => (
         <h4>
           Solve the {props.isPrinting && <>Nonogram</>} {!props.isPrinting && <a href="https://en.wikipedia.org/wiki/Nonogram">Nonogram</a>} to reveal a secret image!&nbsp;
 
-          {props.isPrinting && (
-            <>Nonogram Tutorial: https://www.youtube.com/watch?v=zisu0Qf4TAI</>
-          )}
-
           {!props.isPrinting && (
             <a href="https://www.youtube.com/watch?v=zisu0Qf4TAI">Nonogram Tutorial</a>
           )}
