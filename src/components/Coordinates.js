@@ -5,9 +5,12 @@ import { getCoordinateLabel } from '../lib/util'
 
 const Coordinates = props => {
   const {
-    gridSize, subGridSize, filledColor, emptyColor,
-    solvedColor, unsolvedColor, gridData, coordinatesOrder
+    getCellWidthAndHeight, isPrinting, gridSize, subGridSize,
+    filledColor, emptyColor, solvedColor, unsolvedColor, gridData,
+    coordinatesOrder
   } = props
+
+  const cellWidthAndHeight = getCellWidthAndHeight(isPrinting)
 
   return (
     coordinatesOrder.map((coordinates, index) => {
@@ -31,6 +34,7 @@ const Coordinates = props => {
                 unsolvedColor={unsolvedColor}
                 gridY={y}
                 gridX={x}
+                cellWidthAndHeight={cellWidthAndHeight}
                 initialSubGridData={gridData[y][x]}
               />
             </tr>
@@ -42,6 +46,8 @@ const Coordinates = props => {
 }
 
 Coordinates.propTypes = {
+  getCellWidthAndHeight: PropTypes.func.isRequired,
+  isPrinting: PropTypes.bool,
   gridSize: PropTypes.number.isRequired,
   subGridSize: PropTypes.number.isRequired,
   filledColor: PropTypes.number.isRequired,

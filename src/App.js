@@ -61,7 +61,9 @@ class App extends React.Component {
       // TODO: Move this down to Grid to avoid re-rendering coordinates and make things faster.
       isFilling: false,
       isCrossingOut: false,
-      isLoading: false
+      isLoading: false,
+      gridSize: undefined,
+      subGridSize: undefined
     }
 
     this.printableRef = React.createRef()
@@ -83,6 +85,7 @@ class App extends React.Component {
     this.exportImage = this.exportImage.bind(this)
     this.share = this.share.bind(this)
     this.resizeGrids = this.resizeGrids.bind(this)
+    this.getCellWidthAndHeight = this.getCellWidthAndHeight.bind(this)
     this.print = this.print.bind(this)
   }
 
@@ -282,6 +285,7 @@ class App extends React.Component {
 
                   return (
                     <Grid
+                      getCellWidthAndHeight={this.getCellWidthAndHeight}
                       game={game}
                       isRevealing={true}
                       isFilling={false}
@@ -495,6 +499,24 @@ class App extends React.Component {
     })
   }
 
+  getCellWidthAndHeight (isPrinting) {
+    const { game, gridSize, subGridSize } = this.state
+
+    let scale, minimumWidthAndHeight
+
+    if (game === 'classic') {
+      scale = isPrinting ? 50 : 40
+      minimumWidthAndHeight = '6px'
+    } else if (game === 'nonogram') {
+      scale = isPrinting ? 75 : 40
+      minimumWidthAndHeight = isPrinting ? '10px' : '40px'
+    }
+
+    return (game === 'classic' || isPrinting)
+      ? `max(${scale / (gridSize * subGridSize)}vw, ${minimumWidthAndHeight})`
+      : `min(${scale / (gridSize * subGridSize)}vw, ${minimumWidthAndHeight})`
+  }
+
   render () {
     const {
       game, isAuthoring, isReadOnly, isFilling, isCrossingOut, gridSize, subGridSize,
@@ -526,6 +548,7 @@ class App extends React.Component {
               onCellEdit={this.onCellEdit}
               onCellChanged={this.onCellChanged}
               onCrossOut={this.onCrossOut}
+              getCellWidthAndHeight={this.getCellWidthAndHeight}
               game={game}
               isAuthoring={isAuthoring}
               isFilling={isFilling}
@@ -566,6 +589,7 @@ class App extends React.Component {
               <Footer game={game} />
 
               <Print
+                getCellWidthAndHeight={this.getCellWidthAndHeight}
                 gridSize={gridSize}
                 subGridSize={subGridSize}
                 filledColor={filledColor}

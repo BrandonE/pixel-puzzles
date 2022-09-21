@@ -84,8 +84,8 @@ class SubGrid extends React.Component {
   render () {
     const {
       onCellEdit, onCrossOut, isCoordinate, game, isAuthoring, isFilling, isCrossingOut, isPrinting,
-      gridSize, subGridSize, filledColor, emptyColor, solvedColor, unsolvedColor,
-      gridY, gridX
+      filledColor, emptyColor, solvedColor, unsolvedColor,
+      cellWidthAndHeight, gridY, gridX
     } = this.props
     const { subGridFilling } = this.state
 
@@ -94,8 +94,8 @@ class SubGrid extends React.Component {
         className="subGrid"
         style={{
           border: (game === 'classic') ? `1px solid ${decimalToHex(this.isSolved() ? solvedColor : unsolvedColor)}` : undefined,
-          minWidth: '32px',
-          minHeight: '32px',
+          minWidth: cellWidthAndHeight,
+          minHeight: cellWidthAndHeight,
           touchAction: (isCoordinate) ? 'auto' : 'none'
         }}
       >
@@ -114,14 +114,13 @@ class SubGrid extends React.Component {
                     isFilling={isFilling}
                     isCrossingOut={isCrossingOut}
                     isPrinting={isPrinting}
-                    gridSize={gridSize}
-                    subGridSize={subGridSize}
                     filledColor={filledColor}
                     emptyColor={emptyColor}
                     gridY={gridY}
                     gridX={gridX}
                     subGridY={rowIndex}
                     subGridX={colIndex}
+                    cellWidthAndHeight={cellWidthAndHeight}
                     isFilled={isFilled}
                   />
                 ))}
@@ -153,6 +152,7 @@ SubGrid.propTypes = {
   unsolvedColor: PropTypes.number.isRequired,
   gridY: PropTypes.number.isRequired,
   gridX: PropTypes.number.isRequired,
+  cellWidthAndHeight: PropTypes.string.isRequired,
   initialSubGridData: PropTypes.array
 }
 

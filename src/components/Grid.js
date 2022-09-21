@@ -5,10 +5,15 @@ import { getXLabelValues, getYLabel } from '../lib/util'
 
 const Grid = props => {
   const {
-    onCellEdit, onCellChanged, onCrossOut, game, isAuthoring, isFilling, isCrossingOut, isRevealing,
-    isPrinting, gridSize, subGridSize, filledColor, emptyColor, solvedColor, unsolvedColor, gridData,
-    noFloat
+    onCellEdit, onCellChanged, onCrossOut, getCellWidthAndHeight, game, isAuthoring, isFilling,
+    isCrossingOut, isRevealing, isPrinting, gridSize, subGridSize, filledColor, emptyColor,
+    solvedColor, unsolvedColor, gridData, noFloat
   } = props
+
+  const cellWidthAndHeight = getCellWidthAndHeight(isPrinting)
+  const vw = cellWidthAndHeight.match(/[0-9]\.*[0-9]*vw/)[0]
+  const vwValue = parseFloat(vw.split('vw')[0]) / 2
+  const fontSize = cellWidthAndHeight.replace(vw, `${vwValue}vw`).replace('40px', '20px')
 
   return (
     <div
@@ -33,6 +38,7 @@ const Grid = props => {
                     key={colIndex}
 
                     style={{
+                      fontSize,
                       verticalAlign: 'bottom',
                       paddingDown: '5px'
                     }}
@@ -50,7 +56,7 @@ const Grid = props => {
               {(game === 'classic' || !isAuthoring) && (
                 <td
                   style={{
-                    minWidth: (game === 'nonogram') ? '120px' : undefined,
+                    fontSize,
                     textAlign: 'right',
                     paddingRight: '5px'
                   }}
@@ -79,6 +85,7 @@ const Grid = props => {
                   unsolvedColor={unsolvedColor}
                   gridY={rowIndex}
                   gridX={colIndex}
+                  cellWidthAndHeight={cellWidthAndHeight}
                   initialSubGridData={gridData[rowIndex][colIndex]}
                 />
               ))}
@@ -89,7 +96,12 @@ const Grid = props => {
 
       {!isAuthoring && game === 'nonogram' && (
         <>
-          <p style={{ textAlign: 'center' }}><strong>Grid size: {gridSize}x{gridSize}</strong></p>
+          <p
+            style={{
+              fontSize,
+              textAlign: 'center'
+            }}
+          ><strong>Grid size: {gridSize}x{gridSize}</strong></p>
         </>
       )}
     </div>
@@ -100,6 +112,7 @@ Grid.propTypes = {
   onCellEdit: PropTypes.func,
   onCellChanged: PropTypes.func,
   onCrossOut: PropTypes.func,
+  getCellWidthAndHeight: PropTypes.func.isRequired,
   game: PropTypes.string,
   isAuthoring: PropTypes.bool,
   isFilling: PropTypes.bool,

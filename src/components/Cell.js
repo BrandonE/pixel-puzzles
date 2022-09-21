@@ -9,24 +9,9 @@ const Cell = props => {
   })
 
   const {
-    onCellEdit, onCellChanged, game, isPrinting, gridSize, subGridSize,
-    filledColor, emptyColor, gridY, gridX, subGridY, subGridX, isFilled
+    onCellEdit, onCellChanged, game, filledColor, emptyColor,
+    gridY, gridX, subGridY, subGridX, cellWidthAndHeight, isFilled
   } = props
-
-  let scale
-  let minimumWidthAndHeight
-
-  if (game === 'classic') {
-    scale = isPrinting ? 50 : 40
-    minimumWidthAndHeight = '6px'
-  } else if (game === 'nonogram') {
-    scale = 75
-    minimumWidthAndHeight = '40px'
-  }
-
-  const widthAndHeight = (game === 'classic' || isPrinting)
-    ? `max(${scale / (gridSize * subGridSize)}vw, ${minimumWidthAndHeight})`
-    : minimumWidthAndHeight
 
   return (
     <td
@@ -35,10 +20,10 @@ const Cell = props => {
       style={{
         backgroundColor: crossedOut.isCrossedOut ? undefined : decimalToHex((isFilled) ? filledColor : emptyColor),
         backgroundImage: crossedOut.isCrossedOut ? `url(${X})` : undefined,
-        minWidth: widthAndHeight,
-        minHeight: widthAndHeight,
-        width: widthAndHeight,
-        height: widthAndHeight
+        minWidth: cellWidthAndHeight,
+        minHeight: cellWidthAndHeight,
+        width: cellWidthAndHeight,
+        height: cellWidthAndHeight
       }}
 
       onPointerDown={(e) => {
@@ -105,14 +90,13 @@ Cell.propTypes = {
   isFilling: PropTypes.bool,
   isCrossingOut: PropTypes.bool,
   isPrinting: PropTypes.bool,
-  gridSize: PropTypes.number.isRequired,
-  subGridSize: PropTypes.number.isRequired,
   filledColor: PropTypes.number.isRequired,
   emptyColor: PropTypes.number.isRequired,
   gridY: PropTypes.number.isRequired,
   gridX: PropTypes.number.isRequired,
   subGridY: PropTypes.number.isRequired,
   subGridX: PropTypes.number.isRequired,
+  cellWidthAndHeight: PropTypes.string.isRequired,
   isFilled: PropTypes.number.isRequired
 }
 

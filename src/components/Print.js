@@ -8,7 +8,7 @@ import Footer from './Footer'
 class Print extends React.Component {
   render () {
     const {
-      game, gridSize, subGridSize, filledColor, emptyColor,
+      getCellWidthAndHeight, game, gridSize, subGridSize, filledColor, emptyColor,
       // Don't indicate which boxes are empty to begin with; always use unsolved color.
       unsolvedColor, gridData, coordinatesOrder
     } = this.props
@@ -27,6 +27,7 @@ class Print extends React.Component {
         {gridData && (
           <>
             <Grid
+              getCellWidthAndHeight={getCellWidthAndHeight}
               game={game}
               isPrinting={true}
               gridSize={gridSize}
@@ -40,6 +41,8 @@ class Print extends React.Component {
 
             {game === 'classic' && (
               <Coordinates
+                getCellWidthAndHeight={getCellWidthAndHeight}
+                isPrinting={true}
                 gridSize={gridSize}
                 subGridSize={subGridSize}
                 filledColor={filledColor}
@@ -60,6 +63,7 @@ class Print extends React.Component {
 }
 
 Print.propTypes = {
+  getCellWidthAndHeight: PropTypes.func.isRequired,
   game: PropTypes.string.isRequired,
   gridSize: PropTypes.number.isRequired,
   subGridSize: PropTypes.number.isRequired,

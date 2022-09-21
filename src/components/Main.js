@@ -6,9 +6,10 @@ import Coordinates from './Coordinates'
 class Main extends React.Component {
   render () {
     const {
-      onCellEdit, onCellChanged, onCrossOut, game, isAuthoring, isFilling, isCrossingOut,
-      gridSize, subGridSize, filledColor, emptyColor, solvedColor, unsolvedColor,
-      gridData, coordinatesOrder
+      onCellEdit, onCellChanged, onCrossOut, getCellWidthAndHeight, game,
+      isAuthoring, isFilling, isCrossingOut, gridSize, subGridSize,
+      filledColor, emptyColor, solvedColor, unsolvedColor, gridData,
+      coordinatesOrder
     } = this.props
 
     return (
@@ -17,6 +18,7 @@ class Main extends React.Component {
           onCellEdit={onCellEdit}
           onCellChanged={onCellChanged}
           onCrossOut={onCrossOut}
+          getCellWidthAndHeight={getCellWidthAndHeight}
           game={game}
           isAuthoring={isAuthoring}
           isFilling={isFilling}
@@ -32,6 +34,7 @@ class Main extends React.Component {
 
         {!isAuthoring && game === 'classic' && (
           <Coordinates
+            getCellWidthAndHeight={getCellWidthAndHeight}
             gridSize={gridSize}
             subGridSize={subGridSize}
             filledColor={filledColor}
@@ -51,6 +54,7 @@ Main.propTypes = {
   onCellEdit: PropTypes.func,
   onCellChanged: PropTypes.func,
   onCrossOut: PropTypes.func,
+  getCellWidthAndHeight: PropTypes.func.isRequired,
   game: PropTypes.string.isRequired,
   isAuthoring: PropTypes.bool,
   isFilling: PropTypes.bool,
