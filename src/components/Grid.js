@@ -6,14 +6,15 @@ import { getXLabelValues, getYLabel } from '../lib/util'
 const Grid = props => {
   const {
     onCellEdit, onCellChanged, onCrossOut, game, isAuthoring, isFilling, isCrossingOut, isRevealing,
-    isPrinting, gridSize, subGridSize, filledColor, emptyColor, solvedColor, unsolvedColor, gridData
+    isPrinting, gridSize, subGridSize, filledColor, emptyColor, solvedColor, unsolvedColor, gridData,
+    noFloat
   } = props
 
   return (
     <div
       className="grid"
       style={{
-        float: (game === 'classic') ? 'left' : undefined,
+        float: (game === 'classic' && !noFloat) ? 'left' : undefined,
         paddingRight: (game === 'classic') ? '20px' : undefined
       }}
     >
@@ -111,7 +112,8 @@ Grid.propTypes = {
   emptyColor: PropTypes.number.isRequired,
   solvedColor: PropTypes.number.isRequired,
   unsolvedColor: PropTypes.number.isRequired,
-  gridData: PropTypes.array.isRequired
+  gridData: PropTypes.array.isRequired,
+  noFloat: PropTypes.bool
 }
 
 export default Grid

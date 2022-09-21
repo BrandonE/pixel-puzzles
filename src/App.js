@@ -286,6 +286,7 @@ class App extends React.Component {
                       solvedColor={solvedColor}
                       unsolvedColor={unsolvedColor}
                       gridData={this.gridData}
+                      noFloat={true}
                     />
                   )
                 },
