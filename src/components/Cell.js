@@ -4,35 +4,8 @@ import X from '../images/x.svg'
 import { decimalToHex } from '../lib/util'
 
 const Cell = props => {
-  const [dimensions, setDimensions] = React.useState({
-    height: window.innerHeight,
-    width: window.innerWidth
-  })
-
   const [crossedOut, setCrossedOut] = React.useState({
     isCrossedOut: false
-  })
-
-  React.useEffect(() => {
-    const handleResize = () => {
-      const currentWidth = dimensions.width
-
-      if (
-        (currentWidth > verySmallWidth && window.innerWidth <= verySmallWidth) ||
-          (currentWidth <= verySmallWidth && window.innerWidth > verySmallWidth)
-      ) {
-        setDimensions({
-          height: window.innerHeight,
-          width: window.innerWidth
-        })
-      }
-    }
-
-    window.addEventListener('resize', handleResize)
-
-    return _ => {
-      window.removeEventListener('resize', handleResize)
-    }
   })
 
   const {
@@ -40,8 +13,6 @@ const Cell = props => {
     filledColor, emptyColor, gridY, gridX, subGridY, subGridX, isFilled
   } = props
 
-  const windowWidth = dimensions.width
-  const verySmallWidth = 600
   let scale
   let minimumWidthAndHeight
 
@@ -53,8 +24,8 @@ const Cell = props => {
     minimumWidthAndHeight = '40px'
   }
 
-  const widthAndHeight = ((game === 'classic' || isPrinting) && windowWidth > verySmallWidth)
-    ? `${scale / (gridSize * subGridSize)}vw`
+  const widthAndHeight = (game === 'classic' || isPrinting)
+    ? `max(${scale / (gridSize * subGridSize)}vw, ${minimumWidthAndHeight})`
     : minimumWidthAndHeight
 
   return (
