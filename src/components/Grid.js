@@ -49,7 +49,7 @@ const Grid = props => {
               {(game === 'classic' || !isAuthoring) && (
                 <td
                   style={{
-                    minWidth: game === 'nonogram' ? '120px' : undefined,
+                    minWidth: (game === 'nonogram') ? '120px' : undefined,
                     textAlign: 'right',
                     paddingRight: '5px'
                   }}

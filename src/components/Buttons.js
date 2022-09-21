@@ -20,8 +20,8 @@ const Buttons = props => {
           <Row>
             <Col>
               <DropdownButton title="Resize Grid">
-                {Array(game === 'classic' ? gridSizeMax : nonogramGridSizeMax).fill(0).map((_, i) => i + 1).filter(
-                  size => size >= (game === 'classic' ? gridSizeMin : nonogramGridSizeMin) && size !== gridSize
+                {Array((game === 'classic') ? gridSizeMax : nonogramGridSizeMax).fill(0).map((_, i) => i + 1).filter(
+                  size => size >= ((game === 'classic') ? gridSizeMin : nonogramGridSizeMin) && size !== gridSize
                 ).map(size => (
                   <Dropdown.Item
                     key={size}

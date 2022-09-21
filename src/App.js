@@ -18,12 +18,13 @@ import Footer from './components/Footer'
 import Crop from './components/Crop'
 import {
   generateGrid, generateCoordinatesOrder, serializeGridData,
+  binaryStringToHexStringWithLeftovers, hexStringWithLeftoversToBinaryString,
   jimpToSerializedGridData, gridDataToJimp
 } from './lib/util'
 import Print from './components/Print'
 
-const serializedGridDataGitHub30x30 = '0000000000000000000000000000000000000000000110011100001001111111111111111111111111111111111111111111111111111111111111111111110000111001111111111111110000000000000001100011100000000000000000000000000000000000000000100011000110111111111111111111111110111111111111111111110001111111111111111111111111111111111111111111111111111111111111111111111111100011110111111111111111011110000000000100001100011000001110011101111011110111111110111101111011110111100000100000000000000000000110000000000000000000000000011000000000000000000001000000000000000000000000011110111101111011110111111100111001111011110111101111111111111111111111111111101110011100111001110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111100111001110011100111111111111111111111111111111111111111111111111111111110011100111001110011100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111001110011100111001111111111111111111111111111111110111101111011110011111110111111111111111101110000000000100001110011111000000000000000000001000000000000000000000000000010000000000000010011111111011111111111111111111111111111111101111011110111000011100011000110000100000110111110111101111101111111111111111111101101000001000010000000000000000000000010000100000000000000011111111111111111111111111111111111111111111111111111001100011000100000000000000000000000000000000000111100111000110000000000111111111111111111110011100000000000000000000000000000000000000000000000000111111111111111111111110011110111001100000000000000000000000000000000000000'
-const serializedGridDataGitHub15x15 = '000001111100000000111111111000001111111111100011001111100110011000000000111111000000000111111000000000111111000000000011111000000000111111000000000111111100000001111010111000111110001000000111110000110000111100000011000010000'
+const inputGridDataGitHub30x30 = '000000000019C27FFFFFFFFFFFFFFFFC39FFFC000638000000000231BFFFFFBFFFFC7FFFFFFFFFFFFFFFFFE3DFFFDE00431839DEF7FBDEF782000018000001800004000001EF7BDFCE7BDEFFFFFFFB9CE700000000000000000000000001E739CFFFFFFFFFFFFFF39CE700000000000000000000000000E739CFFFFFFFFBDEF3FBFFFDC00873E00001000000080013FDFFFFFFFF7BDC38C6106FBDF7FFFFB410800000840007FFFFFFFFFFFFCC62000000003CE3003FFFFCE0000000000007FFFFF3DCC000000000'
+const inputGridDataGitHub15x15 = '07C03FE0FFE33E6600FC01F803F003E00FC01FC07AE3E207C30F0308_0'
 
 const gridSizeMin = 2
 const gridSizeMax = 9
@@ -114,7 +115,9 @@ class App extends React.Component {
 
     window.addEventListener('beforeunload', preventUnload)
 
-    this.initializeGrid(game, gridSize, subGridSize, query.gridData)
+    const { gridData } = query
+
+    this.initializeGrid(game, gridSize, subGridSize, gridData)
 
     const isAuthoring = (query.isAuthoring === 'true')
 
@@ -136,14 +139,18 @@ class App extends React.Component {
     window.location.search = searchParams.toString()
   }
 
-  initializeGrid (game, gridSize, subGridSize, serializedGridData) {
-    if (!serializedGridData && game === 'classic' && gridSize === defaultGridSize && subGridSize === defaultSubGridSize) {
-      serializedGridData = serializedGridDataGitHub30x30
+  initializeGrid (game, gridSize, subGridSize, inputGridData) {
+    if (!inputGridData && game === 'classic' && gridSize === defaultGridSize && subGridSize === defaultSubGridSize) {
+      inputGridData = inputGridDataGitHub30x30
     }
 
-    if (!serializedGridData && game === 'nonogram' && gridSize === defaultNonogramGridSize) {
-      serializedGridData = serializedGridDataGitHub15x15
+    if (!inputGridData && game === 'nonogram' && gridSize === defaultNonogramGridSize) {
+      inputGridData = inputGridDataGitHub15x15
     }
+
+    const serializedGridData = (inputGridData.length === Math.pow(gridSize * subGridSize, 2))
+      ? inputGridData
+      : hexStringWithLeftoversToBinaryString(inputGridData)
 
     this.gridData = generateGrid(gridSize, subGridSize, serializedGridData)
     this.coordinatesOrder = generateCoordinatesOrder(gridSize)
@@ -186,7 +193,7 @@ class App extends React.Component {
   confirmChangeGame (game) {
     const searchParams = new URLSearchParams(window.location.search)
     searchParams.set('game', game)
-    searchParams.delete('gridData', serializeGridData(this.gridData))
+    searchParams.delete('gridData')
     searchParams.delete('gridSize')
     searchParams.delete('subGridSize')
     searchParams.delete('isReadOnly')
@@ -218,7 +225,7 @@ class App extends React.Component {
   confirmChangeMode () {
     const { isAuthoring } = this.state
     const searchParams = new URLSearchParams(window.location.search)
-    searchParams.set('gridData', serializeGridData(this.gridData))
+    searchParams.set('gridData', binaryStringToHexStringWithLeftovers(serializeGridData(this.gridData)))
     searchParams.set('isAuthoring', JSON.stringify(!isAuthoring))
     searchParams.delete('isReadOnly')
     this.navigate(searchParams)
@@ -241,7 +248,7 @@ class App extends React.Component {
               searchParams.set('gridData', '0')
             } else {
               // Clear your progress, not the grid data (actual puzzle contents).
-              searchParams.set('gridData', serializeGridData(this.gridData))
+              searchParams.set('gridData', binaryStringToHexStringWithLeftovers(serializeGridData(this.gridData)))
             }
 
             searchParams.set('isAuthoring', JSON.stringify(isAuthoring))
@@ -314,7 +321,7 @@ class App extends React.Component {
     }
 
     const searchParams = new URLSearchParams(window.location.search)
-    searchParams.set('gridData', invertedSerializedGridData)
+    searchParams.set('gridData', binaryStringToHexStringWithLeftovers(invertedSerializedGridData))
     this.navigate(searchParams)
   }
 
@@ -398,7 +405,7 @@ class App extends React.Component {
       .resize(gridWidthAndHeight, gridWidthAndHeight)
 
     const searchParams = new URLSearchParams(window.location.search)
-    searchParams.set('gridData', jimpToSerializedGridData(jimpFile, gridSize, subGridSize))
+    searchParams.set('gridData', binaryStringToHexStringWithLeftovers(jimpToSerializedGridData(jimpFile, gridSize, subGridSize)))
     this.navigate(searchParams)
   }
 
@@ -436,7 +443,7 @@ class App extends React.Component {
     const searchParams = new URLSearchParams(window.location.search)
     searchParams.set('isAuthoring', 'false')
     searchParams.delete('isReadOnly')
-    searchParams.set('gridData', serializeGridData(this.gridData))
+    searchParams.set('gridData', binaryStringToHexStringWithLeftovers(serializeGridData(this.gridData)))
     navigator.clipboard.writeText(`${protocol}//${host}${pathname}?${searchParams.toString()}`)
     toast.success('URL copied to your clipboard!')
   }

@@ -22,6 +22,28 @@ const shuffleArray = arr => {
 
 export const serializeGridData = gridData => gridData.flat().flat().flat().join('')
 
+export const binaryStringToHexStringWithLeftovers = binaryString => {
+  let hexStringWithLeftovers = ''
+
+  for (let i = 0; i < binaryString.length; i += 4) {
+    const nibble = binaryString.substring(i, i + 4)
+
+    if (nibble.length === 4) {
+      hexStringWithLeftovers += parseInt(nibble, 2).toString(16).toUpperCase()
+    } else {
+      hexStringWithLeftovers += '_' + nibble
+    }
+  }
+
+  return hexStringWithLeftovers
+}
+
+export const hexStringWithLeftoversToBinaryString = hexStringWithLeftovers => {
+  const [hexString, leftovers] = hexStringWithLeftovers.split('_')
+
+  return hexString.split('').map(digit => parseInt(digit, 16).toString(2).padStart(4, '0')).join('') + leftovers
+}
+
 export const generateGrid = (gridSize, subGridSize, serializedGridData) => {
   const gridData = []
   let count = 0
