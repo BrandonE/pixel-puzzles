@@ -6,9 +6,9 @@ Fill the grid in your browser or print the puzzle to complete by hand. Edit the 
 
 Copy each square's pattern to the associated coordinates to reveal a secret image! 
 
-![Example puzzle with the GitHub Octocat](./example.png)
+![Example classic puzzle with the GitHub Octocat](./example.png)
 
-![Puzzle generated from a headshot of Brandon Evans](./example-import.png)
+![Classic puzzle generated from a headshot of Brandon Evans](./example-import.png)
 
 Inspired by [Pencil Puzzles](https://web.archive.org/web/20111027002447/http://www.tipstricks.com/puzzles.html) from [Tips & Tricks Magazine](https://en.wikipedia.org/wiki/Tips_%26_Tricks_(magazine)).
 
@@ -16,7 +16,7 @@ Inspired by [Pencil Puzzles](https://web.archive.org/web/20111027002447/http://w
 
 Solve the [Nonogram](https://en.wikipedia.org/wiki/Nonogram) to reveal a secret image! [Nonogram Tutorial](https://www.youtube.com/watch?v=zisu0Qf4TAI)
 
-TODO: Example image
+![Example nonogram puzzle with the GitHub Octocat](./example-nonogram.png)
 
 ## Functionality
 
