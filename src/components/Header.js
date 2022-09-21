@@ -17,11 +17,11 @@ const Header = props => (
           Solve the {props.isPrinting && <>Nonogram</>} {!props.isPrinting && <a href="https://en.wikipedia.org/wiki/Nonogram">Nonogram</a>} to reveal a secret image!&nbsp;
 
           {props.isPrinting && (
-            <>How to play: https://www.youtube.com/watch?v=zisu0Qf4TAI</>
+            <>Nonogram Tutorial: https://www.youtube.com/watch?v=zisu0Qf4TAI</>
           )}
 
           {!props.isPrinting && (
-            <a href="https://www.youtube.com/watch?v=zisu0Qf4TAI">How to play</a>
+            <a href="https://www.youtube.com/watch?v=zisu0Qf4TAI">Nonogram Tutorial</a>
           )}
         </h4>
       </>

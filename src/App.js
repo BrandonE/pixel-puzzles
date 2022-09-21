@@ -25,9 +25,22 @@ import Print from './components/Print'
 const serializedGridDataGitHub30x30 = '0000000000000000000000000000000000000000000110011100001001111111111111111111111111111111111111111111111111111111111111111111110000111001111111111111110000000000000001100011100000000000000000000000000000000000000000100011000110111111111111111111111110111111111111111111110001111111111111111111111111111111111111111111111111111111111111111111111111100011110111111111111111011110000000000100001100011000001110011101111011110111111110111101111011110111100000100000000000000000000110000000000000000000000000011000000000000000000001000000000000000000000000011110111101111011110111111100111001111011110111101111111111111111111111111111101110011100111001110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111100111001110011100111111111111111111111111111111111111111111111111111111110011100111001110011100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111001110011100111001111111111111111111111111111111110111101111011110011111110111111111111111101110000000000100001110011111000000000000000000001000000000000000000000000000010000000000000010011111111011111111111111111111111111111111101111011110111000011100011000110000100000110111110111101111101111111111111111111101101000001000010000000000000000000000010000100000000000000011111111111111111111111111111111111111111111111111111001100011000100000000000000000000000000000000000111100111000110000000000111111111111111111110011100000000000000000000000000000000000000000000000000111111111111111111111110011110111001100000000000000000000000000000000000000'
 const serializedGridDataGitHub15x15 = '000001111100000000111111111000001111111111100011001111100110011000000000111111000000000111111000000000111111000000000011111000000000111111000000000111111100000001111010111000111110001000000111110000110000111100000011000010000'
 
+const gridSizeMin = 2
+const gridSizeMax = 9
+const subGridSizeMin = 2
+const subGridSizeMax = 9
+
+const nonogramGridSizeMin = 5
+const nonogramGridSizeMax = 20
+
 const defaultGridSize = 8
 const defaultSubGridSize = 5
 const defaultNonogramGridSize = 15
+
+const filledColor = 0x00000000
+const emptyColor = 0xFFFFFFFF
+const solvedColor = 0xFFFF00FF
+const unsolvedColor = 0x808080FF
 
 const preventUnload = e => {
   // Cancel the event
@@ -47,10 +60,6 @@ class App extends React.Component {
       // TODO: Move this down to Grid to avoid re-rendering coordinates and make things faster.
       isFilling: false,
       isCrossingOut: false,
-      filledColor: 0x00000000,
-      emptyColor: 0xFFFFFFFF,
-      solvedColor: 0xFFFF00FF,
-      unsolvedColor: 0x808080FF,
       isLoading: false
     }
 
@@ -86,15 +95,15 @@ class App extends React.Component {
     let subGridSize = parseInt(query.subGridSize, 10)
 
     if (game === 'classic') {
-      if (!gridSize || gridSize < 2 || gridSize > 9) {
+      if (!gridSize || gridSize < gridSizeMin || gridSize > gridSizeMax) {
         gridSize = defaultGridSize
       }
 
-      if (!subGridSize || subGridSize < 2 || subGridSize > 9) {
+      if (!subGridSize || subGridSize < subGridSizeMin || subGridSize > subGridSizeMax) {
         subGridSize = defaultSubGridSize
       }
     } else if (game === 'nonogram') {
-      if (!gridSize || gridSize < 5 || gridSize > 20) {
+      if (!gridSize || gridSize < nonogramGridSizeMin || gridSize > nonogramGridSizeMax) {
         gridSize = defaultNonogramGridSize
       }
 
@@ -258,7 +267,7 @@ class App extends React.Component {
               confirmAlert({
                 title: 'Solution',
                 childrenElement: () => {
-                  const { game, gridSize, subGridSize, filledColor, emptyColor, solvedColor, unsolvedColor } = this.state
+                  const { game, gridSize, subGridSize } = this.state
 
                   if (!this.gridData) {
                     return <></>
@@ -394,7 +403,6 @@ class App extends React.Component {
   }
 
   async exportImage () {
-    const { filledColor, emptyColor } = this.state
     const image = gridDataToJimp(this.gridData, filledColor, emptyColor)
     const u8 = await image.getBufferAsync(Jimp.MIME_JPEG)
 
@@ -482,8 +490,7 @@ class App extends React.Component {
   render () {
     const {
       game, isAuthoring, isReadOnly, isFilling, isCrossingOut, gridSize, subGridSize,
-      filledColor, emptyColor, solvedColor, unsolvedColor, isLoading, gridDataToPrint,
-      hasError
+      isLoading, gridDataToPrint, hasError
     } = this.state
 
     if (hasError) {
@@ -539,6 +546,12 @@ class App extends React.Component {
                 print={this.print}
                 isAuthoring={isAuthoring}
                 isReadOnly={isReadOnly}
+                gridSizeMin={gridSizeMin}
+                gridSizeMax={gridSizeMax}
+                subGridSizeMin={subGridSizeMin}
+                subGridSizeMax={subGridSizeMax}
+                nonogramGridSizeMin={nonogramGridSizeMin}
+                nonogramGridSizeMax={nonogramGridSizeMax}
                 gridData={this.gridData}
               />
 

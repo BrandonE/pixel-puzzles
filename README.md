@@ -1,6 +1,10 @@
 # Pixel Puzzles
 
-Copy each square's pattern to the associated coordinates to reveal a secret image! Fill the grid in your browser or print the puzzle to complete by hand. Edit the puzzle or generate your own using any image. Share puzzles with your friends and family!
+Fill the grid in your browser or print the puzzle to complete by hand. Edit the puzzle or generate your own using any image. Share puzzles with your friends and family!
+
+## Classic
+
+Copy each square's pattern to the associated coordinates to reveal a secret image! 
 
 ![Example puzzle with the GitHub Octocat](./example.png)
 
@@ -8,17 +12,23 @@ Copy each square's pattern to the associated coordinates to reveal a secret imag
 
 Inspired by [Pencil Puzzles](https://web.archive.org/web/20111027002447/http://www.tipstricks.com/puzzles.html) from [Tips & Tricks Magazine](https://en.wikipedia.org/wiki/Tips_%26_Tricks_(magazine)).
 
+## Nonogram
+
+Solve the [Nonogram](https://en.wikipedia.org/wiki/Nonogram) to reveal a secret image! [Nonogram Tutorial](https://www.youtube.com/watch?v=zisu0Qf4TAI)
+
+TODO: Example image
+
 ## Functionality
 
 ### Playing
 
-When you first load the application, you will be presented with the sample puzzle shown above. You can toggle pixels on and off using your mouse. When a square has all of its pixels filled out properly, the square's border will light up. You can erase your progress and start over by refreshing the page or selecting *Clear*. You can also *Reveal* the solution.
+When you first load the application, you will be presented with the sample puzzle shown above for the game selected. You can toggle pixels on and off using your mouse. In the **Classic game**, when a sub-grid has all of its pixels filled out properly, the sub-grid's border will light up. In the **Nonogram game**, you can right-click a pixel to cross it out and indicate that it should not be filled out. You can erase your progress and start over by refreshing the page or selecting *Clear*. You can also *Reveal* the solution.
 
 ### Editing
 
 Selecting *Edit* will **reveal the solution to the puzzle you are currently solving**. Afterwards, you can modify the puzzle by toggling pixels using your mouse just as you would when playing. Selecting *Clear* will empty the canvas, allowing you to create a puzzle from scratch.
 
-By default, the canvas is an 8x8 grid, containing 5x5 sub-grids. You can change either of these sizes to any value between 2x2 and 9x9. This will also empty the canvas.
+You can resize the grid (both games) and the sub-grids (**Classic game only**). This will also empty the canvas.
 
 You can also *Import* a puzzle from an image. Select an image from your device to generate the puzzle. Every pixel will either be filled or empty, so high contrast images work best. Before importing, you can crop the image. By default, the cropping will be square. Although unchecking *Square Aspect Ratio (1:1)* allows free-form crops, the resulting puzzle will always be square, so the remainder of the canvas will be empty.
 

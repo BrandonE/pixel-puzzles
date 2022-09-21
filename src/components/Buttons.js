@@ -5,13 +5,13 @@ import { Row, Col, Button, Form, Dropdown, DropdownButton } from 'react-bootstra
 const Buttons = props => {
   const {
     game, changeMode, clear, revealSolution, invert, importImage, exportImage,
-    share, resizeGrids, print, isAuthoring, isReadOnly, gridData
+    share, resizeGrids, print, isAuthoring, isReadOnly,
+    gridSizeMin, gridSizeMax, subGridSizeMin, subGridSizeMax,
+    nonogramGridSizeMin, nonogramGridSizeMax, gridData
   } = props
 
   const gridSize = gridData.length
   const subGridSize = gridData[0][0].length
-  const gridSizeMin = (game === 'classic') ? 2 : 5
-  const gridSizeMax = (game === 'classic') ? 9 : 20
 
   return (
     <>
@@ -20,8 +20,8 @@ const Buttons = props => {
           <Row>
             <Col>
               <DropdownButton title="Resize Grid">
-                {Array(gridSizeMax).fill(0).map((_, i) => i + 1).filter(
-                  size => size >= gridSizeMin && size !== gridSize
+                {Array(game === 'classic' ? gridSizeMax : nonogramGridSizeMax).fill(0).map((_, i) => i + 1).filter(
+                  size => size >= (game === 'classic' ? gridSizeMin : nonogramGridSizeMin) && size !== gridSize
                 ).map(size => (
                   <Dropdown.Item
                     key={size}
@@ -35,8 +35,8 @@ const Buttons = props => {
               {game === 'classic' && (
                 <DropdownButton title="Resize Sub-Grid">
                 { /* Sizes allowed are 2-9 */ }
-                {Array(9).fill(0).map((_, i) => i + 1).filter(
-                  size => size >= 2 && size !== subGridSize
+                {Array(subGridSizeMax).fill(0).map((_, i) => i + 1).filter(
+                  size => size >= subGridSizeMin && size !== subGridSize
                 ).map(size => (
                   <Dropdown.Item
                     key={size}
@@ -110,6 +110,12 @@ Buttons.propTypes = {
   print: PropTypes.func.isRequired,
   isAuthoring: PropTypes.bool,
   isReadOnly: PropTypes.bool,
+  gridSizeMin: PropTypes.number.isRequired,
+  gridSizeMax: PropTypes.number.isRequired,
+  subGridSizeMin: PropTypes.number.isRequired,
+  subGridSizeMax: PropTypes.number.isRequired,
+  nonogramGridSizeMin: PropTypes.number.isRequired,
+  nonogramGridSizeMax: PropTypes.number.isRequired,
   gridData: PropTypes.array.isRequired
 }
 
