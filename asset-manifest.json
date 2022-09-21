@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/pixel-puzzles/static/css/main.aea8221b.chunk.css",
+    "main.css": "/pixel-puzzles/static/css/main.77008fa2.chunk.css",
     "main.js": "/pixel-puzzles/static/js/main.85fba654.chunk.js",
     "main.js.map": "/pixel-puzzles/static/js/main.85fba654.chunk.js.map",
     "runtime-main.js": "/pixel-puzzles/static/js/runtime-main.1e9d3faa.js",
@@ -12,7 +12,7 @@
     "static/js/3.29b2092c.chunk.js.map": "/pixel-puzzles/static/js/3.29b2092c.chunk.js.map",
     "index.html": "/pixel-puzzles/index.html",
     "static/css/2.7446dcc2.chunk.css.map": "/pixel-puzzles/static/css/2.7446dcc2.chunk.css.map",
-    "static/css/main.aea8221b.chunk.css.map": "/pixel-puzzles/static/css/main.aea8221b.chunk.css.map",
+    "static/css/main.77008fa2.chunk.css.map": "/pixel-puzzles/static/css/main.77008fa2.chunk.css.map",
     "static/js/2.c3207363.chunk.js.LICENSE.txt": "/pixel-puzzles/static/js/2.c3207363.chunk.js.LICENSE.txt",
     "static/media/x.f5457199.svg": "/pixel-puzzles/static/media/x.f5457199.svg"
   },
@@ -20,7 +20,7 @@
     "static/js/runtime-main.1e9d3faa.js",
     "static/css/2.7446dcc2.chunk.css",
     "static/js/2.c3207363.chunk.js",
-    "static/css/main.aea8221b.chunk.css",
+    "static/css/main.77008fa2.chunk.css",
     "static/js/main.85fba654.chunk.js"
   ]
 }
