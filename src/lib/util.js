@@ -200,7 +200,7 @@ export const getYLabel = (y, game, gridData, gridSize) => {
       labelValues.push(0)
     }
 
-    return labelValues.join(' ')
+    return labelValues.join(',')
   }
 }
 

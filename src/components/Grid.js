@@ -38,7 +38,7 @@ const Grid = props => {
                     key={colIndex}
 
                     style={{
-                      fontSize,
+                      fontSize: (game === 'nonogram') ? fontSize : undefined,
                       verticalAlign: 'bottom',
                       paddingDown: '5px'
                     }}
@@ -56,7 +56,7 @@ const Grid = props => {
               {(game === 'classic' || !isAuthoring) && (
                 <td
                   style={{
-                    fontSize,
+                    fontSize: (game === 'nonogram') ? fontSize : undefined,
                     textAlign: 'right',
                     paddingRight: '5px'
                   }}
