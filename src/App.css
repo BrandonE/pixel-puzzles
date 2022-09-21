@@ -76,20 +76,9 @@ table tbody tr td {
 
 @media print {
   body {
-    padding-left: 0;
-    padding-right: 0;
-  }
-
-  h1 {
-    font-size: 2rem;
-  }
-
-  h4 {
-    font-size: 1rem;
-  }
-
-  h6 {
-    font-size: 0.75rem;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-bottom: 0;
   }
 
   .no-print {
