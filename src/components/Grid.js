@@ -13,7 +13,7 @@ const Grid = props => {
   const cellWidthAndHeight = getCellWidthAndHeight(isPrinting)
   const vw = cellWidthAndHeight.match(/[0-9]\.*[0-9]*vw/)[0]
   const vwValue = parseFloat(vw.split('vw')[0]) / 2
-  const fontSize = cellWidthAndHeight.replace(vw, `${vwValue}vw`).replace('40px', '10px')
+  const fontSize = cellWidthAndHeight.replace(vw, `${vwValue}vw`).replace('40px', '20px')
 
   return (
     <div
