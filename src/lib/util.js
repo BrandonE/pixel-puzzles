@@ -143,10 +143,10 @@ export const getXLabelValues = (x, game, gridData, gridSize) => {
       }
     }
 
-    if (labelValues.length === 0) {
-      labelValues.push(0)
-    } else if (continuousCells !== 0) {
+    if (continuousCells !== 0) {
       labelValues.push(continuousCells)
+    } else if (labelValues === 0) {
+      labelValues.push(0)
     }
 
     return labelValues
@@ -172,12 +172,14 @@ export const getYLabel = (y, game, gridData, gridSize) => {
       }
     }
 
-    if (labelValues.length === 0) {
-      labelValues.push(0)
-    } else if (continuousCells !== 0) {
+    if (continuousCells !== 0) {
       labelValues.push(continuousCells)
+    } else if (labelValues === 0) {
+      labelValues.push(0)
     }
 
+    console.log(continuousCells)
+    console.log(labelValues)
     return labelValues.join(' ')
   }
 }
