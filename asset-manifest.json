@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/pixel-puzzles/static/css/main.aea8221b.chunk.css",
-    "main.js": "/pixel-puzzles/static/js/main.2cba4f5c.chunk.js",
-    "main.js.map": "/pixel-puzzles/static/js/main.2cba4f5c.chunk.js.map",
+    "main.js": "/pixel-puzzles/static/js/main.795d8c36.chunk.js",
+    "main.js.map": "/pixel-puzzles/static/js/main.795d8c36.chunk.js.map",
     "runtime-main.js": "/pixel-puzzles/static/js/runtime-main.1e9d3faa.js",
     "runtime-main.js.map": "/pixel-puzzles/static/js/runtime-main.1e9d3faa.js.map",
     "static/css/2.7446dcc2.chunk.css": "/pixel-puzzles/static/css/2.7446dcc2.chunk.css",
@@ -21,6 +21,6 @@
     "static/css/2.7446dcc2.chunk.css",
     "static/js/2.c3207363.chunk.js",
     "static/css/main.aea8221b.chunk.css",
-    "static/js/main.2cba4f5c.chunk.js"
+    "static/js/main.795d8c36.chunk.js"
   ]
 }
